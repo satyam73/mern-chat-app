@@ -1,0 +1,8 @@
+.userListCard {
+    background-color: white;
+}
+
+.userListCard:hover {
+    background-color: #F1F1F1;
+    cursor: pointer;
+}

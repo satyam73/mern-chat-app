@@ -6,6 +6,7 @@ import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import Home from "./components/Home";
 import Chat from "./components/Chat";
 import Login from "./components/Login";
+import Register from "./components/Register";
 import "./global.css";
 function App() {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
@@ -27,7 +28,7 @@ function App() {
             path="/"
           />
           {/* <Route element={<>Hello from login</>} path="/login" /> */}
-          <Route element={<>Hello from register</>} path="/register" />
+          {/* <Route element={<>Hello from register</>} path="/register" /> */}
           <Route
             element={
               <Chat
@@ -36,6 +37,15 @@ function App() {
               />
             }
             path="/chat"
+          />
+          <Route
+            element={
+              <Register
+                sidebarToggleHandler={sidebarToggleHandler}
+                isSideBarOpen={isSideBarOpen}
+              />
+            }
+            path="/register"
           />
           <Route
             element={

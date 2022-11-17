@@ -7,6 +7,7 @@ import Home from "./components/Home";
 import Chat from "./components/Chat";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import Profile from "./components/Profile";
 import "./global.css";
 function App() {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
@@ -55,6 +56,15 @@ function App() {
               />
             }
             path="/login"
+          />
+          <Route
+            element={
+              <Profile
+                sidebarToggleHandler={sidebarToggleHandler}
+                isSideBarOpen={isSideBarOpen}
+              />
+            }
+            path="/profile"
           />
         </Routes>
       </Router>

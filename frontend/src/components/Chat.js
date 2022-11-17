@@ -21,10 +21,7 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
         backgroundSize: "100%",
       }}
     >
-      <Navbar
-        sidebarToggleHandler={sidebarToggleHandler}
-        backgroundcolor="white"
-      />
+      <Navbar sidebarToggleHandler={sidebarToggleHandler} />
       <Sidebar isSideBarOpen={isSideBarOpen} />
       <div
         className="container-fluid my-2 border rounded-3 bg-light"

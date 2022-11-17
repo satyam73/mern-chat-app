@@ -166,7 +166,9 @@ export default function PrimarySearchAppBar({
         >
           <AccountCircle />
         </IconButton>
-        <p>Profile</p>
+        <Link to={"/profile"}>
+          <p>Profile</p>
+        </Link>
       </MenuItem>
     </Menu>
   );
@@ -226,7 +228,7 @@ export default function PrimarySearchAppBar({
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <IconButton
+            {/* <IconButton
               size="large"
               aria-label="show 4 new mails"
               color="inherit"
@@ -234,7 +236,7 @@ export default function PrimarySearchAppBar({
               <Badge badgeContent={4} color="error">
                 <MailIcon />
               </Badge>
-            </IconButton>
+            </IconButton> */}
             <IconButton
               size="large"
               aria-label="show 17 new notifications"

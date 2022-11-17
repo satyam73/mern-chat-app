@@ -1,3 +1,8 @@
+*{
+    margin: 0;
+    border: 0;
+    box-sizing: border-box;
+}
 @import url("./components/styles/Home.css");
 @import url("./components/styles/Chat.css");
 @import url("./components/styles/Login.css");

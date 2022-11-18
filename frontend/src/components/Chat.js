@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../common/Navbar";
 import Sidebar from "../common/Sidebar";
 import User from "../common/User";
@@ -9,9 +9,19 @@ import SendIcon from "@mui/icons-material/Send";
 import background from "../images/background.svg";
 // import { MenuIcon } from '@mui/icons-material';
 function Chat({ isSideBarOpen, sidebarToggleHandler }) {
+  const [mobileView, setMobileView] = useState(false);
+  const [isChatActive, setIsChatActive] = useState(false);
+
+  // const clickHandler = () => {
+  //   setIsChatActive(true);
+  // };
   const array = Array(25);
   array.fill("Lorem Ipsum");
   console.log(array);
+  // mobileView && alert(mobileView);
+  useEffect(() => {
+    window.innerWidth > 700 ? setMobileView(false) : setMobileView(true);
+  }, []);
   return (
     <div
       style={{
@@ -28,7 +38,11 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
         style={{ height: "90vh", width: "96vw" }}
       >
         <div className="row h-100">
-          <div className="col-4">
+          <div
+            className={
+              !mobileView ? "col-4" : !isChatActive ? "col-12" : "col-0 d-none"
+            }
+          >
             <div className="row align-items-start" style={{ height: "8vh" }}>
               <div className="col-12 py-2">
                 <Form.Control
@@ -48,12 +62,24 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
             >
               <div className="col-12">
                 {array.map((element, index) => (
-                  <User key={index} name={element} />
+                  <User
+                    key={index}
+                    name={element}
+                    clickHandler={setIsChatActive}
+                  />
                 ))}
               </div>
             </div>
           </div>
-          <div className="col-8">
+          <div
+            className={
+              !mobileView
+                ? "col-8"
+                : !isChatActive
+                ? "col-0 d-none"
+                : "col-12 d-block"
+            }
+          >
             <div
               className="row align-items-center"
               style={{ height: "8vh", backgroundColor: "white" }}

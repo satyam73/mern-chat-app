@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "../common/Navbar";
 import background from "../images/background.svg";
 import { IconButton, Button } from "@mui/material";
@@ -6,6 +6,7 @@ import { PhotoCamera } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 
 function Profile() {
+  const [profile, setProfile] = useState("");
   return (
     <div
       style={{
@@ -46,7 +47,11 @@ function Profile() {
                   border: "5px solid var(--primary-color)",
                 }}
                 className="profileImg my-4"
-                src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80"
+                src={
+                  profile === ""
+                    ? "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80"
+                    : profile
+                }
                 alt=""
               />
             </div>
@@ -58,8 +63,19 @@ function Profile() {
                   backgroundColor: "var(--primary-color)",
                 },
               }}
+              aria-label="upload picture"
+              component="label"
             >
               {/* <Button> */}
+              <input
+                hidden
+                accept="image/*"
+                multiple
+                type="file"
+                onChange={(evt) =>
+                  setProfile(URL.createObjectURL(evt.target.files[0]))
+                }
+              />
               <PhotoCamera sx={{ color: "white" }} />
               {/* Change Photo */}
               {/* </Button> */}

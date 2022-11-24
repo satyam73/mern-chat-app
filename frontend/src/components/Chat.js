@@ -5,21 +5,40 @@ import User from "../common/User";
 import Form from "react-bootstrap/Form";
 import { AppBar, Toolbar, IconButton, Typography, Button } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
+import axios from "axios";
 // import "./styles/Chat.css";
 import background from "../images/background.svg";
 // import { MenuIcon } from '@mui/icons-material';
 function Chat({ isSideBarOpen, sidebarToggleHandler }) {
   const [mobileView, setMobileView] = useState(false);
   const [isChatActive, setIsChatActive] = useState(false);
-
+  const [chats, setChats] = useState([]);
   // const clickHandler = () => {
   //   setIsChatActive(true);
   // };
   const array = Array(25);
   array.fill("Lorem Ipsum");
-  console.log(array);
+  // console.log(array);
   // mobileView && alert(mobileView);
   useEffect(() => {
+    axios
+      .get("http://localhost:5000/api/chats")
+      .then(function (response) {
+        // handle success
+        const { data } = response;
+        setChats([...data]);
+
+        console.log(data);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+      .finally(function () {
+        // always executed
+        console.log("finally");
+        console.log(chats);
+      });
     window.innerWidth > 700 ? setMobileView(false) : setMobileView(true);
   }, []);
   return (
@@ -61,10 +80,10 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
               style={{ height: "81vh", overflowY: "scroll" }}
             >
               <div className="col-12">
-                {array.map((element, index) => (
+                {chats.map((element, index) => (
                   <User
                     key={index}
-                    name={element}
+                    name={element.chatName}
                     clickHandler={setIsChatActive}
                   />
                 ))}
@@ -90,7 +109,7 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
             <div className="row" style={{ height: "74vh" }}></div>
             <div className="row align-items-center" style={{ height: "8vh" }}>
               <div className="col-10">
-                <div class="">
+                <div className="">
                   <Form.Control
                     type="text"
                     placeholder="Enter Your Message!"

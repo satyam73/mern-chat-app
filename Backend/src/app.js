@@ -1,10 +1,13 @@
-console.log("hello world");
+const dotenv = require("dotenv");
+dotenv.config();
 const express = require("express");
 const app = express();
 const PORT = 5000;
 const cors = require("cors");
 const chats = require("../data");
+const connectDB = require("../db/config/conn");
 
+connectDB();
 app.use(cors({ origin: true, credentials: true }));
 
 app.get("/", (req, res) => {

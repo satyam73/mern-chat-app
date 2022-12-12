@@ -40,7 +40,7 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
         console.log(chats);
       });
     window.innerWidth > 700 ? setMobileView(false) : setMobileView(true);
-  }, []);
+  }, [chats]);
   return (
     <div
       style={{

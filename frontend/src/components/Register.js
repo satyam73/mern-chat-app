@@ -12,16 +12,31 @@ import {
   //   FormControlLabel,
   //   Checkbox,
   Button,
+  Typography,
 } from "@mui/material";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
 import background from "../images/background.svg";
-
+// import loader from "../images/loading,gif"
 function Register({ isSideBarOpen, sidebarToggleHandler }) {
   const [isPasswordShowing, setIsPasswordShowing] = useState(false);
-  //   const [isChecked, setIsChecked] = useState(false);
+  const [pic, setPic] = useState("");
+  const [registerDetails, setRegisterDetails] = useState({
+    name: "",
+    email: "",
+    username: "",
+    profilePic: "",
+    password: "",
+    confirmPassword: "",
+  });
   const handleClickShowPassword = () => {
     setIsPasswordShowing(!isPasswordShowing);
+  };
+  const inputChangeHandler = (evt) => {
+    setRegisterDetails({
+      ...registerDetails,
+      [evt.target.name]: evt.target.value,
+    });
   };
   return (
     <div
@@ -48,27 +63,82 @@ function Register({ isSideBarOpen, sidebarToggleHandler }) {
               <div className="col-12" style={{ width: "100%" }}>
                 <TextField
                   fullWidth
-                  label="Email"
-                  type="email"
-                  id="fullWidth"
+                  label="Name"
+                  type="text"
+                  // id="fullWidth"
                   variant="outlined"
+                  name="name"
+                  onChange={inputChangeHandler}
                 />
               </div>
-              <div className="col-12 my-4" style={{ width: "100%" }}>
+              <div className="col-12 mt-2" style={{ width: "100%" }}>
+                <TextField
+                  fullWidth
+                  label="Email"
+                  type="email"
+                  // id="fullWidth"
+                  variant="outlined"
+                  name="email"
+                  onChange={inputChangeHandler}
+                />
+              </div>
+              <div className="col-12 mt-2" style={{ width: "100%" }}>
                 <TextField
                   fullWidth
                   label="Username"
                   type="text"
-                  id="fullWidth"
+                  // id="fullWidth"
                   variant="outlined"
+                  name="username"
+                  onChange={inputChangeHandler}
                 />
               </div>
-              <div className="col-12 my-3" style={{ width: "100%" }}>
+              <div className="col-12 mt-4" style={{ width: "100%" }}>
+                <Typography
+                  sx={{ font: "inherit" }}
+                  className="fw-bolder"
+                  variant="subtitle1"
+                  component="div"
+                >
+                  Upload Profile Picture
+                </Typography>
+                <Button
+                  sx={{
+                    backgroundColor: "var(--primary-color)",
+                    "&:hover": {
+                      backgroundColor: "var(--secondary-color)",
+                    },
+                  }}
+                  variant="contained"
+                  component="label"
+                >
+                  Click to upload
+                  <input
+                    onChange={(evt)=>{
+                      console.log(evt.target.files[0]);
+                      const image = evt.target.files[0];
+                      // if(!image){
+                        
+                      // }
+                      
+                    }}
+                    name="profilePic"
+                    hidden
+                    accept="image/*"
+                    multiple
+                    type="file"
+                  />
+                </Button>
+                {/* <img src="loader" alt="" /> */}
+              </div>
+              <div className="col-12 mt-4" style={{ width: "100%" }}>
                 <FormControl sx={{ width: "100%" }} variant="outlined">
                   <InputLabel htmlFor="outlined-adornment-password">
                     Password
                   </InputLabel>
                   <OutlinedInput
+                    onChange={inputChangeHandler}
+                    name="password"
                     fullWidth
                     id="outlined-adornment-password"
                     type={isPasswordShowing ? "text" : "password"}
@@ -94,54 +164,21 @@ function Register({ isSideBarOpen, sidebarToggleHandler }) {
                   />
                 </FormControl>
               </div>
-              <div className="col-12 my-3" style={{ width: "100%" }}>
+              <div className="col-12 mt-2" style={{ width: "100%" }}>
                 <FormControl sx={{ width: "100%" }} variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-password">
+                  <InputLabel htmlFor="outlined-adornment-c-password">
                     Confirm Password
                   </InputLabel>
                   <OutlinedInput
+                    onChange={inputChangeHandler}
+                    name="confirmPassword"
                     fullWidth
-                    id="outlined-adornment-password"
+                    id="outlined-adornment-c-password"
                     type="password"
-                    // value={"hello"}
-                    // onChange={handleChange("password")}
-                    // endAdornment={
-                    //   <InputAdornment position="end">
-                    //     <IconButton
-                    //       aria-label="toggle password visibility"
-                    //       onClick={handleClickShowPassword}
-                    //       onMouseDown={handleClickShowPassword}
-                    //       edge="end"
-                    //     >
-                    //       {isPasswordShowing ? (
-                    //         <VisibilityOff />
-                    //       ) : (
-                    //         <Visibility />
-                    //       )}
-                    //     </IconButton>
-                    //   </InputAdornment>
-                    // }
                     label="Password"
                   />
                 </FormControl>
               </div>
-              {/* <div className="col-12" style={{ width: "100%" }}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      sx={{
-                        color: "var(--primary-color) !important",
-                      }}
-                      checked={isChecked}
-                      onChange={() => {
-                        setIsChecked(!isChecked);
-                      }}
-                      defaultChecked
-                    />
-                  }
-                  label="Register by username"
-                />
-              </div> */}
               <div
                 className="col-12 text-center mt-3"
                 style={{ width: "100%" }}

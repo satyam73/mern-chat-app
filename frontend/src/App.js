@@ -9,6 +9,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Profile from "./components/Profile";
 import "./global.css";
+export const ErrorContext = createContext();
 function App() {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   function sidebarToggleHandler(evt) {

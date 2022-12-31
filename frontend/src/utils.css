@@ -2,3 +2,14 @@
     --primary-color: #00d5c7;
     --secondary-color: #00a59a;
 }
+
+.left{
+    float: left;
+    clear: both;
+    background-color: white !important;
+}
+
+.right{
+    float: right;
+    clear: both;
+}

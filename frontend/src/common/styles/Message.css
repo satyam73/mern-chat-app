@@ -1,0 +1,15 @@
+.message{
+    background-color:  var(--primary-color);
+    box-shadow: 0px 0px 7px -2px grey;
+    height: fit-content;
+    width: fit-content;
+    border-radius: 6px;
+    font-weight: 600;
+    padding-right: 7px;
+    padding-left: 7px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    max-width: 70%;
+    margin: 10px;
+    margin-top: 0;
+}

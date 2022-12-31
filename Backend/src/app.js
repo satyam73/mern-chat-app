@@ -7,14 +7,18 @@ const cors = require("cors");
 const chats = require("../data");
 const connectDB = require("../db/config/conn");
 const userRoutes = require("../routers/routes");
-app.use(express.json());
+const cookieParser = require("cookie-parser");
 
-connectDB();
+app.use(cookieParser());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(cors({ origin: true, credentials: true }));
+app.use("/api/user", userRoutes);
+connectDB();
+
 app.get("/", (req, res) => {
   res.send("Api is running successfully");
 });
-app.use("/api/user", userRoutes);
 // app.use(router);
 app.listen(PORT, () => {
   console.log(`server is running on the port ${PORT}`);

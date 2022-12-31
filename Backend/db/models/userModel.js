@@ -5,13 +5,14 @@ const userSchema = mongoose.Schema(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     username: { type: String, required: true, unique: true },
-    displayPic: {
+    profilePic: {
       type: String,
       default:
         "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png",
     },
     password: { type: String, required: true },
     confirmPassword: { type: String, required: true },
+    tokens: [{ token: { type: String } }],
   },
   { timestamps: true }
 );

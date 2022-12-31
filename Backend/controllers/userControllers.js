@@ -2,11 +2,11 @@ const express = require("express");
 const User = require("../db/models/userModel");
 const generateToken = require("../db/config/generateToken");
 const bcrypt = require("bcryptjs");
+
 const registerUser = async (req, res) => {
   try {
     const { name, email, username, profilePic, password, confirmPassword } =
       req.body;
-
     if (!name || !email || !username || !password || !confirmPassword) {
       res.status(400);
       throw new Error("Please fill all the details!");
@@ -15,9 +15,9 @@ const registerUser = async (req, res) => {
 
     if (existingUser) {
       res.status(400);
-      res.json({
-        "message": "The user is already present!"
-      })
+      return res.json({
+        message: "The user is already present!",
+      });
     }
 
     const user = await User.create({
@@ -46,32 +46,45 @@ const registerUser = async (req, res) => {
   }
 };
 
-const authUser = async (req, res) => {
+const loginUser = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
     if (!username) {
       if (!email) {
         res.status(400);
-        throw new Error("Unable to login!");
+        console.log("Unable to login!");
       }
     }
-    const userByUsername = await User.findOne({ username });
+
     const userByEmail = await User.findOne({ email });
+    const userByUsername = await User.findOne({ username });
     const user = userByEmail || userByUsername;
+    const token = await generateToken(user._id);
+
     if (!user) {
-      throw new Error("User not found!");
+      console.log("User not found!");
+      return res.status(400).json({
+        message: "Please add valid credentials!",
+      });
     }
-    // console.log(user);
+    console.log(user);
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
       res.status(200);
-      res.json({
+      user.tokens = user.tokens.concat({ token });
+      res.cookie("user", token, {
+        // httpOnly: true,
+      });
+      console.log("ln 79 ", req.cookie);
+      await user.save();
+      return res.json({
         _id: user._id,
         name: user.name,
         email: user.email,
         username: user.username,
         profilePic: user.profilePic,
+        tokens: [...user.tokens],
       });
     } else {
       throw new Error("Please Enter valid details!");
@@ -80,4 +93,4 @@ const authUser = async (req, res) => {
     console.log(error.message);
   }
 };
-module.exports = { registerUser, authUser };
+module.exports = { registerUser, loginUser };

@@ -3,11 +3,15 @@ import Navbar from "../common/Navbar";
 import Sidebar from "../common/Sidebar";
 import User from "../common/User";
 import Form from "react-bootstrap/Form";
-import { AppBar, Toolbar, IconButton, Typography, Button } from "@mui/material";
+import { IconButton } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import axios from "axios";
 // import "./styles/Chat.css";
 import background from "../images/background.svg";
+import BottomBar from "../common/BottomBar";
+import Message from "../common/Message";
+import SearchIcon from "@mui/icons-material/Search";
+
 // import { MenuIcon } from '@mui/icons-material';
 function Chat({ isSideBarOpen, sidebarToggleHandler }) {
   const [mobileView, setMobileView] = useState(false);
@@ -16,10 +20,9 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
   // const clickHandler = () => {
   //   setIsChatActive(true);
   // };
-  const array = Array(25);
+  const array = Array(6);
   array.fill("Lorem Ipsum");
-  // console.log(array);
-  // mobileView && alert(mobileView);
+
   useEffect(() => {
     axios
       .get("http://localhost:5000/api/chats")
@@ -30,14 +33,9 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
 
         console.log(data);
       })
-      .catch(function (error) {
+      .catch((error) => {
         // handle error
         console.log(error);
-      })
-      .finally(function () {
-        // always executed
-        console.log("finally");
-        console.log(chats);
       });
     window.innerWidth > 700 ? setMobileView(false) : setMobileView(true);
   }, [chats]);
@@ -51,6 +49,12 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
       }}
     >
       <Navbar sidebarToggleHandler={sidebarToggleHandler} />
+      {mobileView && (
+        <BottomBar
+          setIsChatActive={setIsChatActive}
+          isChatActive={isChatActive}
+        />
+      )}
       <Sidebar isSideBarOpen={isSideBarOpen} />
       <div
         className="container-fluid my-2 border rounded-3 bg-light"
@@ -74,16 +78,19 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
                   }}
                 />
               </div>
+              <div className="col-2">
+                <SearchIcon />
+              </div>
             </div>
             <div
               className="row"
               style={{ height: "81vh", overflowY: "scroll" }}
             >
-              <div className="col-12">
-                {chats.map((element, index) => (
+              <div className="col-12 pt-3" style={{ paddingLeft: "20px" }}>
+                {array.map((element, index) => (
                   <User
                     key={index}
-                    name={element.chatName}
+                    name={element}
                     clickHandler={setIsChatActive}
                   />
                 ))}
@@ -106,7 +113,21 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
               <div className="col-11 fw-bold fs-5">Satyam Bajpai</div>
               <div className="col-1 justify-self-end">*</div>
             </div>
-            <div className="row" style={{ height: "74vh" }}></div>
+            <div className="row" style={{ height: "72vh" }}>
+              <div
+                className="col mt-3 overflow-y"
+                style={{ height: "inherit", overflow: "scroll" }}
+              >
+                <Message className="left" />
+                <Message className="right" />
+                <Message className="left" />
+                <Message className="right" />
+                <Message className="left" />
+                <Message className="right" />
+                <Message className="left" />
+                <Message className="right" />
+              </div>
+            </div>
             <div className="row align-items-center" style={{ height: "8vh" }}>
               <div className="col-10">
                 <div className="">

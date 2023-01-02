@@ -74,9 +74,10 @@ const loginUser = async (req, res) => {
       res.status(200);
       user.tokens = user.tokens.concat({ token });
       res.cookie("user", token, {
-        // httpOnly: true,
+        expire: Date.now() + 2592000000,
+        httpOnly: true,
       });
-      console.log("ln 79 ", req.cookie);
+      // console.log("ln 79 ", req.cookie);
       await user.save();
       return res.json({
         _id: user._id,
@@ -93,4 +94,29 @@ const loginUser = async (req, res) => {
     console.log(error.message);
   }
 };
-module.exports = { registerUser, loginUser };
+
+const signOutUser = async (req, res) => {
+  try {
+    // console.log("req.user ", req.user);
+    // console.log("req.token ", req.token);
+    res.clearCookie("user");
+    res.status(200).json({
+      message: "Signout Successfully",
+    });
+  } catch (err) {
+    console.log("Error: ", err.message);
+    res.status(400).json({
+      message: "The request is not processed!",
+    });
+  }
+};
+
+const searchUser = async (req, res) => {
+  console.log("hello");
+};
+const chat = async (req, res) => {
+  res.status(200).json({
+    message: "Welcome to chat page!",
+  });
+};
+module.exports = { registerUser, loginUser, chat, searchUser, signOutUser };

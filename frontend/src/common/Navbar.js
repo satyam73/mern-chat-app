@@ -15,8 +15,11 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import Sidebar from "./Sidebar";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+// import Sidebar from "./Sidebar";
+
+import { SIGNOUT_URL } from "../constants";
 import "../utils.css";
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -63,6 +66,7 @@ export default function PrimarySearchAppBar({
   backgroundcolor,
 }) {
   const location = useLocation();
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -97,6 +101,18 @@ export default function PrimarySearchAppBar({
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const signOutHandler = async (evt) => {
+    console.log(SIGNOUT_URL);
+    const { status } = await axios.get(SIGNOUT_URL, {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    });
+    if (status === 200) {
+      console.log(200);
+      navigate("/login");
+    }
+  };
+
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -116,13 +132,30 @@ export default function PrimarySearchAppBar({
     >
       <MenuItem onClick={handleMenuClose}>
         <Link
-          style={{ textDecoration: "none", color: "inherit" }}
+          style={{
+            textDecoration: "none",
+            color: "inherit",
+            marginBottom: 0,
+            padding: "4px",
+          }}
           to={"/profile"}
         >
-          <p>Profile</p>
+          Profile
         </Link>
       </MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+        <p
+          style={{
+            textDecoration: "none",
+            color: "red",
+            marginBottom: 0,
+            padding: "4px",
+          }}
+          onClick={signOutHandler}
+        >
+          Sign Out
+        </p>
+      </MenuItem>
     </Menu>
   );
 

@@ -111,12 +111,102 @@ const signOutUser = async (req, res) => {
   }
 };
 
-const searchUser = async (req, res) => {
-  console.log("hello");
+const searchUserByUsername = async (req, res) => {
+  try {
+    console.log("searchUserByUsername");
+    const username = req.params.username;
+    console.log(username)
+    if (!username) {
+      return res.json({
+        response: "Please enter valid username!"
+      });
+    }
+    const user = await User.find({ username: { $regex: username } });
+    const users = [];
+    user.forEach((elem) => {
+      users.push({ username: elem.username, id: elem._id })
+    })
+
+    return res.json({
+      users
+    })
+  } catch (err) {
+    console.log("Error : ", err)
+  }
 };
+
+const sendFriendRequest = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const fromUser = req.user._id.toString();
+
+    if (!userId) {
+      return res.json({
+        response: "User not found!"
+      });
+    }
+
+    if (fromUser === userId) {
+      console.log('same id')
+      return res.json({
+        response: "Cannot send friend request to yourself!"
+      })
+    }
+
+    const toUser = await User.findById({ _id: userId });
+
+    if (toUser.requests.includes(fromUser)) {
+      return res.json({
+        response: "You've already sent friend request to the user!"
+      })
+    }
+
+    toUser.requests.push(fromUser);
+    await toUser.save();
+
+    return res.json({
+      response: "Friend request sent successfully!"
+    })
+  } catch (err) {
+    console.log("Error : ", err)
+  }
+}
+
+const acceptFriendRequest = async (req, res) => {
+  console.log("accept request");
+  try {
+    const { userId } = req.params;
+
+    if (!userId) {
+      return res.json({
+        response: "User not found!"
+      });
+    }
+
+    const user = await User.findById({ _id: req.user._id });
+
+    if (user.requests.includes(userId)) {
+      console.log('request is there!')
+      user.requests = user.requests.filter((request) => {
+        return request !== userId;
+      });
+      user.friends.push(userId);
+      await user.save();
+      return res.json({
+        response: "Friend is added!"
+      })
+    } else {
+      return res.json({
+        response: "Something went wrong"
+      })
+    }
+  } catch (err) {
+    console.log("Error : ", err)
+  }
+}
 const chat = async (req, res) => {
   res.status(200).json({
     message: "Welcome to chat page!",
   });
 };
-module.exports = { registerUser, loginUser, chat, searchUser, signOutUser };
+module.exports = { registerUser, loginUser, chat, searchUserByUsername, signOutUser, sendFriendRequest, acceptFriendRequest };

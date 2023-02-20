@@ -17,6 +17,8 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import UserSearch from "../common/UserSearch";
+import { SEARCH_API_URL } from "../constants"
 // import Sidebar from "./Sidebar";
 
 import { SIGNOUT_URL } from "../constants";
@@ -216,6 +218,25 @@ export default function PrimarySearchAppBar({
     </Menu>
   );
 
+  const [profiles, setProfiles] = useState([]);
+  async function searchHandler(evt) {
+    try {
+      const searchedUserName = evt.target.value;
+      // console.log(SEARCH_API_URL(searchedUserName))
+      const ENDPOINT = SEARCH_API_URL(searchedUserName);
+      const response = await fetch(ENDPOINT, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const { users } = await response.json();
+      console.log(users)
+      console.log(searchedUserName);
+      setProfiles(users);
+    } catch (err) {
+      console.error('Error : ', err);
+    }
+  }
+
   return (
     <Box
       sx={{
@@ -227,6 +248,7 @@ export default function PrimarySearchAppBar({
       }}
     >
       <AppBar position="static">
+        <UserSearch profiles={profiles} style={{ display: profiles.length >= 1 ? "block" : "block" }} />
         <Toolbar>
           <IconButton
             size="large"
@@ -265,6 +287,10 @@ export default function PrimarySearchAppBar({
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
+              onInput={searchHandler}
+              // onBlur={() => {
+              //   setProfiles([]);
+              // }}
               placeholder="Search Profile"
               inputProps={{ "aria-label": "search" }}
             />

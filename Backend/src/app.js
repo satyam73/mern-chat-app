@@ -4,9 +4,8 @@ const express = require("express");
 const app = express();
 const PORT = 5000;
 const cors = require("cors");
-const chats = require("../data");
 const connectDB = require("../db/config/conn");
-const userRoutes = require("../routers/routes");
+const userRoutes = require("../routers/userRoutes");
 const cookieParser = require("cookie-parser");
 
 app.use(cookieParser());
@@ -19,7 +18,7 @@ connectDB();
 app.get("/", (req, res) => {
   res.send("Api is running successfully");
 });
-// app.use(router);
+
 app.listen(PORT, () => {
   console.log(`server is running on the port ${PORT}`);
 });

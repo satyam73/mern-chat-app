@@ -1,0 +1,53 @@
+.searchContainer {
+    width: 59vw;
+    max-height: 50vh;
+    box-shadow: 0px 0px 20px -5px grey;
+    border-radius: 6px;
+    background-color: white;
+    position: absolute;
+    top: 64px;
+    left: 70px;
+    z-index: 2;
+    overflow-y: auto;
+}
+
+.searchedUser {
+    background-color: #f3f3f3;
+    padding: 10px;
+    display: flex;
+    color: black;
+    font-weight: bold;
+    border-bottom: 1px solid black;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.searchedUser:hover {
+    background-color: #e5e5e5;
+}
+
+.searchedUser p {
+    margin-bottom: 0 !important;
+
+}
+
+
+.searchedUser span {
+    font-size: 30px;
+    color: var(--secondary-color);
+}
+
+.searchedUser span:hover {
+    color: var(--primary-color);
+}
+
+.searchedUser:last-child {
+    border-bottom: none;
+}
+
+@media only screen and (min-width: 960px) {
+    .searchContainer {
+        width: 30vw;
+    }
+}

@@ -11,7 +11,7 @@ import background from "../images/background.svg";
 import BottomBar from "../common/BottomBar";
 import Message from "../common/Message";
 import SearchIcon from "@mui/icons-material/Search";
-
+import UserSearch from "../common/UserSearch";
 // import { MenuIcon } from '@mui/icons-material';
 function Chat({ isSideBarOpen, sidebarToggleHandler }) {
   const [mobileView, setMobileView] = useState(false);
@@ -61,6 +61,7 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
         className="container-fluid my-2 border rounded-3 bg-light"
         style={{ height: "90vh", width: "96vw" }}
       >
+        {/* <UserSearch /> */}
         <div className="row h-100">
           <div
             className={

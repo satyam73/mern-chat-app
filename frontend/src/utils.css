@@ -1,15 +1,17 @@
 :root {
     --primary-color: #00d5c7;
     --secondary-color: #00a59a;
+    --light-grey: #e3e3e3;
+    --transparent-red: #ff00000f;
 }
 
-.left{
+.left {
     float: left;
     clear: both;
     background-color: white !important;
 }
 
-.right{
+.right {
     float: right;
     clear: both;
 }

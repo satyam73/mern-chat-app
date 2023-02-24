@@ -1,0 +1,37 @@
+.tabCard {
+    width: 100%;
+    box-shadow: 0px 0px 2px 2px var(--light-grey);
+    height: 50px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px;
+    margin-top: 10px;
+    background-color: white;
+}
+
+.tabCardDetails {
+    width: 24%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.tabCardImage {
+    height: 100%;
+    width: 20%;
+    border-radius: 42px;
+    border: 3px solid var(--primary-color);
+}
+
+.tabCard .username {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.tabCardActions {
+    width: 25%;
+    display: flex;
+    justify-content: space-evenly;
+}

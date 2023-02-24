@@ -8,7 +8,6 @@ const {
   sendFriendRequest,
   acceptFriendRequest
 } = require("../controllers/userControllers");
-const app = express();
 const auth = require("../middlewares/auth");
 const router = new express.Router();
 

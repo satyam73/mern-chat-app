@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 import Navbar from "../common/Navbar";
 import background from "../images/background.svg";
-import { styled } from "@mui/material/styles";
 import {
   IconButton,
   Button,
   TextField,
   Modal,
   Box,
-  Stack,
+  Tabs,
+  Tab,
+  Typography,
 } from "@mui/material";
 import { PhotoCamera } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
+import TabCard from "../common/TabCard";
+
 function EditModal({ showModal, setShowModal }) {
   const style = {
     position: "absolute",
@@ -26,25 +29,6 @@ function EditModal({ showModal, setShowModal }) {
     p: 2,
     pt: 0,
   };
-  const CssTextField = styled(TextField)({
-    "& label.Mui-focused": {
-      color: "green",
-    },
-    "& .MuiInput-underline:after": {
-      borderBottomColor: "green",
-    },
-    "& .MuiOutlinedInput-root": {
-      "& fieldset": {
-        borderColor: "red",
-      },
-      "&:hover fieldset": {
-        borderColor: "yellow",
-      },
-      "&.Mui-focused fieldset": {
-        borderColor: "green",
-      },
-    },
-  });
   return (
     <Modal
       open={showModal}
@@ -161,9 +145,42 @@ function EditModal({ showModal, setShowModal }) {
     </Modal>
   );
 }
+
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}
+
 function Profile() {
   const [profile, setProfile] = useState("");
   const [isEditPopupShowing, setIsEditPopupShowing] = useState(false);
+  const [tabValue, setTabValue] = useState(0);
+
+  const handleChange = (e, newValue) => {
+    setTabValue(newValue);
+  };
   return (
     <div
       style={{
@@ -177,14 +194,10 @@ function Profile() {
         showModal={isEditPopupShowing}
         setShowModal={setIsEditPopupShowing}
       />
-      {/* <EditModal
-        showModal={isEditPopupShowing}
-        setShowModal={setIsEditPopupShowing}
-      /> */}
       <Navbar />
       <div
         className="container-fluid my-2 border rounded-3 bg-white"
-        style={{ height: "90vh", width: "96vw" }}
+        style={{ height: "93vh", width: "96vw", zIndex: -1 }}
       >
         <div className="row justify-content-end mt-3">
           <div className="col-1" style={{ width: "fit-content" }}>
@@ -232,7 +245,6 @@ function Profile() {
               aria-label="upload picture"
               component="label"
             >
-              {/* <Button> */}
               <input
                 hidden
                 accept="image/*"
@@ -243,14 +255,39 @@ function Profile() {
                 }
               />
               <PhotoCamera sx={{ color: "white" }} />
-              {/* Change Photo */}
-              {/* </Button> */}
             </IconButton>
           </div>
           <div className="col-sm-12 col-md-8  d-flex flex-column justify-content-center">
             <h1 className="fw-bold"> Satyam Bajpai</h1>
             <p className="">@username</p>
           </div>
+        </div>
+        <div className="row h-50">
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Tabs
+              value={tabValue}
+              onChange={handleChange}
+              aria-label="basic tabs example"
+            >
+              <Tab label="Friend Requests" {...a11yProps(0)} />
+              <Tab label="Friends" {...a11yProps(1)} />
+              <Tab label="Deleted" {...a11yProps(2)} />
+            </Tabs>
+          </Box>
+          <TabPanel className="tabContent" value={tabValue} index={0}>
+            {Array(10)
+              .fill("h")
+              .map((elem) => {
+                return <TabCard />;
+              })}
+            {/* Friend Requests */}
+          </TabPanel>
+          <TabPanel className="tabContent" value={tabValue} index={1}>
+            Friends
+          </TabPanel>
+          <TabPanel className="tabContent" value={tabValue} index={2}>
+            Deleted
+          </TabPanel>
         </div>
       </div>
     </div>

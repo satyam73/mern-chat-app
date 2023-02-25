@@ -94,7 +94,23 @@ const loginUser = async (req, res) => {
     console.log(error.message);
   }
 };
-
+const getUserDetails = async (req, res) => {
+  // let user = req.user;
+  const user = {
+    _id: req.user._id,
+    name: req.user.name,
+    email: req.user.email,
+    username: req.user.username,
+    profilePic: req.user.profilePic,
+    requests: req.user.requests,
+    friends: req.user.friends
+  }
+  console.log("user ln 99 ", user)
+  return res.status(200).json({
+    response: "User details returned successfully!",
+    user
+  })
+}
 const signOutUser = async (req, res) => {
   try {
     // console.log("req.user ", req.user);
@@ -209,4 +225,4 @@ const chat = async (req, res) => {
     message: "Welcome to chat page!",
   });
 };
-module.exports = { registerUser, loginUser, chat, searchUserByUsername, signOutUser, sendFriendRequest, acceptFriendRequest };
+module.exports = { registerUser, loginUser, getUserDetails, chat, searchUserByUsername, signOutUser, sendFriendRequest, acceptFriendRequest };

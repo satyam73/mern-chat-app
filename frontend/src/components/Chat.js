@@ -24,6 +24,7 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
   array.fill("Lorem Ipsum");
 
   useEffect(() => {
+    // window.location.reload();
     axios
       .get("http://localhost:5000/api/chats")
       .then(function (response) {
@@ -104,8 +105,8 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
               !mobileView
                 ? "col-8"
                 : !isChatActive
-                ? "col-0 d-none"
-                : "col-12 d-block"
+                  ? "col-0 d-none"
+                  : "col-12 d-block"
             }
           >
             <div

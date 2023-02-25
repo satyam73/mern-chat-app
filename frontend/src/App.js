@@ -10,84 +10,79 @@ import Register from "./components/Register";
 import Profile from "./components/Profile";
 import Auth from "./common/Auth";
 import "./global.css";
-import { BACKEND_BASE_URL } from "./constants";
+import { USER_DETAILS_URL } from "./constants";
 import axios from "axios";
 export const ErrorContext = createContext();
+
+export const UserContext = createContext({});
+// export const UserContext = createContext();
+
 function App() {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
-
+  const [user, setUser] = useState({});
   // const navigate = useNavigate();
   function sidebarToggleHandler(evt) {
     setIsSideBarOpen(!isSideBarOpen);
   }
 
-  useEffect(() => {
-    // const { status } = axios.get(BACKEND_BASE_URL + "/api/user/chat", {
-    //   headers: { "Content-Type": "application/json" },
-    // });
-    // console.log(BACKEND_BASE_URL + "/api/user/chat");
-    // if (status === 200) {
-    //   setIsAuth(status);
-    // }
-  });
   return (
-    <div className="App">
-      <Router>
-        <Routes>
-          <Route
-            element={
-              <Home
-                sidebarToggleHandler={sidebarToggleHandler}
-                isSideBarOpen={isSideBarOpen}
-              />
-            }
-            path="/"
-          />
-          {/* <Route element={<>Hello from login</>} path="/login" /> */}
-          {/* <Route element={<>Hello from register</>} path="/register" /> */}
-          <Route
-            element={
-              <Auth
-                Component={
-                  <Chat
-                    sidebarToggleHandler={sidebarToggleHandler}
-                    isSideBarOpen={isSideBarOpen}
-                  />
-                }
-              />
-            }
-            path="/chat"
-          />
-          <Route
-            element={
-              <Register
-                sidebarToggleHandler={sidebarToggleHandler}
-                isSideBarOpen={isSideBarOpen}
-              />
-            }
-            path="/register"
-          />
-          <Route
-            element={
-              <Login
-                sidebarToggleHandler={sidebarToggleHandler}
-                isSideBarOpen={isSideBarOpen}
-              />
-            }
-            path="/login"
-          />
-          <Route
-            element={
-              <Profile
-                sidebarToggleHandler={sidebarToggleHandler}
-                isSideBarOpen={isSideBarOpen}
-              />
-            }
-            path="/profile"
-          />
-        </Routes>
-      </Router>
-    </div>
+    <UserContext.Provider value={[user, setUser]}>
+      <div className="App">
+        <Router>
+          <Routes>
+            <Route
+              element={
+                <Home
+                  sidebarToggleHandler={sidebarToggleHandler}
+                  isSideBarOpen={isSideBarOpen}
+                />
+              }
+              path="/"
+            />
+            <Route
+              element={
+                <Auth
+                  Component={
+                    <Chat
+                      sidebarToggleHandler={sidebarToggleHandler}
+                      isSideBarOpen={isSideBarOpen}
+                    />
+                  }
+                />
+              }
+              path="/chat"
+            />
+            <Route
+              element={
+                <Register
+                  sidebarToggleHandler={sidebarToggleHandler}
+                  isSideBarOpen={isSideBarOpen}
+                />
+              }
+              path="/register"
+            />
+            <Route
+              element={
+                <Login
+                  sidebarToggleHandler={sidebarToggleHandler}
+                  isSideBarOpen={isSideBarOpen}
+                />
+              }
+              path="/login"
+            />
+            <Route
+              element={
+                <Profile
+                  sidebarToggleHandler={sidebarToggleHandler}
+                  isSideBarOpen={isSideBarOpen}
+                />
+              }
+              path="/profile"
+            />
+          </Routes>
+        </Router>
+      </div>
+    </UserContext.Provider>
   );
 }
 

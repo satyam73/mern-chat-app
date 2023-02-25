@@ -6,7 +6,8 @@ const {
   chat,
   searchUserByUsername,
   sendFriendRequest,
-  acceptFriendRequest
+  acceptFriendRequest,
+  getUserDetails
 } = require("../controllers/userControllers");
 const auth = require("../middlewares/auth");
 const router = new express.Router();
@@ -14,6 +15,7 @@ const router = new express.Router();
 // routes
 router.route("/register").post(registerUser);
 router.post("/login", loginUser);
+router.get("/", auth, getUserDetails)
 router.get("/signout", auth, signOutUser);
 router.get("/chat", auth, chat);
 router.get("/search/:username", searchUserByUsername);

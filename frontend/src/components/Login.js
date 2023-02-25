@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Navbar from "../common/Navbar";
-// import Sidebar from "../common/Sidebar";
+import { UserContext } from "../App";
 import { useNavigate } from "react-router-dom";
 import {
   TextField,
@@ -25,6 +25,7 @@ function Login({ sidebarToggleHandler }) {
   const [isChecked, setIsChecked] = useState(false);
   const [loginDetails, setLoginDetails] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useContext(UserContext);
   const navigate = useNavigate();
   const [error, setError] = useState({
     isError: false,
@@ -75,8 +76,12 @@ function Login({ sidebarToggleHandler }) {
           withCredentials: true,
         }
       );
+
+      setUser(data);
+
       status === 200 &&
         setSuccess({ isSuccess: true, message: "Login Successfully!" });
+
       setTimeout(() => navigate("/chat"), 1000);
     } catch (err) {
       setError({

@@ -3,8 +3,9 @@ import { useState } from "react";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { SEND_FRIEND_REQUEST_URL } from "../constants";
 import { Alert, Snackbar } from "@mui/material";
+import axios from "axios";
 function UserSearch({ style, profiles }) {
-  const [anchorEl, setAnchorEl] = useState(null);
+  // const [anchorEl, setAnchorEl] = useState(null);
   const [error, setError] = useState({
     isError: false,
     message: "",
@@ -13,34 +14,44 @@ function UserSearch({ style, profiles }) {
     isSuccess: false,
     message: "",
   });
-  const open = Boolean(anchorEl);
-  // console.log(profiles);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  // const open = Boolean(anchorEl);
+  // const handleClick = (event) => {
+  //   setAnchorEl(event.currentTarget);
+  // };
   // console.log(profiles[0])
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  // const handleClose = () => {
+  //   setAnchorEl(null);
+  // };
   const sendFriendRequest = async (e, userId) => {
-    console.log(userId);
-    console.log(SEND_FRIEND_REQUEST_URL(userId));
-
-    const response = await fetch(SEND_FRIEND_REQUEST_URL(userId), {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    });
-    console.log("response ", response);
-    const { response: data } = await response.json();
-    console.log("data ", data);
+    try {
+      const {
+        data: { response },
+        status,
+      } = await axios.post(SEND_FRIEND_REQUEST_URL(userId), undefined, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
+      if (status === 200) {
+        setSuccess({
+          isSuccess: true,
+          message: response,
+        });
+      }
+    } catch (err) {
+      console.log("Error: ", err);
+      setError({
+        isError: true,
+        message: err.response.data.response,
+      });
+    }
   };
   return (
     <>
       <Snackbar
+        variant="error"
         open={error.isError}
         autoHideDuration={6000}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
         // key={{ vertical: "bottom" } + { horizontal: "center" }}
         onClose={() =>
           setError({
@@ -62,7 +73,30 @@ function UserSearch({ style, profiles }) {
           {error.message}
         </Alert>
       </Snackbar>
-
+      <Snackbar
+        open={success.isSuccess}
+        autoHideDuration={6000}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        onClose={() =>
+          setSuccess({
+            isSuccess: false,
+            message: "no error!",
+          })
+        }
+      >
+        <Alert
+          onClose={() =>
+            setSuccess({
+              isSuccess: false,
+              message: "no error!",
+            })
+          }
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          {success.message}
+        </Alert>
+      </Snackbar>
       <div style={style} className="searchContainer">
         {profiles.map((profile) => {
           return (

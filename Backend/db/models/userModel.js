@@ -10,8 +10,9 @@ const userSchema = mongoose.Schema(
       default:
         "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png",
     },
-    requests: [{ type: String, unique: true }],
-    friends: [{ type: String, unique: true }],
+    incomingRequests: [{ type: mongoose.Schema.Types.ObjectId, unique: true, ref: "User" }],
+    pendingRequests: [{ type: mongoose.Schema.Types.ObjectId, unique: true, ref: "User" }],
+    friends: [{ type: mongoose.Schema.Types.ObjectId, unique: true, ref: "User" }],
     password: { type: String, required: true },
     confirmPassword: { type: String, required: true },
     tokens: [{ token: { type: String } }],

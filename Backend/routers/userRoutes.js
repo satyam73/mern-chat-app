@@ -7,7 +7,8 @@ const {
   searchUserByUsername,
   sendFriendRequest,
   acceptFriendRequest,
-  getUserDetails
+  getUserDetails,
+  getFriends
 } = require("../controllers/userControllers");
 const auth = require("../middlewares/auth");
 const router = new express.Router();
@@ -21,5 +22,6 @@ router.get("/chat", auth, chat);
 router.get("/search/:username", searchUserByUsername);
 router.post("/:userId/friend-request/", auth, sendFriendRequest);
 router.put("/:userId/friend-request/accept", auth, acceptFriendRequest);
+router.get("/friends", auth, getFriends)
 
 module.exports = router;

@@ -222,6 +222,9 @@ export default function PrimarySearchAppBar({
   async function searchHandler(evt) {
     try {
       const searchedUserName = evt.target.value;
+      if (!searchedUserName) {
+        return;
+      }
       // console.log(SEARCH_API_URL(searchedUserName))
       const ENDPOINT = SEARCH_API_URL(searchedUserName);
       const response = await fetch(ENDPOINT, {

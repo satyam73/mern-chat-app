@@ -2,6 +2,7 @@ const express = require("express");
 const User = require("../db/models/userModel");
 const generateToken = require("../db/config/generateToken");
 const bcrypt = require("bcryptjs");
+const { populate } = require("../db/models/userModel");
 
 const registerUser = async (req, res) => {
   try {
@@ -153,8 +154,9 @@ const searchUserByUsername = async (req, res) => {
 
 const sendFriendRequest = async (req, res) => {
   try {
+    // fromUser is self account and toUser is whom the self is sending the request
     const { userId } = req.params;
-    const fromUser = req.user._id.toString();
+    const fromUser = req.user;
 
     if (!userId) {
       return res.json({
@@ -162,24 +164,25 @@ const sendFriendRequest = async (req, res) => {
       });
     }
 
-    if (fromUser === userId) {
+    if (fromUser._id.toString() === userId) {
       console.log('same id')
-      return res.json({
+      return res.status(400).json({
         response: "Cannot send friend request to yourself!"
       })
     }
 
     const toUser = await User.findById({ _id: userId });
 
-    if (toUser.requests.includes(fromUser)) {
-      return res.json({
+    if (toUser.pendingRequests.includes(fromUser)) {
+      return res.status(409).json({
         response: "You've already sent friend request to the user!"
       })
     }
 
-    toUser.requests.push(fromUser);
+    toUser.incomingRequests.push(fromUser._id);
+    fromUser.pendingRequests.push(toUser);
     await toUser.save();
-
+    await fromUser.save();
     return res.json({
       response: "Friend request sent successfully!"
     })
@@ -192,22 +195,29 @@ const acceptFriendRequest = async (req, res) => {
   console.log("accept request");
   try {
     const { userId } = req.params;
-
+    //user is whose friend request is came and the self is accepting the friend request here
+    const user = await User.findById({ _id: userId });
+    const self = req.user;
     if (!userId) {
       return res.json({
         response: "User not found!"
       });
     }
 
-    const user = await User.findById({ _id: req.user._id });
 
-    if (user.requests.includes(userId)) {
+    if (self.incomingRequests.includes(userId)) {
       console.log('request is there!')
-      user.requests = user.requests.filter((request) => {
-        return request !== userId;
+      self.incomingRequests = self.incomingRequests.filter((request) => {
+        return request.toString() !== userId;
       });
-      user.friends.push(userId);
+      user.pendingRequests = user.pendingRequests.filter((request) => {
+        return request.toString() !== self._id.toString();
+      })
+      self.friends.push(userId);
+      user.friends.push(self._id);
+      await self.save();
       await user.save();
+
       return res.json({
         response: "Friend is added!"
       })
@@ -220,9 +230,31 @@ const acceptFriendRequest = async (req, res) => {
     console.log("Error : ", err)
   }
 }
+
+const getFriends = async (req, res) => {
+  try {
+    const user = req.user;
+
+    if (!user) {
+      return res.json({
+        response: "User not found!"
+      })
+    }
+
+    const { friends } = await user.populate("friends", { password: 0, confirmPassword: 0, tokens: 0 });
+    res.status(200).json({
+      response: "All friend returned successfully!",
+      friends
+    })
+  } catch (err) {
+    return res.json({
+      response: "Something went wrong!"
+    })
+  }
+}
 const chat = async (req, res) => {
   res.status(200).json({
     message: "Welcome to chat page!",
   });
 };
-module.exports = { registerUser, loginUser, getUserDetails, chat, searchUserByUsername, signOutUser, sendFriendRequest, acceptFriendRequest };
+module.exports = { registerUser, loginUser, getUserDetails, chat, searchUserByUsername, signOutUser, sendFriendRequest, acceptFriendRequest, getFriends };

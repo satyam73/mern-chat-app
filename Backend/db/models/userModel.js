@@ -13,6 +13,7 @@ const userSchema = mongoose.Schema(
     incomingRequests: [{ type: mongoose.Schema.Types.ObjectId, unique: true, ref: "User" }],
     pendingRequests: [{ type: mongoose.Schema.Types.ObjectId, unique: true, ref: "User" }],
     friends: [{ type: mongoose.Schema.Types.ObjectId, unique: true, ref: "User" }],
+    chats: [{ type: mongoose.Schema.Types.ObjectId, unique: true, ref: "Chat" }],
     password: { type: String, required: true },
     confirmPassword: { type: String, required: true },
     tokens: [{ token: { type: String } }],

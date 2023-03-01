@@ -3,7 +3,7 @@ const User = require("../db/models/userModel");
 const generateToken = require("../db/config/generateToken");
 const bcrypt = require("bcryptjs");
 const { populate } = require("../db/models/userModel");
-
+const Chat = require("../db/models/chatModel")
 const registerUser = async (req, res) => {
   try {
     const { name, email, username, profilePic, password, confirmPassword } =

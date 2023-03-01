@@ -16,7 +16,9 @@ import UserSearch from "../common/UserSearch";
 function Chat({ isSideBarOpen, sidebarToggleHandler }) {
   const [mobileView, setMobileView] = useState(false);
   const [isChatActive, setIsChatActive] = useState(false);
+  const [activeChat, setActiveChat] = useState("")
   const [chats, setChats] = useState([]);
+  const [friends, setFriends] = useState([])
   // const clickHandler = () => {
   //   setIsChatActive(true);
   // };
@@ -26,19 +28,18 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
   useEffect(() => {
     // window.location.reload();
     axios
-      .get("http://localhost:5000/api/chats")
+      .get("http://localhost:5000/api/user/friends", { withCredentials: true })
       .then(function (response) {
         // handle success
         const { data } = response;
-        setChats([...data]);
-
+        setFriends(data.friends)
         console.log(data);
       })
       .catch((error) => {
         // handle error
         console.log(error);
       });
-
+    console.log(friends)
     window.innerWidth > 700 ? setMobileView(false) : setMobileView(true);
   }, [chats]);
   return (
@@ -90,11 +91,11 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
               style={{ height: "81vh", overflowY: "scroll" }}
             >
               <div className="col-12 pt-3" style={{ paddingLeft: "20px" }}>
-                {array.map((element, index) => (
+                {friends.map((friend, index) => (
                   <User
                     key={index}
-                    name={element}
-                    clickHandler={setIsChatActive}
+                    name={friend.name}
+                    clickHandler={() => { setActiveChat(friend._id.toString()) }}
                   />
                 ))}
               </div>

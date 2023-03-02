@@ -50,7 +50,7 @@ const sendMessage = async (req, res) => {
             })
         }
     } catch (err) {
-        console.log("Error: ", err)
+        console.log("Error: ", err);
     }
 
 }

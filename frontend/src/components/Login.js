@@ -77,7 +77,7 @@ function Login({ sidebarToggleHandler }) {
         }
       );
 
-      setUser(data);
+      // setUser(data);
 
       status === 200 &&
         setSuccess({ isSuccess: true, message: "Login Successfully!" });

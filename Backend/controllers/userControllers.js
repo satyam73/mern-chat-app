@@ -64,12 +64,11 @@ const loginUser = async (req, res) => {
     const token = await generateToken(user._id);
 
     if (!user) {
-      console.log("User not found!");
       return res.status(400).json({
         message: "Please add valid credentials!",
       });
     }
-    console.log(user);
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
       res.status(200);
@@ -106,7 +105,7 @@ const getUserDetails = async (req, res) => {
     requests: req.user.requests,
     friends: req.user.friends
   }
-  console.log("user ln 99 ", user)
+
   return res.status(200).json({
     response: "User details returned successfully!",
     user
@@ -114,8 +113,6 @@ const getUserDetails = async (req, res) => {
 }
 const signOutUser = async (req, res) => {
   try {
-    // console.log("req.user ", req.user);
-    // console.log("req.token ", req.token);
     res.clearCookie("user");
     res.status(200).json({
       message: "Signout Successfully",
@@ -130,9 +127,7 @@ const signOutUser = async (req, res) => {
 
 const searchUserByUsername = async (req, res) => {
   try {
-    console.log("searchUserByUsername");
     const username = req.params.username;
-    console.log(username)
     if (!username) {
       return res.json({
         response: "Please enter valid username!"
@@ -165,7 +160,6 @@ const sendFriendRequest = async (req, res) => {
     }
 
     if (fromUser._id.toString() === userId) {
-      console.log('same id')
       return res.status(400).json({
         response: "Cannot send friend request to yourself!"
       })
@@ -199,14 +193,13 @@ const acceptFriendRequest = async (req, res) => {
     const user = await User.findById({ _id: userId });
     const self = req.user;
     if (!userId) {
-      return res.json({
+      return res.status(404).json({
         response: "User not found!"
       });
     }
 
 
     if (self.incomingRequests.includes(userId)) {
-      console.log('request is there!')
       self.incomingRequests = self.incomingRequests.filter((request) => {
         return request.toString() !== userId;
       });
@@ -218,11 +211,11 @@ const acceptFriendRequest = async (req, res) => {
       await self.save();
       await user.save();
 
-      return res.json({
+      return res.status(200).json({
         response: "Friend is added!"
       })
     } else {
-      return res.json({
+      return res.status(500).json({
         response: "Something went wrong"
       })
     }
@@ -252,9 +245,48 @@ const getFriends = async (req, res) => {
     })
   }
 }
+
+const getFriendRequests = async (req, res) => {
+  try {
+    const user = req.user;
+    //type - incoming || pending
+    const { type } = req.params;
+
+    if (type.trim() === "incoming") {
+      const populatedUserRequest = await user.populate("incomingRequests", {
+        password: 0, confirmPassword: 0, chats: 0, tokens: 0, friends: 0,
+        incomingRequests: 0,
+        pendingRequests: 0
+      });
+      const incomingRequests = populatedUserRequest.incomingRequests;
+      return res.status(200).json({
+        response: "All incoming friend requests fetched successfully!",
+        incomingRequests
+      })
+    }
+
+    if (type.trim() === "pending") {
+      const populatedUserRequest = await user.populate("pendingRequests", {
+        password: 0, confirmPassword: 0, chats: 0, tokens: 0, friends: 0,
+        incomingRequests: 0,
+        pendingRequests: 0
+      });
+      const pendingRequests = populatedUserRequest.pendingRequests;
+      return res.status(200).json({
+        response: "All pending friend requests fetched successfully!",
+        pendingRequests
+      })
+    }
+  } catch (err) {
+    console.log(err)
+    return res.status(400).json({
+      response: "Something went wrong!"
+    })
+  }
+}
 const chat = async (req, res) => {
   res.status(200).json({
     message: "Welcome to chat page!",
   });
 };
-module.exports = { registerUser, loginUser, getUserDetails, chat, searchUserByUsername, signOutUser, sendFriendRequest, acceptFriendRequest, getFriends };
+module.exports = { registerUser, loginUser, getUserDetails, chat, searchUserByUsername, signOutUser, sendFriendRequest, acceptFriendRequest, getFriends, getFriendRequests };

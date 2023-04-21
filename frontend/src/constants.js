@@ -2,8 +2,9 @@ const BACKEND_BASE_URL = "http://localhost:5000";
 const SIGNIN_URL = "http://localhost:5000/api/user/login";
 const REGISTER_URL = "http://localhost:5000/api/user/register";
 const SIGNOUT_URL = "http://localhost:5000/api/user/signout";
-const USER_DETAILS_URL = `${BACKEND_BASE_URL}/api/user`
-// const API_BASE_URL = 'http://localhost:8080'
+const USER_DETAILS_URL = `${BACKEND_BASE_URL}/api/user`;
+const SEND_API_URL = "http://localhost:5000/api/messages";
+const FRIENDS_API_URL = `${BACKEND_BASE_URL}/api/user/friends`;
 
 const SEARCH_API_URL = (username) => {
   return `${BACKEND_BASE_URL}/api/user/search/${username}`;
@@ -17,9 +18,22 @@ const ACCEPT_FRIEND_REQUEST_URL = (userId) => {
   return `${BACKEND_BASE_URL}/api/user/${userId}/friend-request/accept`;
 };
 
+const GET_CHAT_BY_USERID = (userId) => {
+  return `${BACKEND_BASE_URL}/api/chats/${userId}`;
+};
+
 const REJECT_FRIEND_REQUEST_URL = (userId) => {
   return `${BACKEND_BASE_URL}/api/user/${userId}/friend-request/reject`;
 };
+
+const FRIEND_REQUESTS_API_URL = (type) => {
+  return `${BACKEND_BASE_URL}/api/user/friend-requests/${type}`;
+}
+const PROFILE_TABS = [
+  "Friends",
+  "Friend Requests",
+  "Sent Requests"
+]
 export {
   BACKEND_BASE_URL,
   SIGNIN_URL,
@@ -29,5 +43,10 @@ export {
   SEND_FRIEND_REQUEST_URL,
   ACCEPT_FRIEND_REQUEST_URL,
   REJECT_FRIEND_REQUEST_URL,
-  USER_DETAILS_URL
+  GET_CHAT_BY_USERID,
+  USER_DETAILS_URL,
+  SEND_API_URL,
+  PROFILE_TABS,
+  FRIENDS_API_URL,
+  FRIEND_REQUESTS_API_URL
 };

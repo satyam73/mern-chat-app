@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Navbar from "../common/Navbar";
 import Sidebar from "../common/Sidebar";
 import User from "../common/User";
@@ -12,21 +12,22 @@ import BottomBar from "../common/BottomBar";
 import Message from "../common/Message";
 import SearchIcon from "@mui/icons-material/Search";
 import UserSearch from "../common/UserSearch";
-// import { MenuIcon } from '@mui/icons-material';
+import { v4 as uuidv4 } from 'uuid';
+import { BACKEND_BASE_URL, GET_CHAT_BY_USERID, SEND_API_URL } from "../constants";
+import { UserContext } from "../App";
+import { io } from "socket.io-client"
 function Chat({ isSideBarOpen, sidebarToggleHandler }) {
+  const socket = io("http://localhost:8080", { transports: ['websocket'] });
   const [mobileView, setMobileView] = useState(false);
   const [isChatActive, setIsChatActive] = useState(false);
-  const [activeChat, setActiveChat] = useState("")
-  const [chats, setChats] = useState([]);
+  const [activeUser, setActiveUser] = useState([]);
+  const [activeChat, setActiveChat] = useState([])
+  const [message, setMessage] = useState("");
+  const [user, setUser] = useContext(UserContext);
+  // const [chats, setChats] = useState([]);
   const [friends, setFriends] = useState([])
-  // const clickHandler = () => {
-  //   setIsChatActive(true);
-  // };
-  const array = Array(6);
-  array.fill("Lorem Ipsum");
 
   useEffect(() => {
-    // window.location.reload();
     axios
       .get("http://localhost:5000/api/user/friends", { withCredentials: true })
       .then(function (response) {
@@ -39,9 +40,50 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
         // handle error
         console.log(error);
       });
+
+    socket.connect();
     console.log(friends)
     window.innerWidth > 700 ? setMobileView(false) : setMobileView(true);
-  }, [chats]);
+  }, []);
+
+  socket.on("receive-message", (message) => {
+    console.log("message ", message)
+    console.log("active chat here  ", activeChat)
+    setActiveChat((prev) => [...prev, message]);
+  });
+
+  const userClickHandler = async (e, friend) => {
+    try {
+      const { data: { chat } } = await axios
+        .get(GET_CHAT_BY_USERID(friend?._id), { withCredentials: true });
+      // console.log(chat)
+      if (chat.length !== 0) {
+        setActiveChat([...chat[0]?.messages]);
+        console.log(chat[0]?.messages)
+      }
+      setActiveUser(friend._id);
+
+      if (socket.connected) {
+        if (chat.length === 0) {
+          /*if chat not present case needs to be handled - 
+          update its implemented needs to be checked*/
+          const uuid = uuidv4();
+          const chatId = uuid;
+          console.log(chatId)
+          // socket.emit("connected", chatId);
+          socket.emit("joining", chatId);
+          console.log("connected")
+        } else {
+          const chatId = chat[0]._id;
+          console.log(chatId)
+          socket.emit("joining", chatId);
+          console.log("connected")
+        }
+      }
+    } catch (err) {
+      console.log("Error: ", err)
+    }
+  }
   return (
     <div
       style={{
@@ -95,7 +137,7 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
                   <User
                     key={index}
                     name={friend.name}
-                    clickHandler={() => { setActiveChat(friend._id.toString()) }}
+                    clickHandler={(e) => { userClickHandler(e, friend) }}
                   />
                 ))}
               </div>
@@ -122,14 +164,22 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
                 className="col mt-3 overflow-y"
                 style={{ height: "inherit", overflow: "scroll" }}
               >
-                <Message className="left" />
+                {activeChat.map((message) => {
+                  if (message?.sender === user?._id) {
+                    // console.log('self')
+                    return <Message key={message._id} className="right" message={message.message} />
+                  } else {
+                    return <Message key={message._id} className="left" message={message.message} />
+                  }
+                })}
+                {/* <Message className="left" />
                 <Message className="right" />
                 <Message className="left" />
                 <Message className="right" />
                 <Message className="left" />
                 <Message className="right" />
                 <Message className="left" />
-                <Message className="right" />
+                <Message className="right" /> */}
               </div>
             </div>
             <div className="row align-items-center" style={{ height: "8vh" }}>
@@ -143,6 +193,7 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
                       color: "black",
                       backgroundColor: "rgb(227 227 227)",
                     }}
+                    onInput={(e) => { setMessage(e.target.value.trim()) }}
                   />
                 </div>
               </div>
@@ -155,6 +206,26 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
                     height: "80%",
                     width: "100%",
                     "&:hover": { backgroundColor: "var(--primary-color)" },
+                  }}
+                  onClick={async (e) => {
+                    try {
+                      const payload = { senderId: user._id, receiverId: activeUser, message, chatId: activeChat[0].chat ?? null }
+                      const { data, status } = await axios.post(
+                        SEND_API_URL,
+                        payload,
+                        {
+                          headers: { "Content-Type": "application/json" },
+                          withCredentials: true,
+                        }
+                      );
+                      const savedMessage = data.message;
+                      console.log("socket is connect", socket.connected)
+                      socket.emit("send-message", savedMessage);
+                      console.log("data ", savedMessage, " status ", status)
+                    } catch (err) {
+                      console.log("Error: ", err);
+                    }
+                    console.log(message)
                   }}
                 >
                   <SendIcon />

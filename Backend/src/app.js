@@ -10,8 +10,7 @@ const userRoutes = require("../routers/userRoutes");
 const chatRoutes = require("../routers/chatRoutes");
 const messageRoutes = require("../routers/messageRoutes");
 const cookieParser = require("cookie-parser");
-
-
+const io = require("socket.io")(8080)
 const server = http.createServer(app)
 // middlewares
 app.use(cookieParser());
@@ -24,6 +23,24 @@ app.use("/api/messages", messageRoutes);
 
 // database connection 
 connectDB();
+
+io.on("connection", socket => {
+  let chatId;
+  socket.on("joining", id => {
+    chatId = id;
+    socket.join(id);
+    socket.emit("joined")
+    console.log("joined ", id)
+  })
+
+  socket.on("send-message", (message) => {
+    socket.in(message.chat).emit("receive-message", message);
+    console.log("ln 37 ", message)
+  });
+  socket.on("disconnect", (reason) => {
+    console.log("The connection is closed: ", reason);
+  });
+})
 
 app.get("/", (req, res) => {
   res.send("Api is running successfully");

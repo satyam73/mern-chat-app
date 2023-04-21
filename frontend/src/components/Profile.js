@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Navbar from "../common/Navbar";
 import background from "../images/background.svg";
 import {
@@ -11,10 +11,17 @@ import {
   Tab,
   Typography,
 } from "@mui/material";
-import { PhotoCamera } from "@mui/icons-material";
+import { PhotoCamera, UsbRounded } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
 import TabCard from "../common/TabCard";
+import {
+  PROFILE_TABS,
+  FRIEND_REQUESTS_API_URL,
+  FRIENDS_API_URL,
+} from "../constants";
+import axios from "axios";
+import { UserContext } from "../App";
 
 function EditModal({ showModal, setShowModal }) {
   const style = {
@@ -177,9 +184,34 @@ function Profile() {
   const [profile, setProfile] = useState("");
   const [isEditPopupShowing, setIsEditPopupShowing] = useState(false);
   const [tabValue, setTabValue] = useState(0);
+  const [tabData, setTabData] = useState([]);
+  const [user, setUser] = useContext(UserContext);
 
-  const handleChange = (e, newValue) => {
+  const handleChange = async (e, newValue) => {
     setTabValue(newValue);
+    if (newValue === 0) {
+      const { data } = await axios.get(FRIENDS_API_URL, {
+        withCredentials: true,
+      });
+      setTabData(data.friends);
+      return;
+    }
+    if (newValue === 1) {
+      const { data } = await axios.get(FRIEND_REQUESTS_API_URL("incoming"), {
+        withCredentials: true,
+      });
+      console.log(data);
+      setTabData(data.incomingRequests);
+      return;
+    }
+    if (newValue === 2) {
+      const { data } = await axios.get(FRIEND_REQUESTS_API_URL("pending"), {
+        withCredentials: true,
+      });
+      console.log(data);
+      setTabData(data.pendingRequests);
+      return;
+    }
   };
   return (
     <div
@@ -258,8 +290,8 @@ function Profile() {
             </IconButton>
           </div>
           <div className="col-sm-12 col-md-8  d-flex flex-column justify-content-center">
-            <h1 className="fw-bold"> Satyam Bajpai</h1>
-            <p className="">@username</p>
+            <h1 className="fw-bold"> {user?.name || "Not logged in"}</h1>
+            <p className="fw-bold">{`@${user?.username}` || "Log in"}</p>
           </div>
         </div>
         <div className="row h-50">
@@ -269,25 +301,22 @@ function Profile() {
               onChange={handleChange}
               aria-label="basic tabs example"
             >
-              <Tab label="Friend Requests" {...a11yProps(0)} />
-              <Tab label="Friends" {...a11yProps(1)} />
-              <Tab label="Deleted" {...a11yProps(2)} />
+              {PROFILE_TABS.map((tab, index) => (
+                <Tab label={tab} {...a11yProps(index)} />
+              ))}
             </Tabs>
           </Box>
-          <TabPanel className="tabContent" value={tabValue} index={0}>
-            {Array(10)
-              .fill("h")
-              .map((elem) => {
-                return <TabCard />;
-              })}
-            {/* Friend Requests */}
-          </TabPanel>
-          <TabPanel className="tabContent" value={tabValue} index={1}>
-            Friends
-          </TabPanel>
-          <TabPanel className="tabContent" value={tabValue} index={2}>
-            Deleted
-          </TabPanel>
+          {PROFILE_TABS.map((tab, index) => (
+            <TabPanel className="tabContent" value={tabValue} index={index}>
+              {tabData.map((item) => (
+                <TabCard
+                  id={item._id}
+                  name={item.name}
+                  profileImg={item.profilePic}
+                />
+              ))}
+            </TabPanel>
+          ))}
         </div>
       </div>
     </div>

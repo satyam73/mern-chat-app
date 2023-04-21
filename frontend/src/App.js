@@ -15,12 +15,23 @@ import axios from "axios";
 export const ErrorContext = createContext();
 
 export const UserContext = createContext({});
-// export const UserContext = createContext();
 
 function App() {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const [user, setUser] = useState({});
-  // const navigate = useNavigate();
+
+  useEffect(() => {
+    (async () => {
+      const { data, status } = await axios.get(
+        "http://localhost:5000/api/user/",
+        {
+          withCredentials: true,
+        }
+      );
+
+      setUser({ ...data.user });
+    })();
+  }, [])
   function sidebarToggleHandler(evt) {
     setIsSideBarOpen(!isSideBarOpen);
   }

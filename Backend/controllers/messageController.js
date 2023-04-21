@@ -12,7 +12,7 @@ const sendMessage = async (req, res) => {
         }
         const sender = await User.findOne({ _id: senderId });
         const receiver = await User.findOne({ _id: receiverId });
-        console.log("ln 13 ", sender)
+        // console.log("ln 13 ", sender)
         if (sender.chats.includes(chatId)) {
             const chat = await Chat.findOne({ _id: chatId });
             const savedMessage = new Message({
@@ -25,7 +25,8 @@ const sendMessage = async (req, res) => {
             chat.messages.push(savedMessage);
             await chat.save();
             return res.json({
-                response: "Chat was already present!"
+                response: "Chat was already present!",
+                message: savedMessage
             })
         }
 
@@ -46,7 +47,8 @@ const sendMessage = async (req, res) => {
             chat.messages.push(savedMessage);
             await chat.save()
             res.status(201).json({
-                response: "New Chat Started!"
+                response: "New Chat Started!",
+                message: savedMessage
             })
         }
     } catch (err) {

@@ -6,84 +6,79 @@ import Form from "react-bootstrap/Form";
 import { IconButton } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import axios from "axios";
-// import "./styles/Chat.css";
 import background from "../images/background.svg";
 import BottomBar from "../common/BottomBar";
 import Message from "../common/Message";
-import SearchIcon from "@mui/icons-material/Search";
-import UserSearch from "../common/UserSearch";
-import { v4 as uuidv4 } from 'uuid';
-import { BACKEND_BASE_URL, GET_CHAT_BY_USERID, SEND_API_URL } from "../constants";
+import { v4 as uuidv4 } from "uuid";
+import { GET_CHAT_BY_USERID, SEND_API_URL } from "../constants";
 import { UserContext } from "../App";
-import { io } from "socket.io-client"
+import { io } from "socket.io-client";
+import Loader from "../common/Loader";
+
 function Chat({ isSideBarOpen, sidebarToggleHandler }) {
-  const socket = io("http://localhost:8080", { transports: ['websocket'] });
+  const socket = io("http://localhost:5000", {
+    transports: ["websocket", "polling"],
+    reconnection: true,
+    reconnectionDelay: 1000,
+  });
   const [mobileView, setMobileView] = useState(false);
   const [isChatActive, setIsChatActive] = useState(false);
   const [activeUser, setActiveUser] = useState([]);
-  const [activeChat, setActiveChat] = useState([])
+  const [activeChat, setActiveChat] = useState([]);
   const [message, setMessage] = useState("");
+  const [chatId, setChatId] = useState("");
   const [user, setUser] = useContext(UserContext);
   // const [chats, setChats] = useState([]);
-  const [friends, setFriends] = useState([])
+  const [friends, setFriends] = useState([]);
 
   useEffect(() => {
     axios
       .get("http://localhost:5000/api/user/friends", { withCredentials: true })
       .then(function (response) {
-        // handle success
         const { data } = response;
-        setFriends(data.friends)
+        setFriends(data.friends);
         console.log(data);
       })
       .catch((error) => {
-        // handle error
         console.log(error);
       });
 
     socket.connect();
-    console.log(friends)
+    console.log(friends);
     window.innerWidth > 700 ? setMobileView(false) : setMobileView(true);
   }, []);
 
   socket.on("receive-message", (message) => {
-    console.log("message ", message)
-    console.log("active chat here  ", activeChat)
+    console.log("message ", message);
+    console.log("active chat here  ", activeChat);
     setActiveChat((prev) => [...prev, message]);
   });
 
   const userClickHandler = async (e, friend) => {
     try {
-      const { data: { chat } } = await axios
-        .get(GET_CHAT_BY_USERID(friend?._id), { withCredentials: true });
-      // console.log(chat)
+      setActiveUser(friend);
+      const {
+        data: { chat },
+      } = await axios.get(GET_CHAT_BY_USERID(friend?._id), {
+        withCredentials: true,
+      });
+
       if (chat.length !== 0) {
         setActiveChat([...chat[0]?.messages]);
-        console.log(chat[0]?.messages)
+        console.log(chat[0]?.messages);
       }
-      setActiveUser(friend._id);
 
       if (socket.connected) {
-        if (chat.length === 0) {
-          /*if chat not present case needs to be handled - 
-          update its implemented needs to be checked*/
-          const uuid = uuidv4();
-          const chatId = uuid;
-          console.log(chatId)
-          // socket.emit("connected", chatId);
-          socket.emit("joining", chatId);
-          console.log("connected")
-        } else {
-          const chatId = chat[0]._id;
-          console.log(chatId)
-          socket.emit("joining", chatId);
-          console.log("connected")
-        }
+        const tempChatId = chat[0]._id;
+        setChatId(tempChatId);
+        socket.emit("joining", tempChatId);
+        console.log("connected");
       }
     } catch (err) {
-      console.log("Error: ", err)
+      console.log("Error: ", err);
     }
-  }
+  };
+
   return (
     <div
       style={{
@@ -124,9 +119,9 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
                   }}
                 />
               </div>
-              <div className="col-2">
+              {/* <div className="col-2">
                 <SearchIcon />
-              </div>
+              </div> */}
             </div>
             <div
               className="row"
@@ -137,7 +132,9 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
                   <User
                     key={index}
                     name={friend.name}
-                    clickHandler={(e) => { userClickHandler(e, friend) }}
+                    clickHandler={(e) => {
+                      userClickHandler(e, friend);
+                    }}
                   />
                 ))}
               </div>
@@ -148,18 +145,20 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
               !mobileView
                 ? "col-8"
                 : !isChatActive
-                  ? "col-0 d-none"
-                  : "col-12 d-block"
+                ? "col-0 d-none"
+                : "col-12 d-block"
             }
           >
             <div
               className="row align-items-center"
               style={{ height: "8vh", backgroundColor: "white" }}
             >
-              <div className="col-11 fw-bold fs-5">Satyam Bajpai</div>
-              <div className="col-1 justify-self-end">*</div>
+              <div className="col-12 fw-bold fs-5">{activeUser.name || ""}</div>
+              {/* <div className="col-1 justify-self-end">*</div> */}
             </div>
             <div className="row" style={{ height: "72vh" }}>
+              {/* <>Loader</> */}
+              {/* <Loader style={{ height: "75px !important", width: "100px !important" }} /> */}
               <div
                 className="col mt-3 overflow-y"
                 style={{ height: "inherit", overflow: "scroll" }}
@@ -167,25 +166,30 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
                 {activeChat.map((message) => {
                   if (message?.sender === user?._id) {
                     // console.log('self')
-                    return <Message key={message._id} className="right" message={message.message} />
+                    return (
+                      <Message
+                        key={message._id}
+                        className="right"
+                        message={message.message}
+                      />
+                    );
                   } else {
-                    return <Message key={message._id} className="left" message={message.message} />
+                    return (
+                      <Message
+                        key={message._id}
+                        className="left"
+                        message={message.message}
+                      />
+                    );
                   }
                 })}
-                {/* <Message className="left" />
-                <Message className="right" />
-                <Message className="left" />
-                <Message className="right" />
-                <Message className="left" />
-                <Message className="right" />
-                <Message className="left" />
-                <Message className="right" /> */}
               </div>
             </div>
             <div className="row align-items-center" style={{ height: "8vh" }}>
               <div className="col-10">
                 <div className="">
                   <Form.Control
+                    value={message}
                     type="text"
                     placeholder="Enter Your Message!"
                     className="mb-2 py-3 w-100 rounded-3 border-0 ps-2 "
@@ -193,7 +197,9 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
                       color: "black",
                       backgroundColor: "rgb(227 227 227)",
                     }}
-                    onInput={(e) => { setMessage(e.target.value.trim()) }}
+                    onInput={(e) => {
+                      setMessage(e.target.value);
+                    }}
                   />
                 </div>
               </div>
@@ -209,7 +215,12 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
                   }}
                   onClick={async (e) => {
                     try {
-                      const payload = { senderId: user._id, receiverId: activeUser, message, chatId: activeChat[0].chat ?? null }
+                      const payload = {
+                        senderId: user._id,
+                        receiverId: activeUser._id,
+                        message: message.trim(),
+                        chatId,
+                      };
                       const { data, status } = await axios.post(
                         SEND_API_URL,
                         payload,
@@ -219,13 +230,15 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
                         }
                       );
                       const savedMessage = data.message;
-                      console.log("socket is connect", socket.connected)
+                      console.log("socket is connect", socket.connected);
                       socket.emit("send-message", savedMessage);
-                      console.log("data ", savedMessage, " status ", status)
+                      console.log("data ", savedMessage, " status ", status);
                     } catch (err) {
                       console.log("Error: ", err);
+                    } finally {
+                      setMessage("");
                     }
-                    console.log(message)
+                    console.log(message);
                   }}
                 >
                   <SendIcon />

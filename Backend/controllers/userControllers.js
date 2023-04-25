@@ -3,7 +3,8 @@ const User = require("../db/models/userModel");
 const generateToken = require("../db/config/generateToken");
 const bcrypt = require("bcryptjs");
 const { populate } = require("../db/models/userModel");
-const Chat = require("../db/models/chatModel")
+const Chat = require("../db/models/chatModel");
+
 const registerUser = async (req, res) => {
   try {
     const { name, email, username, profilePic, password, confirmPassword } =
@@ -198,7 +199,6 @@ const acceptFriendRequest = async (req, res) => {
       });
     }
 
-
     if (self.incomingRequests.includes(userId)) {
       self.incomingRequests = self.incomingRequests.filter((request) => {
         return request.toString() !== userId;
@@ -208,6 +208,24 @@ const acceptFriendRequest = async (req, res) => {
       })
       self.friends.push(userId);
       user.friends.push(self._id);
+
+      // 
+      const chat = new Chat();
+      chat.users.push(...[self._id, user._id])
+      self.chats.push(chat._id);
+      user.chats.push(chat._id);
+      // await receiver.save();
+      // await sender.save();
+      // const savedMessage = new Message({
+      //   sender: senderId,
+      //   receiver: receiverId,
+      //   chat: chat._id,
+      //   message
+      // });
+      // await savedMessage.save();
+      // chat.messages.push(savedMessage);
+      await chat.save()
+      // 
       await self.save();
       await user.save();
 

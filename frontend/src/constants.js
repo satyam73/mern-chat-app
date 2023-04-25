@@ -3,7 +3,7 @@ const SIGNIN_URL = "http://localhost:5000/api/user/login";
 const REGISTER_URL = "http://localhost:5000/api/user/register";
 const SIGNOUT_URL = "http://localhost:5000/api/user/signout";
 const USER_DETAILS_URL = `${BACKEND_BASE_URL}/api/user`;
-const SEND_API_URL = "http://localhost:5000/api/messages";
+const SEND_API_URL = `${BACKEND_BASE_URL}/api/messages`;
 const FRIENDS_API_URL = `${BACKEND_BASE_URL}/api/user/friends`;
 
 const SEARCH_API_URL = (username) => {
@@ -34,6 +34,7 @@ const PROFILE_TABS = [
   "Friend Requests",
   "Sent Requests"
 ]
+
 export {
   BACKEND_BASE_URL,
   SIGNIN_URL,

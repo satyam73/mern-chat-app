@@ -3,15 +3,23 @@ dotenv.config();
 const express = require("express");
 const app = express();
 const http = require("http");
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 const cors = require("cors");
 const connectDB = require("../db/config/conn");
 const userRoutes = require("../routers/userRoutes");
 const chatRoutes = require("../routers/chatRoutes");
 const messageRoutes = require("../routers/messageRoutes");
 const cookieParser = require("cookie-parser");
-const io = require("socket.io")(8080)
+const { Server } = require("socket.io")
+
 const server = http.createServer(app)
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    credentials: true
+  }
+});
+
 // middlewares
 app.use(cookieParser());
 app.use(express.json());
@@ -40,6 +48,9 @@ io.on("connection", socket => {
   socket.on("disconnect", (reason) => {
     console.log("The connection is closed: ", reason);
   });
+  socket.on("connect_error", (err) => {
+    console.log("ln44 ", err.message)
+  })
 })
 
 app.get("/", (req, res) => {

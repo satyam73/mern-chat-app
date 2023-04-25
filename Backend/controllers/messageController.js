@@ -8,7 +8,7 @@ const sendMessage = async (req, res) => {
         if (!senderId || !message) {
             return res.status(400).json({
                 response: "Field cannot be empty!"
-            })
+            });
         }
         const sender = await User.findOne({ _id: senderId });
         const receiver = await User.findOne({ _id: receiverId });
@@ -30,27 +30,6 @@ const sendMessage = async (req, res) => {
             })
         }
 
-        if (!chatId) {
-            const chat = new Chat();
-            const savedMessage = new Message({
-                sender: senderId,
-                receiver: receiverId,
-                chat: chat._id,
-                message
-            });
-            chat.users.push(...[senderId, req.user._id])
-            sender.chats.push(chat._id);
-            receiver.chats.push(chat._id);
-            await receiver.save();
-            await sender.save();
-            await savedMessage.save();
-            chat.messages.push(savedMessage);
-            await chat.save()
-            res.status(201).json({
-                response: "New Chat Started!",
-                message: savedMessage
-            })
-        }
     } catch (err) {
         console.log("Error: ", err);
     }

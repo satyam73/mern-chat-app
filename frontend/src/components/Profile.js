@@ -11,7 +11,7 @@ import {
   Tab,
   Typography,
 } from "@mui/material";
-import { PhotoCamera, UsbRounded } from "@mui/icons-material";
+import { PhotoCamera } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
 import TabCard from "../common/TabCard";

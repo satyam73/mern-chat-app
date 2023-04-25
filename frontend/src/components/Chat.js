@@ -9,11 +9,13 @@ import axios from "axios";
 import background from "../images/background.svg";
 import BottomBar from "../common/BottomBar";
 import Message from "../common/Message";
-import { v4 as uuidv4 } from "uuid";
-import { GET_CHAT_BY_USERID, SEND_API_URL } from "../constants";
+import {
+  GET_CHAT_BY_USERID,
+  SEND_API_URL,
+  FRIENDS_API_URL,
+} from "../constants";
 import { UserContext } from "../App";
 import { io } from "socket.io-client";
-import Loader from "../common/Loader";
 
 function Chat({ isSideBarOpen, sidebarToggleHandler }) {
   const socket = io("http://localhost:5000", {
@@ -28,12 +30,11 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
   const [message, setMessage] = useState("");
   const [chatId, setChatId] = useState("");
   const [user, setUser] = useContext(UserContext);
-  // const [chats, setChats] = useState([]);
   const [friends, setFriends] = useState([]);
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/user/friends", { withCredentials: true })
+      .get(FRIENDS_API_URL, { withCredentials: true })
       .then(function (response) {
         const { data } = response;
         setFriends(data.friends);
@@ -55,6 +56,7 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
   });
 
   const userClickHandler = async (e, friend) => {
+    setIsChatActive(true);
     try {
       setActiveUser(friend);
       const {
@@ -100,7 +102,6 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
         className="container-fluid my-2 border rounded-3 bg-light"
         style={{ height: "90vh", width: "96vw" }}
       >
-        {/* <UserSearch /> */}
         <div className="row h-100">
           <div
             className={
@@ -119,9 +120,6 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
                   }}
                 />
               </div>
-              {/* <div className="col-2">
-                <SearchIcon />
-              </div> */}
             </div>
             <div
               className="row"
@@ -131,6 +129,7 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
                 {friends.map((friend, index) => (
                   <User
                     key={index}
+                    user={friend}
                     name={friend.name}
                     clickHandler={(e) => {
                       userClickHandler(e, friend);
@@ -156,16 +155,13 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
               <div className="col-12 fw-bold fs-5">{activeUser.name || ""}</div>
               {/* <div className="col-1 justify-self-end">*</div> */}
             </div>
-            <div className="row" style={{ height: "72vh" }}>
-              {/* <>Loader</> */}
-              {/* <Loader style={{ height: "75px !important", width: "100px !important" }} /> */}
+            <div className="row" style={{ height: "65vh" }}>
               <div
                 className="col mt-3 overflow-y"
                 style={{ height: "inherit", overflow: "scroll" }}
               >
                 {activeChat.map((message) => {
                   if (message?.sender === user?._id) {
-                    // console.log('self')
                     return (
                       <Message
                         key={message._id}

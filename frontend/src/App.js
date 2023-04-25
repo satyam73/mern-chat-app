@@ -22,7 +22,7 @@ function App() {
 
   useEffect(() => {
     (async () => {
-      const { data, status } = await axios.get(
+      const { data } = await axios.get(
         "http://localhost:5000/api/user/",
         {
           withCredentials: true,

@@ -11,7 +11,7 @@ const chatRoutes = require("../routers/chatRoutes");
 const messageRoutes = require("../routers/messageRoutes");
 const cookieParser = require("cookie-parser");
 const { Server } = require("socket.io")
-
+const path = require("path")
 const server = http.createServer(app)
 const io = new Server(server, {
   cors: {
@@ -53,9 +53,22 @@ io.on("connection", socket => {
   })
 })
 
-app.get("/", (req, res) => {
-  res.send("Api is running successfully");
-});
+// deployment configuration
+
+const dir = path.resolve();
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.resolve(dir, "../frontend/build")))
+  app.get("*", (req, res) => {
+    res.status(200).sendFile(path.resolve(dir, "../../frontend/build/index.html"))
+
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.status(200).send("Api is running successfully");
+  });
+}
+// deployment configuration
 
 server.listen(PORT, () => {
   console.log(`server is running on the port ${PORT}`);

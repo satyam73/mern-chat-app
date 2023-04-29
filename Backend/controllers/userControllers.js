@@ -4,6 +4,7 @@ const generateToken = require("../db/config/generateToken");
 const bcrypt = require("bcryptjs");
 const { populate } = require("../db/models/userModel");
 const Chat = require("../db/models/chatModel");
+const frontendUrl = "convochat.netlify.app";
 
 const registerUser = async (req, res) => {
   try {
@@ -75,6 +76,7 @@ const loginUser = async (req, res) => {
       res.status(200);
       user.tokens = user.tokens.concat({ token });
       res.cookie("user", token, {
+        domain: frontendUrl,
         expire: Date.now() + 2592000000,
         // httpOnly: true,
       });

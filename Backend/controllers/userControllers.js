@@ -2,7 +2,6 @@ const express = require("express");
 const User = require("../db/models/userModel");
 const generateToken = require("../db/config/generateToken");
 const bcrypt = require("bcryptjs");
-const { populate } = require("../db/models/userModel");
 const Chat = require("../db/models/chatModel");
 const frontendUrl = ".convochat.netlify.app";
 
@@ -78,6 +77,7 @@ const loginUser = async (req, res) => {
       res.cookie("user", token, {
         domain: frontendUrl,
         expire: Date.now() + 2592000000,
+        secure: true,
         // httpOnly: true,
       });
       // console.log("ln 79 ", req.cookie);

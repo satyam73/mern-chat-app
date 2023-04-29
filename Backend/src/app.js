@@ -11,7 +11,6 @@ const chatRoutes = require("../routers/chatRoutes");
 const messageRoutes = require("../routers/messageRoutes");
 const cookieParser = require("cookie-parser");
 const { Server } = require("socket.io")
-const path = require("path")
 const server = http.createServer(app)
 const io = new Server(server, {
   cors: {
@@ -32,6 +31,7 @@ app.use("/api/messages", messageRoutes);
 // database connection 
 connectDB();
 
+//socket.io event handlings
 io.on("connection", socket => {
   let chatId;
   socket.on("joining", id => {
@@ -52,23 +52,11 @@ io.on("connection", socket => {
     console.log("ln44 ", err.message)
   })
 })
+//socket.io event handlings
 
-// deployment configuration
-
-const dir = path.resolve();
-
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.resolve(dir, "../frontend/build")))
-  app.get("*", (req, res) => {
-    res.status(200).sendFile(path.resolve(dir, "../../frontend/build/index.html"))
-
-  });
-} else {
-  app.get("/", (req, res) => {
-    res.status(200).send("Api is running successfully");
-  });
-}
-// deployment configuration
+app.get("/", (req, res) => {
+  res.status(200).send({ response: "Api is running successfully!" });
+});
 
 server.listen(PORT, () => {
   console.log(`server is running on the port ${PORT}`);

@@ -76,7 +76,7 @@ const loginUser = async (req, res) => {
       user.tokens = user.tokens.concat({ token });
       res.cookie("user", token, {
         expire: Date.now() + 2592000000,
-        httpOnly: true,
+        // httpOnly: true,
       });
       // console.log("ln 79 ", req.cookie);
       await user.save();

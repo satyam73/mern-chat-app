@@ -23,7 +23,7 @@ function App() {
   useEffect(() => {
     (async () => {
       const { data } = await axios.get(
-        "http://localhost:5000/api/user/",
+        USER_DETAILS_URL,
         {
           withCredentials: true,
         }

@@ -18,6 +18,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
 import background from "../images/background.svg";
 import Loader from "../common/Loader";
+import { REGISTER_URL } from "../constants";
 
 function Register({ isSideBarOpen, sidebarToggleHandler }) {
   const [isPasswordShowing, setIsPasswordShowing] = useState(false);
@@ -141,7 +142,7 @@ function Register({ isSideBarOpen, sidebarToggleHandler }) {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/api/user/register",
+        REGISTER_URL,
         { name, email, username, profilePic, password, confirmPassword },
         {
           headers: {

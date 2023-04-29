@@ -16,9 +16,10 @@ import {
 } from "../constants";
 import { UserContext } from "../App";
 import { io } from "socket.io-client";
+import { BACKEND_BASE_URL } from "../constants";
 
 function Chat({ isSideBarOpen, sidebarToggleHandler }) {
-  const socket = io("http://localhost:5000", {
+  const socket = io(BACKEND_BASE_URL, {
     transports: ["websocket", "polling"],
     reconnection: true,
     reconnectionDelay: 1000,

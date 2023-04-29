@@ -20,6 +20,8 @@ import Visibility from "@mui/icons-material/Visibility";
 import background from "../images/background.svg";
 import axios from "axios";
 import Loader from "../common/Loader";
+import { SIGNIN_URL } from "../constants";
+
 function Login({ sidebarToggleHandler }) {
   const [isPasswordShowing, setIsPasswordShowing] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
@@ -69,7 +71,7 @@ function Login({ sidebarToggleHandler }) {
 
     try {
       const { data, status } = await axios.post(
-        "http://localhost:5000/api/user/login",
+        SIGNIN_URL,
         { email, username, password },
         {
           headers: { "Content-Type": "application/json" },

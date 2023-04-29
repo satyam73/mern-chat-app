@@ -23,7 +23,7 @@ const io = new Server(server, {
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors({ origin: "https://convochat.netlify.app", credentials: true }));
 app.use("/api/user", userRoutes);
 app.use("/api/chats", chatRoutes);
 app.use("/api/messages", messageRoutes);

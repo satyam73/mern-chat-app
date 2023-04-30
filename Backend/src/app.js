@@ -10,11 +10,12 @@ const userRoutes = require("../routers/userRoutes");
 const chatRoutes = require("../routers/chatRoutes");
 const messageRoutes = require("../routers/messageRoutes");
 const cookieParser = require("cookie-parser");
-const { Server } = require("socket.io")
+const { Server } = require("socket.io");
 const server = http.createServer(app)
+const frontendUrl = process.env.FRONTEND_URL;
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: frontendUrl,
     credentials: true
   }
 });
@@ -23,7 +24,7 @@ const io = new Server(server, {
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cors({ origin: "https://convochat.netlify.app", credentials: true }));
+app.use(cors({ origin: frontendUrl, credentials: true }));
 app.use("/api/user", userRoutes);
 app.use("/api/chats", chatRoutes);
 app.use("/api/messages", messageRoutes);

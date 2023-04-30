@@ -3,7 +3,7 @@ const User = require("../db/models/userModel");
 const generateToken = require("../db/config/generateToken");
 const bcrypt = require("bcryptjs");
 const Chat = require("../db/models/chatModel");
-const frontendUrl = ".netlify.app";
+const frontendUrl = process.env.FRONTEND_URL;
 
 const registerUser = async (req, res) => {
   try {

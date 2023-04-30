@@ -77,6 +77,7 @@ const loginUser = async (req, res) => {
       res.cookie("user", token, {
         domain: frontendUrl,
         expire: Date.now() + 2592000000,
+        sameSite: "none",
         secure: true,
         // httpOnly: true,
       });

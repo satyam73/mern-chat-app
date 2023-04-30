@@ -3,7 +3,7 @@ const User = require("../db/models/userModel");
 const generateToken = require("../db/config/generateToken");
 const bcrypt = require("bcryptjs");
 const Chat = require("../db/models/chatModel");
-const frontendUrl = process.env.FRONTEND_URL;
+const domainUrl = process.env.DOMAIN;
 
 const registerUser = async (req, res) => {
   try {
@@ -75,7 +75,7 @@ const loginUser = async (req, res) => {
       res.status(200);
       user.tokens = user.tokens.concat({ token });
       res.cookie("user", token, {
-        domain: frontendUrl,
+        domain: domainUrl,
         expire: Date.now() + 2592000000,
         sameSite: "none",
         secure: true,

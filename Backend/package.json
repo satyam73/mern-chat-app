@@ -6,7 +6,10 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node src/app.js",
-        "dev": "nodemon src/app.js"
+        "dev": "nodemon src/app.js",
+        "client:start": "npm start --prefix frontend",
+        "client:install": "npm run build --prefix frontend",
+        "render-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
     },
     "author": "Satyam Bajpai",
     "license": "ISC",

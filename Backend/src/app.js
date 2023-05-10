@@ -2,6 +2,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 const express = require("express");
 const app = express();
+const path = require("path")
 const http = require("http");
 const PORT = process.env.PORT || 5000;
 const cors = require("cors");
@@ -55,9 +56,21 @@ io.on("connection", socket => {
 })
 //socket.io event handlings
 
-app.get("/", (req, res) => {
-  res.status(200).send({ response: "Api is running successfully!" });
-});
+
+
+// configuration setup for production
+const dirName = path.resolve(__dirname);
+
+if(process.env.NODE_ENV === "production"){
+  app.use(express.static(path.join(dirName, "../../frontend/build")));
+  app.get("*", (req,res)=> res.sendFile(path.join(dirName, "../../frontend/build/index.html")))
+  console.log(path.join(dirName, "../../frontend/build/index.html"))
+}else{
+  app.get("/", (req, res) => {
+    res.status(200).send({ response: "Api is running successfully!" });
+  });
+}
+// configuration setup for production
 
 server.listen(PORT, () => {
   console.log(`server is running on the port ${PORT}`);

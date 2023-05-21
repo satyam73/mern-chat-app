@@ -6,23 +6,18 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
-import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import MailIcon from "@mui/icons-material/Mail";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import MoreIcon from "@mui/icons-material/MoreVert";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import UserSearch from "../common/UserSearch";
 import { SEARCH_API_URL } from "../constants"
-// import Sidebar from "./Sidebar";
-
 import { SIGNOUT_URL } from "../constants";
 import "../utils.css";
+
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -70,47 +65,23 @@ export default function PrimarySearchAppBar({
   const location = useLocation();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
   const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
-  const toggleDrawer = (open) => (event) => {
-    if (
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
-
-    setIsSideBarOpen(!isSideBarOpen);
-  };
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
-
   const handleMenuClose = () => {
     setAnchorEl(null);
-    handleMobileMenuClose();
   };
 
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
 
   const signOutHandler = async (evt) => {
-    console.log(SIGNOUT_URL);
     const { status } = await axios.get(SIGNOUT_URL, {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     });
     if (status === 200) {
-      console.log(200);
       navigate("/login");
     }
   };
@@ -161,79 +132,20 @@ export default function PrimarySearchAppBar({
     </Menu>
   );
 
-  const mobileMenuId = "primary-search-account-menu-mobile";
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <Link
-          style={{ textDecoration: "none", color: "inherit" }}
-          to={"/profile"}
-        >
-          <p>Profile</p>
-        </Link>
-      </MenuItem>
-    </Menu>
-  );
-
   const [profiles, setProfiles] = useState([]);
   async function searchHandler(evt) {
     try {
       const searchedUserName = evt.target.value;
+      const ENDPOINT = SEARCH_API_URL(searchedUserName);
       if (!searchedUserName) {
         return;
       }
-      // console.log(SEARCH_API_URL(searchedUserName))
-      const ENDPOINT = SEARCH_API_URL(searchedUserName);
+      
       const response = await fetch(ENDPOINT, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
       });
       const { users } = await response.json();
-      console.log(users)
-      console.log(searchedUserName);
       setProfiles(users);
     } catch (err) {
       console.error('Error : ', err);
@@ -300,24 +212,6 @@ export default function PrimarySearchAppBar({
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            {/* <IconButton
-              size="large"
-              aria-label="show 4 new mails"
-              color="inherit"
-            >
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton> */}
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
             <IconButton
               size="large"
               edge="end"
@@ -334,17 +228,15 @@ export default function PrimarySearchAppBar({
             <IconButton
               size="large"
               aria-label="show more"
-              aria-controls={mobileMenuId}
+              aria-controls={menuId}
+              onClick={handleProfileMenuOpen}
               aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
             >
-              <MoreIcon />
+              <AccountCircle />
             </IconButton>
           </Box>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
       {renderMenu}
     </Box>
   );

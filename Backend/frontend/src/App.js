@@ -1,4 +1,3 @@
-// import logo from './logo.svg';
 import React, { useState, createContext, useEffect } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";

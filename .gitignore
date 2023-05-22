@@ -10,6 +10,9 @@ node_modules
 # testing
 /coverage
 
+#build 
+/Backend/frontend/build
+
 # production
 
 # misc

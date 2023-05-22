@@ -1,0 +1,9 @@
+.home_img {
+    width: 50vw;
+}
+
+@media only screen and (max-width:767px) {
+    .home_img {
+        width: 75vw;
+    }
+}

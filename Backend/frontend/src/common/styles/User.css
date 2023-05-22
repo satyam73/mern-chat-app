@@ -1,0 +1,38 @@
+.userListCard {
+    background-color: white;
+}
+
+.userListCard:hover {
+    background-color: #F1F1F1;
+    cursor: pointer;
+}
+
+
+
+@media only screen and (min-width: 800px){
+    .userListName{
+        margin-left: 10px;
+    }
+    .userListLastMessage{
+        margin-left: 10px;
+    }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 800px){
+    .userListName{
+        margin-left: auto;
+    }
+    .userListLastMessage{
+        margin-left: auto;
+    }
+}
+
+@media only screen and (min-width: 1000px){
+    .userListName{
+        margin-left: 0px;
+    }
+    .userListLastMessage{
+        margin-left: 0px;
+    }
+}
+

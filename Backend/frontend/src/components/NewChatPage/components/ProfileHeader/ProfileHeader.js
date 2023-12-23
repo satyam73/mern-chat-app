@@ -2,12 +2,11 @@ import { Box, Typography } from '@mui/material';
 import styles from './ProfileHeader.module.css';
 
 const defaultImageSource =
-  'https://bootstrapdemos.wrappixel.com/spike/dist/assets/images/profile/user-1.jpg';
-export default function ProfileHeader({ activeChatUser }) {
-
-  const name = activeChatUser?.name || 'Name';
-  const username = activeChatUser?.username ? '@' + activeChatUser?.username : '@username';
-  const profileImage = activeChatUser?.profilePic || defaultImageSource;
+  'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+export default function ProfileHeader({ user }) {
+  const name = user?.name || 'Name';
+  const username = user?.username ? '@' + user?.username : '@username';
+  const profileImage = user?.profilePic || defaultImageSource;
   return (
     <Box className={styles['profile-header']}>
       <img

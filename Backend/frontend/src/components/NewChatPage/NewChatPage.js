@@ -7,10 +7,11 @@ import ProfileCard from './components/ProfileCard/ProfileCard';
 import { useContext, useEffect, useState } from 'react';
 import ChatInput from './components/ChatInput/ChatInput';
 import ChatMessagesList from './components/ChatMessagesList/ChatMessagesList';
-import { BACKEND_BASE_URL, FRIENDS_API_URL } from '../../constants';
+import { BACKEND_BASE_URL } from '../../constants';
 import { io } from 'socket.io-client';
 import { getChatByUserId, getFriends } from '../../services/chat';
 import { UserContext } from '../../App';
+import { debounce } from '../../utils';
 
 const socket = io(BACKEND_BASE_URL, {
   transports: ["websocket", "polling"],
@@ -24,6 +25,8 @@ export default function NewChatPage() {
   const [friends, setFriends] = useState([]);
   const [messages, setMessages] = useState([]);
   const [user] = useContext(UserContext);
+  const [friendsToShowOnUi, setFriendsToShowOnUi] = useState([]);
+  const searchInputHandler = debounce(onSearchInput);
 
   useEffect(() => {
     const onMessageReceive = (message) => {
@@ -40,10 +43,24 @@ export default function NewChatPage() {
     (async () => {
       const friends = await getFriends();
       setFriends(friends);
+      setFriendsToShowOnUi(friends);
     })();
   }, []);
 
-  const profileMapping = friends.map((friend, idx) => (
+  function onSearchInput(event) {
+    const sanitizedInput = event.target.value.trim();
+
+    if (!sanitizedInput) {
+      setFriendsToShowOnUi(friends);
+      return;
+    }
+
+    const filteredFriends = friends.filter((friend) => friend.name.includes(sanitizedInput));
+
+    setFriendsToShowOnUi(filteredFriends);
+  }
+
+  const profileMapping = friendsToShowOnUi.map((friend, idx) => (
     <ProfileCard
       name={friend.name}
       profileImage={friend.profilePic}
@@ -52,7 +69,6 @@ export default function NewChatPage() {
       key={friend._id}
     />
   ));
-
   async function profileClickHandler(e, user) {
     socket.disconnect();
     socket.connect();
@@ -72,19 +88,16 @@ export default function NewChatPage() {
     }
   }
 
-
-
-
   return (
     <Box className='chat-container'>
       <Box className='chat-container__main'>
         <Box className='chat-container__sidebar'>
-          <ProfileHeader />
-          <SidebarSearchBar />
+          <ProfileHeader user={user} />
+          <SidebarSearchBar onSearchInput={searchInputHandler} />
           <Box className='chat-container__friend-list'>{profileMapping}</Box>
         </Box>
         <Box className='chat-container__chat-section'>
-          <ProfileHeader activeChatUser={activeChatUser} />
+          <ProfileHeader user={activeChatUser} />
           <hr className='chat-container__separator' />
           <Box className={'chat-container__message-section'}>
             <ChatMessagesList activeChatUserId={activeChatUserId} messages={messages} />

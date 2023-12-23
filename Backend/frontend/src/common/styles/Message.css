@@ -1,9 +1,7 @@
-.message{
-    background-color:  var(--primary-color);
-    box-shadow: 0px 0px 7px -2px grey;
+.message {
     height: fit-content;
     width: fit-content;
-    border-radius: 6px;
+    border-radius: 10px;
     font-weight: 600;
     padding-right: 7px;
     padding-left: 7px;

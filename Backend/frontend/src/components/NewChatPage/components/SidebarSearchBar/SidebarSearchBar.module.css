@@ -1,0 +1,25 @@
+.search-bar {
+  position: relative;
+  width: 96%;
+}
+
+.search-bar__input {
+  height: 40px;
+  padding: 10px;
+  border: 1px solid var(--color-grey);
+  outline: none;
+  border-radius: 10px;
+  width: 100%;
+  color: black;
+  font-weight: 600;
+}
+
+.search-bar__input:focus {
+  border: 1px solid var(--primary-color);
+}
+
+.search-bar .search-bar__button {
+  position: absolute;
+  right: 0px;
+  color: black;
+}

@@ -1,18 +1,24 @@
 :root {
     --primary-color: #00d5c7;
     --secondary-color: #00a59a;
+    --primary-color-light: #e1fffd;
     --light-grey: #e3e3e3;
     --transparent-red: #ff00000f;
     --red-color: red;
+    --color-white: white;
+    --color-grey: #AEBCC3;
+    --color-bluish-light-grey: #E7ECF0;
+    --navbar-height: 64px;
 }
 
 .left {
     float: left;
     clear: both;
-    background-color: white !important;
+    background-color: var(--color-bluish-light-grey);
 }
 
 .right {
     float: right;
     clear: both;
+    background-color: var(--primary-color-light) !important;
 }

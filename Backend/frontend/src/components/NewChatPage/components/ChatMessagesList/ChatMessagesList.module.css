@@ -1,0 +1,12 @@
+.chat-list {
+  height: 100%;
+  width: 100%;
+  padding: 10px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.chat-list::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  opacity: 0.5;
+}

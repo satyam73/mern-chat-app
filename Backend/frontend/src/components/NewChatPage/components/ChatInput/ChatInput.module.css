@@ -1,0 +1,32 @@
+.chat-input-container {
+  border-top: 1px solid var(--color-grey);
+  height: 60px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  position: relative;
+  padding-right: 10px;
+}
+
+.chat-input-container__emoji-panel {
+  position: absolute;
+  bottom: 70px;
+  left: 20px;
+}
+
+.chat-input-container .chat-input-container__input {
+  color: black;
+  font-weight: 600;
+  width: 90%;
+}
+
+.chat-input-container .chat-input-container__send-button {
+  color: white;
+  background-color: var(--primary-color);
+}
+
+.chat-input-container .chat-input-container__send-button:hover {
+  color: white;
+  background-color: var(--primary-color);
+}

@@ -1,0 +1,44 @@
+.profile-card {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  gap: 10px;
+}
+
+.profile-card--active {
+  background-color: var(--color-bluish-light-grey);
+}
+
+.profile-card__image {
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+}
+
+.profile-card__info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  width: 100%;
+  font-family: 'Poppins', sans-serif;
+}
+
+.profile-card__name,
+.profile-card__last-message {
+  text-align: left;
+}
+
+.profile-card__info .profile-card__name {
+  color: black;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif
+}
+
+.profile-card__info .profile-card__last-message {
+  color: grey;
+  font-weight: 600;
+  letter-spacing: 1px;
+  font-family: 'Poppins', sans-serif
+}

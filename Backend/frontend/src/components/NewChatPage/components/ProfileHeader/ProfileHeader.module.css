@@ -1,0 +1,41 @@
+.profile-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  gap: 10px;
+}
+
+.profile-header__image {
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+}
+
+
+.profile-header__info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  width: 100%;
+  font-family: 'Poppins', sans-serif;
+}
+
+.profile-header__name,
+.profile-header__username {
+  text-align: left;
+}
+
+.profile-header__info .profile-header__name {
+  color: black;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif
+}
+
+.profile-header__info .profile-header__username {
+  color: grey;
+  font-weight: 600;
+  letter-spacing: 1px;
+  font-family: 'Poppins', sans-serif
+}

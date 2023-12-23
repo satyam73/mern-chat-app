@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { Box } from '@mui/material';
 import '../styles/NewChatPage.css';
 import ProfileHeader from './components/ProfileHeader/ProfileHeader';
@@ -55,7 +54,7 @@ export default function NewChatPage() {
       return;
     }
 
-    const filteredFriends = friends.filter((friend) => friend.name.includes(sanitizedInput));
+    const filteredFriends = friends.filter((friend) => friend.name.includes(sanitizedInput) || friend.username.includes(sanitizedInput));
 
     setFriendsToShowOnUi(filteredFriends);
   }
@@ -69,6 +68,7 @@ export default function NewChatPage() {
       key={friend._id}
     />
   ));
+
   async function profileClickHandler(e, user) {
     socket.disconnect();
     socket.connect();

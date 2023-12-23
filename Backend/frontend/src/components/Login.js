@@ -37,7 +37,7 @@ function Login({ sidebarToggleHandler }) {
     isSuccess: false,
     message: "",
   });
-
+  console.log(SIGNIN_URL)
   const handleClickShowPassword = () => {
     setIsPasswordShowing(!isPasswordShowing);
   };
@@ -68,7 +68,7 @@ function Login({ sidebarToggleHandler }) {
         return;
       }
     }
-
+    console.log(SIGNIN_URL)
     try {
       const { data, status } = await axios.post(
         SIGNIN_URL,

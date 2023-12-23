@@ -1,4 +1,4 @@
-const BACKEND_BASE_URL = process.env.BACKEND_BASE_URL;
+const BACKEND_BASE_URL = 'https://convo-q1bf.onrender.com'
 
 const SIGNIN_URL = `${BACKEND_BASE_URL}/api/user/login`;
 const REGISTER_URL = `${BACKEND_BASE_URL}/api/user/register`;

@@ -24,7 +24,7 @@ const sendMessage = async (req, res) => {
             await savedMessage.save();
             chat.messages.push(savedMessage);
             await chat.save();
-            return res.json({
+            return res.status(201).json({
                 response: "Chat was already present!",
                 message: savedMessage
             })

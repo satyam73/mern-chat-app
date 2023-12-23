@@ -44,6 +44,7 @@ io.on("connection", socket => {
   })
 
   socket.on("send-message", (message) => {
+    console.log('message before emitting ', message)
     socket.in(message.chat).emit("receive-message", message);
     console.log("ln 37 ", message)
   });
@@ -61,10 +62,10 @@ io.on("connection", socket => {
 // configuration setup for production
 const dirName = path.resolve(__dirname);
 
-if(process.env.NODE_ENV === "production"){
+if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(dirName, "../frontend/build")));
-  app.get("*", (req,res)=> res.sendFile(path.join(dirName, "../frontend/build/index.html")));
-}else{
+  app.get("*", (req, res) => res.sendFile(path.join(dirName, "../frontend/build/index.html")));
+} else {
   app.get("/", (req, res) => {
     res.status(200).send({ response: "Api is running successfully!" });
   });

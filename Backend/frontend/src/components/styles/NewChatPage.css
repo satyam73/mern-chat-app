@@ -84,11 +84,12 @@
 
 
 @media (width<=1007px) {
-  /* .chat-container__chat-section {
-    width: 100%;
+  .chat-container {
+    height: calc(100svh - 56px);
   }
 
-  .chat-container__sidebar {
-    width: 100%;
-  } */
+  .chat-container__main {
+    height: 98%;
+    width: 98%;
+  }
 }

@@ -23,6 +23,17 @@ function App() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const isDev = Boolean(searchParams.get('dev'));
+  const [activeChatUserId, setActiveChatUserId] = useState(null);
+  const [activeChatUser, setActiveChatUser] = useState(null)
+  const [activeChatId, setActiveChatId] = useState(null);
+  const [isChatActive, setIsChatActive] = useState(false);
+
+  function goToAllChats() {
+    setIsChatActive(false);
+    setActiveChatUserId('')
+    setActiveChatUser({})
+    setActiveChatId('')
+  }
 
   useEffect(() => {
     (async () => {
@@ -68,7 +79,17 @@ function App() {
                 Component={
                   isDev
                     ?
-                    <Layout sidebarToggleHandler={sidebarToggleHandler}>< NewChatPage /></Layout>
+                    <Layout goToAllChats={goToAllChats} sidebarToggleHandler={sidebarToggleHandler}>< NewChatPage
+                      setActiveChatUserId={setActiveChatUserId}
+                      activeChatUserId={activeChatUserId}
+                      activeChatUser={activeChatUser}
+                      setActiveChatUser={setActiveChatUser}
+                      activeChatId={activeChatId}
+                      setActiveChatId={setActiveChatId}
+                      setIsChatActive={setIsChatActive}
+                      isChatActive={isChatActive}
+                    />
+                    </Layout>
                     : <Chat
                       sidebarToggleHandler={sidebarToggleHandler}
                       isSideBarOpen={isSideBarOpen}

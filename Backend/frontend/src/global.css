@@ -13,3 +13,8 @@
 @import url("./common/styles/UserSearch.css");
 @import url("./components/styles/Profile.css");
 @import url("./common/styles/TabCard.css");
+
+
+.MuiBottomNavigationAction-root.Mui-selected * {
+    color: var(--secondary-color);
+}

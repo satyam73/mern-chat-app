@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, ThemeProvider } from '@mui/material';
 import '../styles/NewChatPage.css';
 import ProfileHeader from './components/ProfileHeader/ProfileHeader';
 import SidebarSearchBar from './components/SidebarSearchBar/SidebarSearchBar';
@@ -17,15 +17,13 @@ const socket = io(BACKEND_BASE_URL, {
   reconnection: true,
   reconnectionDelay: 1000,
 });
-export default function NewChatPage() {
-  const [activeChatUserId, setActiveChatUserId] = useState(null);
-  const [activeChatUser, setActiveChatUser] = useState(null)
-  const [activeChatId, setActiveChatId] = useState();
+export default function NewChatPage({ activeChatUserId, setActiveChatUserId, activeChatUser, setActiveChatUser, activeChatId, setActiveChatId, isChatActive, setIsChatActive }) {
   const [friends, setFriends] = useState([]);
   const [messages, setMessages] = useState([]);
   const [user] = useContext(UserContext);
   const [friendsToShowOnUi, setFriendsToShowOnUi] = useState([]);
   const searchInputHandler = debounce(onSearchInput);
+  const isMobileScreen = window.innerWidth <= 1007;
 
   useEffect(() => {
     const onMessageReceive = (message) => {
@@ -70,6 +68,7 @@ export default function NewChatPage() {
   ));
 
   async function profileClickHandler(e, user) {
+    setIsChatActive(true);
     socket.disconnect();
     socket.connect();
     setActiveChatUser(user);
@@ -91,21 +90,44 @@ export default function NewChatPage() {
   return (
     <Box className='chat-container'>
       <Box className='chat-container__main'>
-        <Box className='chat-container__sidebar'>
-          <ProfileHeader user={user} />
-          <SidebarSearchBar onSearchInput={searchInputHandler} />
-          <Box className='chat-container__friend-list'>{profileMapping}</Box>
-        </Box>
-        <Box className='chat-container__chat-section'>
-          <ProfileHeader user={activeChatUser} />
-          <hr className='chat-container__separator' />
-          <Box className={'chat-container__message-section'}>
-            <ChatMessagesList activeChatUserId={activeChatUserId} messages={messages} />
-          </Box>
-          <Box className='chat-container__input-wrapper'>
-            <ChatInput activeChatUserId={activeChatUserId} activeChatId={activeChatId} setMessages={setMessages} socket={socket} />
-          </Box>
-        </Box>
+        {isMobileScreen ?
+          <>
+            <Box className={`chat-container__sidebar ${isChatActive ? 'chat-container__sidebar--hidden' : 'chat-container__sidebar--visible'}`}>
+              <ProfileHeader user={user} />
+              <SidebarSearchBar onSearchInput={searchInputHandler} />
+              <Box className='chat-container__friend-list'>{profileMapping}
+              </Box>
+            </Box>
+            <Box className={`chat-container__chat-section ${isChatActive ? 'chat-container__chat-section--visible' : 'chat-container__chat-section--hidden'}`}>
+              <ProfileHeader user={activeChatUser} />
+              <hr className='chat-container__separator' />
+              <Box className={'chat-container__message-section'}>
+                <ChatMessagesList activeChatUserId={activeChatUserId} messages={messages} />
+              </Box>
+              <Box className='chat-container__input-wrapper'>
+                <ChatInput activeChatUserId={activeChatUserId} activeChatId={activeChatId} setMessages={setMessages} socket={socket} />
+              </Box>
+            </Box>
+          </>
+          :
+          <>
+            <Box className='chat-container__sidebar'>
+              <ProfileHeader user={user} />
+              <SidebarSearchBar onSearchInput={searchInputHandler} />
+              <Box className='chat-container__friend-list'>{profileMapping}</Box>
+            </Box>
+            <Box className='chat-container__chat-section'>
+              <ProfileHeader user={activeChatUser} />
+              <hr className='chat-container__separator' />
+              <Box className={'chat-container__message-section'}>
+                <ChatMessagesList activeChatUserId={activeChatUserId} messages={messages} />
+              </Box>
+              <Box className='chat-container__input-wrapper'>
+                <ChatInput activeChatUserId={activeChatUserId} activeChatId={activeChatId} setMessages={setMessages} socket={socket} />
+              </Box>
+            </Box>
+          </>
+        }
       </Box >
     </Box >
   );

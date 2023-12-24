@@ -23,13 +23,18 @@
   overflow: hidden;
   width: 30%;
   border-right: 1px solid var(--color-grey);
-}
-
-.chat-container__sidebar {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
+}
+
+.chat-container__sidebar--hidden {
+  display: none;
+}
+
+.chat-container__sidebar--visible {
+  width: 100%;
 }
 
 .chat-container__friend-list {
@@ -49,6 +54,15 @@
   position: relative;
 }
 
+.chat-container__chat-section--visible {
+  display: block;
+  width: 100%;
+}
+
+.chat-container__chat-section--hidden {
+  display: none;
+}
+
 .chat-container__separator {
   width: 100%;
   margin: 0;
@@ -62,4 +76,19 @@
 
 .chat-container__message-section {
   height: 77%;
+}
+
+
+
+
+
+
+@media (width<=1007px) {
+  /* .chat-container__chat-section {
+    width: 100%;
+  }
+
+  .chat-container__sidebar {
+    width: 100%;
+  } */
 }

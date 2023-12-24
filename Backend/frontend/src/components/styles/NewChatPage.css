@@ -78,11 +78,6 @@
   height: 77%;
 }
 
-
-
-
-
-
 @media (width<=1007px) {
   .chat-container {
     height: calc(100svh - 56px);

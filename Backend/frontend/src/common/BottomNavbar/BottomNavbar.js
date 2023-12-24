@@ -19,7 +19,7 @@ export default function BottomNavbar({ goToAllChats }) {
       navigate('/');
     },
     '2': function () {
-      navigate('/profile');
+      navigate('/profile?dev=true');
     }
   }
   return (<BottomNavigation

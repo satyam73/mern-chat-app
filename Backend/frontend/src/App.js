@@ -1,18 +1,24 @@
-import React, { useState, createContext, useEffect } from "react";
-import "./App.css";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-import Home from "./components/Home";
-import Chat from "./components/Chat";
-import Login from "./components/Login";
-import Register from "./components/Register";
-import Profile from "./components/Profile";
-import Auth from "./common/Auth";
-import "./global.css";
-import { USER_DETAILS_URL } from "./constants";
-import axios from "axios";
-import NewChatPage from "./components/NewChatPage/NewChatPage";
-import Layout from "./common/Layout";
+import React, { useState, createContext, useEffect } from 'react';
+import './App.css';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from 'react-router-dom';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import Home from './components/Home';
+import Chat from './components/Chat';
+import Login from './components/Login';
+import Register from './components/Register';
+import Profile from './components/Profile';
+import Auth from './common/Auth';
+import './global.css';
+import { USER_DETAILS_URL } from './constants';
+import axios from 'axios';
+import NewChatPage from './components/NewChatPage/NewChatPage';
+import Layout from './common/Layout';
+import NewProfilePage from './components/NewProfilePage/NewProfilePage';
 export const ErrorContext = createContext();
 
 export const UserContext = createContext({});
@@ -24,25 +30,22 @@ function App() {
   const searchParams = new URLSearchParams(location.search);
   const isDev = Boolean(searchParams.get('dev'));
   const [activeChatUserId, setActiveChatUserId] = useState(null);
-  const [activeChatUser, setActiveChatUser] = useState(null)
+  const [activeChatUser, setActiveChatUser] = useState(null);
   const [activeChatId, setActiveChatId] = useState(null);
   const [isChatActive, setIsChatActive] = useState(false);
 
   function goToAllChats() {
     setIsChatActive(false);
-    setActiveChatUserId('')
-    setActiveChatUser({})
-    setActiveChatId('')
+    setActiveChatUserId('');
+    setActiveChatUser({});
+    setActiveChatId('');
   }
 
   useEffect(() => {
     (async () => {
-      const { data } = await axios.get(
-        USER_DETAILS_URL,
-        {
-          withCredentials: true,
-        }
-      );
+      const { data } = await axios.get(USER_DETAILS_URL, {
+        withCredentials: true,
+      });
 
       setUser({ ...data.user });
     })();
@@ -54,7 +57,7 @@ function App() {
 
   return (
     <UserContext.Provider value={[user, setUser]}>
-      <div className="App">
+      <div className='App'>
         {/* <Router> */}
         <Routes>
           <Route
@@ -64,7 +67,7 @@ function App() {
                 isSideBarOpen={isSideBarOpen}
               />
             }
-            path="/"
+            path='/'
           />
           <Route
             element={
@@ -77,27 +80,32 @@ function App() {
                 // }
 
                 Component={
-                  isDev
-                    ?
-                    <Layout goToAllChats={goToAllChats} sidebarToggleHandler={sidebarToggleHandler}>< NewChatPage
-                      setActiveChatUserId={setActiveChatUserId}
-                      activeChatUserId={activeChatUserId}
-                      activeChatUser={activeChatUser}
-                      setActiveChatUser={setActiveChatUser}
-                      activeChatId={activeChatId}
-                      setActiveChatId={setActiveChatId}
-                      setIsChatActive={setIsChatActive}
-                      isChatActive={isChatActive}
-                    />
+                  isDev ? (
+                    <Layout
+                      goToAllChats={goToAllChats}
+                      sidebarToggleHandler={sidebarToggleHandler}
+                    >
+                      <NewChatPage
+                        setActiveChatUserId={setActiveChatUserId}
+                        activeChatUserId={activeChatUserId}
+                        activeChatUser={activeChatUser}
+                        setActiveChatUser={setActiveChatUser}
+                        activeChatId={activeChatId}
+                        setActiveChatId={setActiveChatId}
+                        setIsChatActive={setIsChatActive}
+                        isChatActive={isChatActive}
+                      />
                     </Layout>
-                    : <Chat
+                  ) : (
+                    <Chat
                       sidebarToggleHandler={sidebarToggleHandler}
                       isSideBarOpen={isSideBarOpen}
                     />
+                  )
                 }
               />
             }
-            path="/chat"
+            path='/chat'
           />
           <Route
             element={
@@ -106,7 +114,7 @@ function App() {
                 isSideBarOpen={isSideBarOpen}
               />
             }
-            path="/register"
+            path='/register'
           />
           <Route
             element={
@@ -115,21 +123,30 @@ function App() {
                 isSideBarOpen={isSideBarOpen}
               />
             }
-            path="/login"
+            path='/login'
           />
           <Route
             element={
-              <Profile
-                sidebarToggleHandler={sidebarToggleHandler}
-                isSideBarOpen={isSideBarOpen}
-              />
+              isDev ? (
+                <Layout
+                  goToAllChats={goToAllChats}
+                  sidebarToggleHandler={sidebarToggleHandler}
+                >
+                  <NewProfilePage />
+                </Layout>
+              ) : (
+                <Profile
+                  sidebarToggleHandler={sidebarToggleHandler}
+                  isSideBarOpen={isSideBarOpen}
+                />
+              )
             }
-            path="/profile"
+            path='/profile'
           />
         </Routes>
         {/* </Router> */}
       </div>
-    </UserContext.Provider >
+    </UserContext.Provider>
   );
 }
 

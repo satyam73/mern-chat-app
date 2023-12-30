@@ -1,8 +1,9 @@
+import { Box } from '@mui/material';
 
 export default function NewProfilePage() {
   return (
-    <div>
-      New Profile Page
-    </div>
-  )
+    <Box>
+      <Box></Box>
+    </Box>
+  );
 }

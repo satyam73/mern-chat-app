@@ -11,7 +11,7 @@ import Home from './components/Home';
 import Chat from './components/Chat';
 import Login from './components/Login';
 import Register from './components/Register';
-import Profile from './components/Profile';
+import Profile from './components/ProfilePage/Profile';
 import Auth from './common/Auth';
 import './global.css';
 import { USER_DETAILS_URL } from './constants';
@@ -135,10 +135,15 @@ function App() {
                   <NewProfilePage />
                 </Layout>
               ) : (
-                <Profile
+                <Layout
+                  goToAllChats={goToAllChats}
                   sidebarToggleHandler={sidebarToggleHandler}
-                  isSideBarOpen={isSideBarOpen}
-                />
+                >
+                  <Profile
+                    sidebarToggleHandler={sidebarToggleHandler}
+                    isSideBarOpen={isSideBarOpen}
+                  />
+                </Layout>
               )
             }
             path='/profile'

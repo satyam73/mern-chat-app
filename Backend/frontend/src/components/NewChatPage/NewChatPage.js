@@ -1,4 +1,4 @@
-import { Box, ThemeProvider } from '@mui/material';
+import { Box } from '@mui/material';
 import '../styles/NewChatPage.css';
 import ProfileHeader from './components/ProfileHeader/ProfileHeader';
 import SidebarSearchBar from './components/SidebarSearchBar/SidebarSearchBar';
@@ -11,17 +11,20 @@ import { io } from 'socket.io-client';
 import { getChatByUserId, getFriends } from '../../services/chat';
 import { UserContext } from '../../App';
 import { debounce } from '../../utils';
+import NoDataFoundFallback from '../../common/NoDataFoundFallback';
 
 const socket = io(BACKEND_BASE_URL, {
   transports: ["websocket", "polling"],
   reconnection: true,
   reconnectionDelay: 1000,
 });
+
 export default function NewChatPage({ activeChatUserId, setActiveChatUserId, activeChatUser, setActiveChatUser, activeChatId, setActiveChatId, isChatActive, setIsChatActive }) {
   const [friends, setFriends] = useState([]);
   const [messages, setMessages] = useState([]);
   const [user] = useContext(UserContext);
   const [friendsToShowOnUi, setFriendsToShowOnUi] = useState([]);
+  const isNoFriendsFound = friendsToShowOnUi.length === 0;
   const searchInputHandler = debounce(onSearchInput);
   const isMobileScreen = window.innerWidth <= 1007;
 
@@ -95,7 +98,11 @@ export default function NewChatPage({ activeChatUserId, setActiveChatUserId, act
             <Box className={`chat-container__sidebar ${isChatActive ? 'chat-container__sidebar--hidden' : 'chat-container__sidebar--visible'}`}>
               <ProfileHeader user={user} />
               <SidebarSearchBar onSearchInput={searchInputHandler} />
-              <Box className='chat-container__friend-list'>{profileMapping}
+              <Box className='chat-container__friend-list'>
+
+                {isNoFriendsFound ?
+                  <NoDataFoundFallback /> :
+                  profileMapping}
               </Box>
             </Box>
             <Box className={`chat-container__chat-section ${isChatActive ? 'chat-container__chat-section--visible' : 'chat-container__chat-section--hidden'}`}>
@@ -114,7 +121,9 @@ export default function NewChatPage({ activeChatUserId, setActiveChatUserId, act
             <Box className='chat-container__sidebar'>
               <ProfileHeader user={user} />
               <SidebarSearchBar onSearchInput={searchInputHandler} />
-              <Box className='chat-container__friend-list'>{profileMapping}</Box>
+              <Box className='chat-container__friend-list'> {isNoFriendsFound ?
+                <NoDataFoundFallback /> :
+                profileMapping}</Box>
             </Box>
             <Box className='chat-container__chat-section'>
               <ProfileHeader user={activeChatUser} />

@@ -1,0 +1,33 @@
+.profile-page {
+  background: url('../../images/background.svg') no-repeat fixed center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: calc(100vh - var(--navbar-height));
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.profile-page__main {
+  height: 90%;
+  width: 90%;
+  background-color: var(--color-white);
+  box-shadow: 2px 6px rgba(37, 83, 185, 0.1);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.profile-page__main .profile-page__edit-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.profile-page__main .profile-page__edit-button:hover {
+  background-color: var(--color-grey);
+}

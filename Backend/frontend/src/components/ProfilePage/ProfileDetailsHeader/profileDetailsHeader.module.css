@@ -1,0 +1,17 @@
+.profile-detail-header {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.profile-detail-header__info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.profile-detail-header__info .profile-detail-header__name,
+.profile-detail-header__info .profile-detail-header__username {
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+}

@@ -38,6 +38,7 @@ const PROFILE_TABS = [
   "Sent Requests"
 ]
 
+export const INTERNAL_SERVER_ERROR = 'Internal server error';
 export {
   BACKEND_BASE_URL,
   SIGNIN_URL,

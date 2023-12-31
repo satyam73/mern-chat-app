@@ -1,11 +1,6 @@
 import React, { useState, createContext, useEffect } from 'react';
 import './App.css';
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useLocation,
-} from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import Home from './components/Home';
 import Chat from './components/Chat';
@@ -19,6 +14,7 @@ import axios from 'axios';
 import NewChatPage from './components/NewChatPage/NewChatPage';
 import Layout from './common/Layout';
 import NewProfilePage from './components/NewProfilePage/NewProfilePage';
+import ToastProvider from './common/Toast';
 export const ErrorContext = createContext();
 
 export const UserContext = createContext({});
@@ -56,102 +52,104 @@ function App() {
   }
 
   return (
-    <UserContext.Provider value={[user, setUser]}>
-      <div className='App'>
-        {/* <Router> */}
-        <Routes>
-          <Route
-            element={
-              <Home
-                sidebarToggleHandler={sidebarToggleHandler}
-                isSideBarOpen={isSideBarOpen}
-              />
-            }
-            path='/'
-          />
-          <Route
-            element={
-              <Auth
-                // Component={
-                //   <Chat
-                //     sidebarToggleHandler={sidebarToggleHandler}
-                //     isSideBarOpen={isSideBarOpen}
-                //   />
-                // }
+    <ToastProvider>
+      <UserContext.Provider value={[user, setUser]}>
+        <div className='App'>
+          {/* <Router> */}
+          <Routes>
+            <Route
+              element={
+                <Home
+                  sidebarToggleHandler={sidebarToggleHandler}
+                  isSideBarOpen={isSideBarOpen}
+                />
+              }
+              path='/'
+            />
+            <Route
+              element={
+                <Auth
+                  // Component={
+                  //   <Chat
+                  //     sidebarToggleHandler={sidebarToggleHandler}
+                  //     isSideBarOpen={isSideBarOpen}
+                  //   />
+                  // }
 
-                Component={
-                  isDev ? (
-                    <Layout
-                      goToAllChats={goToAllChats}
-                      sidebarToggleHandler={sidebarToggleHandler}
-                    >
-                      <NewChatPage
-                        setActiveChatUserId={setActiveChatUserId}
-                        activeChatUserId={activeChatUserId}
-                        activeChatUser={activeChatUser}
-                        setActiveChatUser={setActiveChatUser}
-                        activeChatId={activeChatId}
-                        setActiveChatId={setActiveChatId}
-                        setIsChatActive={setIsChatActive}
-                        isChatActive={isChatActive}
+                  Component={
+                    isDev ? (
+                      <Layout
+                        goToAllChats={goToAllChats}
+                        sidebarToggleHandler={sidebarToggleHandler}
+                      >
+                        <NewChatPage
+                          setActiveChatUserId={setActiveChatUserId}
+                          activeChatUserId={activeChatUserId}
+                          activeChatUser={activeChatUser}
+                          setActiveChatUser={setActiveChatUser}
+                          activeChatId={activeChatId}
+                          setActiveChatId={setActiveChatId}
+                          setIsChatActive={setIsChatActive}
+                          isChatActive={isChatActive}
+                        />
+                      </Layout>
+                    ) : (
+                      <Chat
+                        sidebarToggleHandler={sidebarToggleHandler}
+                        isSideBarOpen={isSideBarOpen}
                       />
-                    </Layout>
-                  ) : (
-                    <Chat
+                    )
+                  }
+                />
+              }
+              path='/chat'
+            />
+            <Route
+              element={
+                <Register
+                  sidebarToggleHandler={sidebarToggleHandler}
+                  isSideBarOpen={isSideBarOpen}
+                />
+              }
+              path='/register'
+            />
+            <Route
+              element={
+                <Login
+                  sidebarToggleHandler={sidebarToggleHandler}
+                  isSideBarOpen={isSideBarOpen}
+                />
+              }
+              path='/login'
+            />
+            <Route
+              element={
+                isDev ? (
+                  <Layout
+                    goToAllChats={goToAllChats}
+                    sidebarToggleHandler={sidebarToggleHandler}
+                  >
+                    <NewProfilePage />
+                  </Layout>
+                ) : (
+                  <Layout
+                    goToAllChats={goToAllChats}
+                    sidebarToggleHandler={sidebarToggleHandler}
+                  >
+                    <Profile
                       sidebarToggleHandler={sidebarToggleHandler}
                       isSideBarOpen={isSideBarOpen}
                     />
-                  )
-                }
-              />
-            }
-            path='/chat'
-          />
-          <Route
-            element={
-              <Register
-                sidebarToggleHandler={sidebarToggleHandler}
-                isSideBarOpen={isSideBarOpen}
-              />
-            }
-            path='/register'
-          />
-          <Route
-            element={
-              <Login
-                sidebarToggleHandler={sidebarToggleHandler}
-                isSideBarOpen={isSideBarOpen}
-              />
-            }
-            path='/login'
-          />
-          <Route
-            element={
-              isDev ? (
-                <Layout
-                  goToAllChats={goToAllChats}
-                  sidebarToggleHandler={sidebarToggleHandler}
-                >
-                  <NewProfilePage />
-                </Layout>
-              ) : (
-                <Layout
-                  goToAllChats={goToAllChats}
-                  sidebarToggleHandler={sidebarToggleHandler}
-                >
-                  <Profile
-                    sidebarToggleHandler={sidebarToggleHandler}
-                    isSideBarOpen={isSideBarOpen}
-                  />
-                </Layout>
-              )
-            }
-            path='/profile'
-          />
-        </Routes>
-        {/* </Router> */}
-      </div>
-    </UserContext.Provider>
+                  </Layout>
+                )
+              }
+              path='/profile'
+            />
+          </Routes>
+          {/* </Router> */}
+        </div>
+      </UserContext.Provider>
+    </ToastProvider>
   );
 }
 

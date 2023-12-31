@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Tabs, Tab, Typography } from '@mui/material';
-import { PROFILE_TABS } from '../../../constants';
+import {
+  acceptFriendRequest,
+  getAllFriends,
+  getFriendRequests,
+  rejectFriendRequest,
+} from '../../../services/user';
 import TabCard from '../../../common/TabCard/TabCard';
-import { getAllFriends, getFriendRequests } from '../../../services/user';
 import NoDataFoundFallback from '../../../common/NoDataFoundFallback';
+import { useToast } from '../../../common/Toast';
+import { INTERNAL_SERVER_ERROR, PROFILE_TABS } from '../../../constants';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -36,6 +42,7 @@ export default function FriendSection() {
   const [tabValue, setTabValue] = useState(0);
   const [tabData, setTabData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { toast, showToast } = useToast();
   // const tabDataTemp = [
   //   {
   //     _id: 'some-id',
@@ -102,6 +109,81 @@ export default function FriendSection() {
     }
   };
 
+  const acceptFriendRequestHandler = async (e, userId) => {
+    try {
+      const { status } = await acceptFriendRequest(userId);
+      if (status !== 200) {
+        showToast({
+          ...toast,
+          isVisible: true,
+          type: 'error',
+          text: 'Something went wrong',
+        });
+        return;
+      }
+      setIsLoading(true);
+      const { data } = await getFriendRequests('pending');
+      setTabData(data.pendingRequests);
+
+      showToast({
+        ...toast,
+        isVisible: true,
+        type: 'success',
+        text: 'Request accepted successfully',
+      });
+    } catch (error) {
+      console.error(
+        'Some error occured while accepting the friend request ',
+        error
+      );
+      showToast({
+        ...toast,
+        isVisible: true,
+        text: INTERNAL_SERVER_ERROR,
+        type: 'error',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const rejectFriendRequestHandler = async (e, userId) => {
+    try {
+      const { status } = await rejectFriendRequest(userId);
+      if (status !== 200) {
+        showToast({
+          ...toast,
+          isVisible: true,
+          type: 'error',
+          text: 'Something went wrong',
+        });
+        return;
+      }
+      setIsLoading(true);
+      const { data } = await getFriendRequests('incoming');
+      setTabData(data.incomingRequests);
+
+      showToast({
+        ...toast,
+        isVisible: true,
+        text: 'Request rejected successfully',
+        type: 'success',
+      });
+    } catch (error) {
+      console.error(
+        'Some error occured while rejecting the friend request ',
+        error
+      );
+      showToast({
+        ...toast,
+        isVisible: true,
+        text: INTERNAL_SERVER_ERROR,
+        type: 'error',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <Box className='friend-section'>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -133,6 +215,8 @@ export default function FriendSection() {
                 name={item.name}
                 profileImg={item.profilePic}
                 isLoading={isLoading}
+                acceptFriendRequestHandler={acceptFriendRequestHandler}
+                rejectFriendRequestHandler={rejectFriendRequestHandler}
               />
             ))
           )}

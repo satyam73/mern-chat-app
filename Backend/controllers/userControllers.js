@@ -234,7 +234,7 @@ const acceptFriendRequest = async (req, res) => {
 
       return res.status(200).json({
         response: "Friend is added!"
-      })
+      });
     } else {
       return res.status(500).json({
         response: "Something went wrong"
@@ -305,9 +305,56 @@ const getFriendRequests = async (req, res) => {
     })
   }
 }
+
+const rejectFriendRequest = async (req, res) => {
+  const { userId } = req.params;
+  const self = req.user;
+
+  if (!userId) {
+    return res.status(404).json({
+      response: "User not found!"
+    });
+  }
+
+  if (!self.incomingRequests.includes(userId)) {
+    res.status(400).json({
+      response: "There is not incoming request with this userId!"
+    });
+  }
+
+  self.incomingRequests = self.incomingRequests.filter((request) => {
+    return request.toString() !== userId;
+  });
+
+  try {
+    const user = await User.findById({ _id: userId });
+
+    if (!user.pendingRequests.includes(self._id)) {
+      res.status(400).json({
+        response: "Bad request"
+      });
+    }
+
+    user.pendingRequests = user.pendingRequests.filter((request) => {
+      return request.toString() !== self._id.toString();
+    });
+
+    await self.save();
+    await user.save();
+
+    return res.status(200).json({
+      response: 'Friend request rejected successfully'
+    });
+  } catch (error) {
+    return res.status(500).json({
+      response: 'Internal server error',
+      error: error.message
+    });
+  }
+}
 const chat = async (req, res) => {
   res.status(200).json({
     message: "Welcome to chat page!",
   });
 };
-module.exports = { registerUser, loginUser, getUserDetails, chat, searchUserByUsername, signOutUser, sendFriendRequest, acceptFriendRequest, getFriends, getFriendRequests };
+module.exports = { registerUser, loginUser, getUserDetails, chat, searchUserByUsername, signOutUser, sendFriendRequest, acceptFriendRequest, getFriends, getFriendRequests, rejectFriendRequest };

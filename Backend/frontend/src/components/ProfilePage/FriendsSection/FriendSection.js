@@ -36,7 +36,13 @@ export default function FriendSection() {
   const [tabValue, setTabValue] = useState(0);
   const [tabData, setTabData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  // const tabDataTemp = [
+  //   {
+  //     _id: 'some-id',
+  //     name: 'Some name',
+  //     username: 'username',
+  //   },
+  // ];
   useEffect(() => {
     (async () => {
       try {

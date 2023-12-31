@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconButton, Skeleton } from '@mui/material';
+import { IconButton, Skeleton, Typography } from '@mui/material';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
@@ -43,31 +43,32 @@ function TabCard({ id, tabValue, isLoading, name, profileImg }) {
 
   return (
     <div className={styles['tab-card']}>
-      <div className={styles['tabCardDetails']}>
+      <div className={styles['tab-card__details']}>
         <img
-          className={styles['tabCardImage']}
+          className={styles['tab-card__image']}
           src={profileImg || defaultImage}
           alt=''
         />
-        <div className={styles['username']}>{name || 'No user'}</div>
+        <Typography component='span' className={styles['tab-card__username']}>
+          {name || 'No user'}
+        </Typography>
       </div>
       {shouldShowActions && (
-        <div className={styles['tabCardActions']}>
+        <div className={styles['tab-card__actions']}>
           <IconButton
-            className={styles['acceptButton']}
+            className={styles['tab-card__accept-button']}
             aria-label='accept'
             onClick={(e) => acceptHandler(e, id)}
           >
-            <DoneIcon className={styles['acceptIcon']} />
+            <DoneIcon className={styles['tab-card__accept-icon']} />
           </IconButton>
-
-          {/* <IconButton
-          className="rejectButton"
-          aria-label="reject"
-          onClick={(e) => rejectHandler(e, id)}
-        >
-          <CloseIcon className="rejectIcon" />
-        </IconButton> */}
+          <IconButton
+            className={styles['tab-card__reject-button']}
+            aria-label='reject'
+            onClick={(e) => rejectHandler(e, id)}
+          >
+            <CloseIcon className={styles['tab-card__reject-icon']} />
+          </IconButton>
         </div>
       )}
     </div>

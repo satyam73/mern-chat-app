@@ -1,17 +1,15 @@
-import axios from "axios";
-import React, { useState, useContext } from "react";
-import { PhotoCamera } from "@mui/icons-material";
+import React, { useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import {
   IconButton,
   Box,
 } from "@mui/material";
-import { UserContext } from "../../App";
-import EditModal from "./EditModal/EditModal";
 
-import styles from './profilePage.module.css';
+import EditModal from "./EditModal/EditModal";
 import ProfileDetailsHeader from "./ProfileDetailsHeader/ProfileDetailsHeader";
 import FriendSection from "./FriendsSection/FriendSection";
+
+import styles from './profilePage.module.css';
 
 function Profile() {
   const [profile, setProfile] = useState("");

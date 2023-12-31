@@ -11,11 +11,11 @@
 }
 
 .profile-page__main {
-  height: 90%;
-  width: 90%;
+  height: 99%;
+  width: 99%;
   background-color: var(--color-white);
   box-shadow: 2px 6px rgba(37, 83, 185, 0.1);
-  border-radius: 20px;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   overflow: hidden;

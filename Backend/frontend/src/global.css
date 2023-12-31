@@ -17,3 +17,11 @@
 .MuiBottomNavigationAction-root.Mui-selected * {
     color: var(--secondary-color);
 }
+
+.MuiButtonBase-root.MuiTab-root.Mui-selected {
+    color: var(--secondary-color);
+}
+
+.MuiTabs-root .MuiTabs-indicator {
+    background-color: var(--secondary-color);
+}

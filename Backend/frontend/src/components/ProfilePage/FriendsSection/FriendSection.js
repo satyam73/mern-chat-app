@@ -190,7 +190,7 @@ export default function FriendSection() {
         <Tabs
           value={tabValue}
           onChange={handleChange}
-          aria-label='basic tabs example'
+          aria-label='friends details tab'
         >
           {PROFILE_TABS.map((tab, index) => (
             <Tab key={index} label={tab} {...a11yProps(index)} />

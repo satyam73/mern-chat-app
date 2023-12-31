@@ -10,11 +10,11 @@
 }
 
 .chat-container__main {
-  height: 90%;
-  width: 90%;
+  height: 99%;
+  width: 99%;
   background-color: var(--color-white);
   box-shadow: 2px 6px rgba(37, 83, 185, 0.1);
-  border-radius: 20px;
+  border-radius: 10px;
   display: flex;
   overflow: hidden;
 }
@@ -80,11 +80,6 @@
 
 @media (width<=1007px) {
   .chat-container {
-    height: calc(100svh - 56px);
-  }
-
-  .chat-container__main {
-    height: 98%;
-    width: 98%;
+    height: calc(100vh - 2 * var(--navbar-height));
   }
 }

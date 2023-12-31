@@ -31,3 +31,9 @@
 .profile-page__main .profile-page__edit-button:hover {
   background-color: var(--color-grey);
 }
+
+@media (width<=1007px) {
+  .profile-page {
+    height: calc(100vh - 2 * var(--navbar-height));
+  }
+}

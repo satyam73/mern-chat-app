@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconButton, Skeleton, Typography } from '@mui/material';
+import { Box, IconButton, Skeleton, Typography } from '@mui/material';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
 import styles from './tabCard.module.css';
@@ -34,8 +34,8 @@ function TabCard({
   if (isLoading) return skeletonMapping;
 
   return (
-    <div className={styles['tab-card']}>
-      <div className={styles['tab-card__details']}>
+    <Box className={styles['tab-card']}>
+      <Box className={styles['tab-card__details']}>
         <img
           className={styles['tab-card__image']}
           src={profileImg || defaultImage}
@@ -44,9 +44,9 @@ function TabCard({
         <Typography component='span' className={styles['tab-card__username']}>
           {name || 'No user'}
         </Typography>
-      </div>
+      </Box>
       {shouldShowActions && (
-        <div className={styles['tab-card__actions']}>
+        <Box className={styles['tab-card__actions']}>
           <IconButton
             className={styles['tab-card__accept-button']}
             aria-label='accept'
@@ -61,9 +61,9 @@ function TabCard({
           >
             <CloseIcon className={styles['tab-card__reject-icon']} />
           </IconButton>
-        </div>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 }
 

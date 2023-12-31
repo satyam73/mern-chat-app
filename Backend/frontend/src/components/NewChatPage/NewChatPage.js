@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, useMediaQuery } from '@mui/material';
 import '../styles/NewChatPage.css';
 import ProfileHeader from './components/ProfileHeader/ProfileHeader';
 import SidebarSearchBar from './components/SidebarSearchBar/SidebarSearchBar';
@@ -26,7 +26,7 @@ export default function NewChatPage({ activeChatUserId, setActiveChatUserId, act
   const [friendsToShowOnUi, setFriendsToShowOnUi] = useState([]);
   const isNoFriendsFound = friendsToShowOnUi.length === 0;
   const searchInputHandler = debounce(onSearchInput);
-  const isMobileScreen = window.innerWidth <= 1007;
+  const isMobileScreen = useMediaQuery('(max-width: 1007px)', { defaultMatches: null });
 
   useEffect(() => {
     const onMessageReceive = (message) => {

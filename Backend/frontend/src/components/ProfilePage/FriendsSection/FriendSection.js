@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Tabs, Tab, Typography } from '@mui/material';
+import { Box, Tabs, Tab, Typography, Skeleton } from '@mui/material';
 import {
   acceptFriendRequest,
   getAllFriends,
@@ -109,6 +109,20 @@ export default function FriendSection() {
     }
   };
 
+  const skeletonMapping = Array(4)
+    .fill('skeleton')
+    .map((element, idx) => {
+      return (
+        <Skeleton
+          key={element + '-' + idx}
+          sx={{ margin: '10px 0' }}
+          variant='rounded'
+          width={'100%'}
+          height={50}
+        />
+      );
+    });
+
   const acceptFriendRequestHandler = async (e, userId) => {
     try {
       const { status } = await acceptFriendRequest(userId);
@@ -204,7 +218,9 @@ export default function FriendSection() {
           value={tabValue}
           index={index}
         >
-          {tabData.length === 0 ? (
+          {isLoading ? (
+            skeletonMapping
+          ) : tabData.length === 0 ? (
             <NoDataFoundFallback />
           ) : (
             tabData.map((item) => (

@@ -9,29 +9,12 @@ const defaultImage =
 function TabCard({
   id,
   tabValue,
-  isLoading,
   name,
   profileImg,
   rejectFriendRequestHandler,
   acceptFriendRequestHandler,
 }) {
   const shouldShowActions = tabValue === 1;
-
-  const skeletonMapping = Array(1)
-    .fill('skeleton')
-    .map((element, idx) => {
-      return (
-        <Skeleton
-          key={element + '-' + idx}
-          sx={{ margin: '10px 0' }}
-          variant='rounded'
-          width={'100%'}
-          height={50}
-        />
-      );
-    });
-
-  if (isLoading) return skeletonMapping;
 
   return (
     <Box className={styles['tab-card']}>

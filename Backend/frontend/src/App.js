@@ -15,6 +15,7 @@ import NewChatPage from './components/NewChatPage/NewChatPage';
 import Layout from './common/Layout';
 import NewProfilePage from './components/NewProfilePage/NewProfilePage';
 import ToastProvider from './common/Toast';
+import { Box } from '@mui/material';
 export const ErrorContext = createContext();
 
 export const UserContext = createContext({});
@@ -54,8 +55,7 @@ function App() {
   return (
     <ToastProvider>
       <UserContext.Provider value={[user, setUser]}>
-        <div className='App'>
-          {/* <Router> */}
+        <Box className='App'>
           <Routes>
             <Route
               element={
@@ -69,15 +69,8 @@ function App() {
             <Route
               element={
                 <Auth
-                  // Component={
-                  //   <Chat
-                  //     sidebarToggleHandler={sidebarToggleHandler}
-                  //     isSideBarOpen={isSideBarOpen}
-                  //   />
-                  // }
-
                   Component={
-                    isDev ? (
+                    !isDev ? (
                       <Layout
                         goToAllChats={goToAllChats}
                         sidebarToggleHandler={sidebarToggleHandler}
@@ -146,8 +139,7 @@ function App() {
               path='/profile'
             />
           </Routes>
-          {/* </Router> */}
-        </div>
+        </Box>
       </UserContext.Provider>
     </ToastProvider>
   );

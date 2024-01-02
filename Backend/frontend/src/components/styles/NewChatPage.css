@@ -80,6 +80,6 @@
 
 @media (width<=1007px) {
   .chat-container {
-    height: calc(100vh - 2 * var(--navbar-height));
+    height: calc(100svh - 2 * var(--navbar-height));
   }
 }

@@ -109,20 +109,6 @@ export default function FriendSection() {
     }
   };
 
-  const skeletonMapping = Array(4)
-    .fill('skeleton')
-    .map((element, idx) => {
-      return (
-        <Skeleton
-          key={element + '-' + idx}
-          sx={{ margin: '10px 0' }}
-          variant='rounded'
-          width={'100%'}
-          height={50}
-        />
-      );
-    });
-
   const acceptFriendRequestHandler = async (e, userId) => {
     try {
       const { status } = await acceptFriendRequest(userId);
@@ -198,6 +184,21 @@ export default function FriendSection() {
       setIsLoading(false);
     }
   };
+
+  const skeletonMapping = Array(4)
+    .fill('skeleton')
+    .map((element, idx) => {
+      return (
+        <Skeleton
+          key={element + '-' + idx}
+          sx={{ margin: '10px 0' }}
+          variant='rounded'
+          width={'100%'}
+          height={50}
+        />
+      );
+    });
+
   return (
     <Box className='friend-section'>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

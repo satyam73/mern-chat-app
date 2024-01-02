@@ -25,3 +25,15 @@
 .MuiTabs-root .MuiTabs-indicator {
     background-color: var(--secondary-color);
 }
+
+.MuiInputBase-root.MuiOutlinedInput-root {
+    border-radius: 5px;
+}
+
+.MuiInputBase-root.MuiOutlinedInput-root.Mui-focused fieldset {
+    border-color: var(--secondary-color);
+}
+
+.MuiFormLabel-root.MuiInputLabel-root.Mui-focused {
+    color: var(--secondary-color);
+}

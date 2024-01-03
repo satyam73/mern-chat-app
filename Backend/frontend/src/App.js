@@ -12,7 +12,7 @@ import Home from './components/Home';
 import Login from './components/Login';
 import Register from './components/Register';
 import Profile from './components/ProfilePage/Profile';
-import Auth from './contexts/Auth';
+import Auth from './contexts/AuthProvider';
 import NewChatPage from './components/NewChatPage/NewChatPage';
 import Layout from './common/Layout';
 

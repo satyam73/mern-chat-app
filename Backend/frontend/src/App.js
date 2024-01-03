@@ -12,7 +12,7 @@ import Home from './components/Home';
 import Login from './components/Login';
 import Register from './components/Register';
 import Profile from './components/ProfilePage/Profile';
-import Auth from './contexts/AuthProvider';
+import AuthProvider from './contexts/AuthProvider';
 import NewChatPage from './components/NewChatPage/NewChatPage';
 import Layout from './common/Layout';
 
@@ -55,7 +55,7 @@ function App() {
             />
             <Route
               element={
-                <Auth>
+                <AuthProvider>
                   <Layout
                     goToAllChats={goToAllChats}
                     sidebarToggleHandler={sidebarToggleHandler}
@@ -71,7 +71,7 @@ function App() {
                       isChatActive={isChatActive}
                     />
                   </Layout>
-                </Auth>
+                </AuthProvider>
               }
               path='/chat'
             />
@@ -95,7 +95,7 @@ function App() {
             />
             <Route
               element={
-                <Auth>
+                <AuthProvider>
                   <Layout
                     goToAllChats={goToAllChats}
                     sidebarToggleHandler={sidebarToggleHandler}
@@ -105,7 +105,7 @@ function App() {
                       isSideBarOpen={isSideBarOpen}
                     />
                   </Layout>
-                </Auth>
+                </AuthProvider>
               }
               path='/profile'
             />

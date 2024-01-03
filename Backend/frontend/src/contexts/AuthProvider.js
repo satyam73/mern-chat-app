@@ -5,7 +5,7 @@ import { useUser } from "./UserProvider";
 export const AuthContext = createContext({});
 export const useAuth = () => useContext(AuthContext);
 
-export default function Auth({ children }) {
+export default function AuthProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { user } = useUser();
   const navigate = useNavigate();

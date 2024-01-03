@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -12,12 +13,15 @@ import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { useLocation, Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+
+
 import UserSearch from "../common/UserSearch";
+import { useUser } from "../contexts/UserProvider";
+
 import { SEARCH_API_URL } from "../constants"
 import { SIGNOUT_URL } from "../constants";
+
 import "../utils.css";
-import { useUser } from "../contexts/UserProvider";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -94,15 +98,11 @@ export default function PrimarySearchAppBar({
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
       id={menuId}
       keepMounted
       transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
+        vertical: "-10px",
+        horizontal: "10px",
       }}
       open={isMenuOpen}
       onClose={handleMenuClose}

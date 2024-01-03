@@ -7,11 +7,12 @@ export const useAuth = () => useContext(AuthContext);
 
 export default function AuthProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const { user } = useUser();
+  const { user, isLoading } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
     function check() {
+      if (isLoading) return;
 
       if (!user._id) {
         setIsLoggedIn(false);
@@ -21,9 +22,8 @@ export default function AuthProvider({ children }) {
 
       setIsLoggedIn(true);
     }
-
     check();
-  }, []);
+  }, [isLoading]);
 
   return (
     <AuthContext.Provider value={{ isLoggedIn }}>

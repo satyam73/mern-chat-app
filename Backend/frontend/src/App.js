@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 // bootstrap styles
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
@@ -21,8 +21,6 @@ import './App.css';
 
 function App() {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
   const [activeChatUserId, setActiveChatUserId] = useState(null);
   const [activeChatUser, setActiveChatUser] = useState(null);
   const [activeChatId, setActiveChatId] = useState(null);

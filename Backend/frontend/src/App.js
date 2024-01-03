@@ -16,13 +16,12 @@ import Layout from './common/Layout';
 import NewProfilePage from './components/NewProfilePage/NewProfilePage';
 import ToastProvider from './contexts/Toast';
 import { Box } from '@mui/material';
+import UserProvider, { useUser } from './contexts/UserProvider';
 export const ErrorContext = createContext();
-
-export const UserContext = createContext({});
 
 function App() {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
-  const [user, setUser] = useState({});
+  const { user, setUser, isLoading } = useUser();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const isDev = Boolean(searchParams.get('dev'));
@@ -38,23 +37,13 @@ function App() {
     setActiveChatId('');
   }
 
-  useEffect(() => {
-    (async () => {
-      const { data } = await axios.get(USER_DETAILS_URL, {
-        withCredentials: true,
-      });
-
-      setUser({ ...data.user });
-    })();
-  }, []);
-
   function sidebarToggleHandler(evt) {
     setIsSideBarOpen(!isSideBarOpen);
   }
 
   return (
     <ToastProvider>
-      <UserContext.Provider value={[user, setUser]}>
+      <UserProvider>
         <Box className='App'>
           <Routes>
             <Route
@@ -140,7 +129,7 @@ function App() {
             />
           </Routes>
         </Box>
-      </UserContext.Provider>
+      </UserProvider>
     </ToastProvider>
   );
 }

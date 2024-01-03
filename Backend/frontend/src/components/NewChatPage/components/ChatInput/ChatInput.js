@@ -1,11 +1,11 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Box, IconButton } from '@mui/material';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import styles from './ChatInput.module.css';
 import EmojiPicker from 'emoji-picker-react';
 import SendIcon from '@mui/icons-material/Send';
-import { UserContext } from '../../../../App';
 import { sendMessage } from '../../../../services/chat';
+import { useUser } from '../../../../contexts/UserProvider';
 
 export default function ChatInput({
   activeChatUserId,
@@ -15,7 +15,7 @@ export default function ChatInput({
 }) {
   const [isEmojiPanelVisible, setIsEmojiPanelVisible] = useState(false);
   const chatInputRef = useRef(null);
-  const [user] = useContext(UserContext);
+  const { user } = useUser();
 
   useEffect(() => {
     const onKeyPress = (e) => {

@@ -1,12 +1,5 @@
 import axios from "axios";
 import { ACCEPT_FRIEND_REQUEST_URL, FRIENDS_API_URL, FRIEND_REQUESTS_API_URL, REJECT_FRIEND_REQUEST_URL, } from "../constants";
-// async function getSelfDetails() {
-//   const [user, setUser] = useContext(UserContext);
-//   const { data } = await axios.get(USER_DETAILS_URL, {
-//     withCredentials: true,
-//   });
-//   setUser({ ...data.user });
-// }
 
 async function getAllFriends() {
   try {

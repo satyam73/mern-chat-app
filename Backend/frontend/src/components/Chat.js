@@ -14,9 +14,9 @@ import {
   SEND_API_URL,
   FRIENDS_API_URL,
 } from "../constants";
-import { UserContext } from "../App";
 import { io } from "socket.io-client";
 import { BACKEND_BASE_URL } from "../constants";
+import { useUser } from "../contexts/UserProvider";
 
 function Chat({ isSideBarOpen, sidebarToggleHandler }) {
   const socket = io(BACKEND_BASE_URL, {
@@ -30,7 +30,7 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
   const [activeChat, setActiveChat] = useState([]);
   const [message, setMessage] = useState("");
   const [chatId, setChatId] = useState("");
-  const [user, setUser] = useContext(UserContext);
+  const { user, setUser } = useUser();
   const [friends, setFriends] = useState([]);
 
   useEffect(() => {
@@ -145,8 +145,8 @@ function Chat({ isSideBarOpen, sidebarToggleHandler }) {
               !mobileView
                 ? "col-8"
                 : !isChatActive
-                ? "col-0 d-none"
-                : "col-12 d-block"
+                  ? "col-0 d-none"
+                  : "col-12 d-block"
             }
           >
             <div

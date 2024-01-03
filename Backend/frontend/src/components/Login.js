@@ -1,6 +1,5 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import Navbar from "../common/Navbar";
-import { UserContext } from "../App";
 import { useNavigate } from "react-router-dom";
 import {
   TextField,
@@ -27,7 +26,6 @@ function Login({ sidebarToggleHandler }) {
   const [isChecked, setIsChecked] = useState(false);
   const [loginDetails, setLoginDetails] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [user, setUser] = useContext(UserContext);
   const navigate = useNavigate();
   const [error, setError] = useState({
     isError: false,

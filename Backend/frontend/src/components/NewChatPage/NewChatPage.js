@@ -3,15 +3,15 @@ import '../styles/NewChatPage.css';
 import ProfileHeader from './components/ProfileHeader/ProfileHeader';
 import SidebarSearchBar from './components/SidebarSearchBar/SidebarSearchBar';
 import ProfileCard from './components/ProfileCard/ProfileCard';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ChatInput from './components/ChatInput/ChatInput';
 import ChatMessagesList from './components/ChatMessagesList/ChatMessagesList';
 import { BACKEND_BASE_URL } from '../../constants';
 import { io } from 'socket.io-client';
 import { getChatByUserId, getFriends } from '../../services/chat';
-import { UserContext } from '../../App';
 import { debounce } from '../../utils';
 import NoDataFoundFallback from '../../common/NoDataFoundFallback';
+import { useUser } from '../../contexts/UserProvider';
 
 const socket = io(BACKEND_BASE_URL, {
   transports: ["websocket", "polling"],
@@ -22,7 +22,7 @@ const socket = io(BACKEND_BASE_URL, {
 export default function NewChatPage({ activeChatUserId, setActiveChatUserId, activeChatUser, setActiveChatUser, activeChatId, setActiveChatId, isChatActive, setIsChatActive }) {
   const [friends, setFriends] = useState([]);
   const [messages, setMessages] = useState([]);
-  const [user] = useContext(UserContext);
+  const { user } = useUser();
   const [friendsToShowOnUi, setFriendsToShowOnUi] = useState([]);
   const isNoFriendsFound = friendsToShowOnUi.length === 0;
   const searchInputHandler = debounce(onSearchInput);

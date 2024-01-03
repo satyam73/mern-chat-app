@@ -1,12 +1,11 @@
 import { Box } from "@mui/material";
 import styles from './ChatMessagesList.module.css';
 import Message from "../../../../common/Message";
-import { useContext, useEffect, useRef } from "react";
-import { UserContext } from "../../../../App";
+import { useEffect, useRef } from "react";
+import { useUser } from "../../../../contexts/UserProvider";
 
 export default function ChatMessagesList({ activeChatUserId, messages }) {
-
-  const [user] = useContext(UserContext);
+  const { user } = useUser();
   const lastMessageRef = useRef();
   const userId = user?._id;
   const lastMessageIndex = messages?.length - 1;

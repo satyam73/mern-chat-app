@@ -1,10 +1,10 @@
 import { Box, Typography } from '@mui/material';
-import React, { useContext } from 'react';
+import React from 'react';
 import styles from './profileDetailsHeader.module.css';
-import { UserContext } from '../../../App';
+import { useUser } from '../../../contexts/UserProvider';
 
 export default function ProfileDetailsHeader({ profile }) {
-  const [user] = useContext(UserContext);
+  const { user } = useUser();
 
   return (
     <Box className={styles['profile-detail-header']}>

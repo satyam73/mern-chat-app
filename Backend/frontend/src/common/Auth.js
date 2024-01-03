@@ -1,36 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { BACKEND_BASE_URL } from "../constants";
-function Auth({ Component }) {
+import { useUser } from "../contexts/UserProvider";
+
+function Auth({ children }) {
   const [isAuth, setIsAuth] = useState(false);
+  const { user } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function check() {
-      try {
-        const { status } = await axios.get(
-          BACKEND_BASE_URL + "/api/user/chat",
-          {
-            headers: { "Content-Type": "application/json" },
-            withCredentials: true,
-          }
-        );
+    function check() {
 
-        if (status === 200) {
-          setIsAuth(true);
-        }
-      } catch (err) {
-        console.log("Error: ", err.message);
+      if (!user._id) {
         setIsAuth(false);
-        console.log("navigating");
         navigate("/login");
+        return;
       }
-    }
-    check();
-  });
 
-  return <>{isAuth && Component}</>;
+      setIsAuth(true);
+    }
+
+    check();
+  }, []);
+
+  return <>{isAuth && children}</>;
 }
 
 export default Auth;

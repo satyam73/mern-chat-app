@@ -57,32 +57,30 @@ function App() {
             />
             <Route
               element={
-                <Auth
-                  Component={
-                    !isDev ? (
-                      <Layout
-                        goToAllChats={goToAllChats}
-                        sidebarToggleHandler={sidebarToggleHandler}
-                      >
-                        <NewChatPage
-                          setActiveChatUserId={setActiveChatUserId}
-                          activeChatUserId={activeChatUserId}
-                          activeChatUser={activeChatUser}
-                          setActiveChatUser={setActiveChatUser}
-                          activeChatId={activeChatId}
-                          setActiveChatId={setActiveChatId}
-                          setIsChatActive={setIsChatActive}
-                          isChatActive={isChatActive}
-                        />
-                      </Layout>
-                    ) : (
-                      <Chat
-                        sidebarToggleHandler={sidebarToggleHandler}
-                        isSideBarOpen={isSideBarOpen}
+                <Auth>
+                  {!isDev ? (
+                    <Layout
+                      goToAllChats={goToAllChats}
+                      sidebarToggleHandler={sidebarToggleHandler}
+                    >
+                      <NewChatPage
+                        setActiveChatUserId={setActiveChatUserId}
+                        activeChatUserId={activeChatUserId}
+                        activeChatUser={activeChatUser}
+                        setActiveChatUser={setActiveChatUser}
+                        activeChatId={activeChatId}
+                        setActiveChatId={setActiveChatId}
+                        setIsChatActive={setIsChatActive}
+                        isChatActive={isChatActive}
                       />
-                    )
-                  }
-                />
+                    </Layout>
+                  ) : (
+                    <Chat
+                      sidebarToggleHandler={sidebarToggleHandler}
+                      isSideBarOpen={isSideBarOpen}
+                    />
+                  )}
+                </Auth>
               }
               path='/chat'
             />
@@ -106,24 +104,26 @@ function App() {
             />
             <Route
               element={
-                isDev ? (
-                  <Layout
-                    goToAllChats={goToAllChats}
-                    sidebarToggleHandler={sidebarToggleHandler}
-                  >
-                    <NewProfilePage />
-                  </Layout>
-                ) : (
-                  <Layout
-                    goToAllChats={goToAllChats}
-                    sidebarToggleHandler={sidebarToggleHandler}
-                  >
-                    <Profile
+                <Auth>
+                  {isDev ? (
+                    <Layout
+                      goToAllChats={goToAllChats}
                       sidebarToggleHandler={sidebarToggleHandler}
-                      isSideBarOpen={isSideBarOpen}
-                    />
-                  </Layout>
-                )
+                    >
+                      <NewProfilePage />
+                    </Layout>
+                  ) : (
+                    <Layout
+                      goToAllChats={goToAllChats}
+                      sidebarToggleHandler={sidebarToggleHandler}
+                    >
+                      <Profile
+                        sidebarToggleHandler={sidebarToggleHandler}
+                        isSideBarOpen={isSideBarOpen}
+                      />
+                    </Layout>
+                  )}
+                </Auth>
               }
               path='/profile'
             />

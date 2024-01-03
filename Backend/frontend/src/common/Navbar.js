@@ -17,6 +17,7 @@ import UserSearch from "../common/UserSearch";
 import { SEARCH_API_URL } from "../constants"
 import { SIGNOUT_URL } from "../constants";
 import "../utils.css";
+import { useUser } from "../contexts/UserProvider";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -64,6 +65,7 @@ export default function PrimarySearchAppBar({
 }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const { setUser } = useUser();
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
 
@@ -81,7 +83,9 @@ export default function PrimarySearchAppBar({
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     });
+
     if (status === 200) {
+      setUser({});
       navigate("/login");
     }
   };
@@ -140,7 +144,7 @@ export default function PrimarySearchAppBar({
       if (!searchedUserName) {
         return;
       }
-      
+
       const response = await fetch(ENDPOINT, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }

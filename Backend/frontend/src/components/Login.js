@@ -20,6 +20,7 @@ import background from "../images/background.svg";
 import axios from "axios";
 import Loader from "../common/Loader";
 import { SIGNIN_URL } from "../constants";
+import { useUser } from "../contexts/UserProvider";
 
 function Login({ sidebarToggleHandler }) {
   const [isPasswordShowing, setIsPasswordShowing] = useState(false);
@@ -27,6 +28,7 @@ function Login({ sidebarToggleHandler }) {
   const [loginDetails, setLoginDetails] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { setUser } = useUser();
   const [error, setError] = useState({
     isError: false,
     message: "",
@@ -77,10 +79,10 @@ function Login({ sidebarToggleHandler }) {
         }
       );
 
-      // setUser(data);
-
-      status === 200 &&
+      if (status === 200) {
+        setUser(data);
         setSuccess({ isSuccess: true, message: "Login Successfully!" });
+      }
 
       setTimeout(() => navigate("/chat"), 1000);
     } catch (err) {
@@ -88,7 +90,7 @@ function Login({ sidebarToggleHandler }) {
         isError: true,
         message: err.message,
       });
-      console.error("Error: ", err.message);
+      console.error("Error in login : ", err.message);
     } finally {
       setIsLoading(false);
     }

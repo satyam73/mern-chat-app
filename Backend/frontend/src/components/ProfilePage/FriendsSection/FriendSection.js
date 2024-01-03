@@ -8,7 +8,7 @@ import {
 } from '../../../services/user';
 import TabCard from '../../../common/TabCard/TabCard';
 import NoDataFoundFallback from '../../../common/NoDataFoundFallback';
-import { useToast } from '../../../common/Toast';
+import { useToast } from '../../../contexts/Toast';
 import { INTERNAL_SERVER_ERROR, PROFILE_TABS } from '../../../constants';
 
 function TabPanel(props) {

@@ -14,7 +14,7 @@ import axios from 'axios';
 import NewChatPage from './components/NewChatPage/NewChatPage';
 import Layout from './common/Layout';
 import NewProfilePage from './components/NewProfilePage/NewProfilePage';
-import ToastProvider from './common/Toast';
+import ToastProvider from './contexts/Toast';
 import { Box } from '@mui/material';
 export const ErrorContext = createContext();
 

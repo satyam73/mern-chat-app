@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, TextField, Modal, Box, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { PhotoCamera } from '@mui/icons-material';
+import { FALLBACK_PROFILE_IMAGE } from '../../../constants';
 export default function EditModal({
   showModal,
   setShowModal,
@@ -43,11 +44,7 @@ export default function EditModal({
           <div className='col-6'>
             <img
               class='profileImg my-4'
-              src={
-                profile === ''
-                  ? 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80'
-                  : profile
-              }
+              src={profile === '' ? FALLBACK_PROFILE_IMAGE : profile}
               alt=''
               style={{
                 height: '150px',

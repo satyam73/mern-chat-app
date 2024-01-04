@@ -1,28 +1,22 @@
-import { Box, Typography } from '@mui/material';
 import React from 'react';
-import styles from './profileDetailsHeader.module.css';
+import { Box, Typography } from '@mui/material';
+
 import { useUser } from '../../../contexts/UserProvider';
+import { FALLBACK_PROFILE_IMAGE } from '../../../constants';
+
+import styles from './profileDetailsHeader.module.css';
 
 export default function ProfileDetailsHeader({ profile }) {
   const { user } = useUser();
+  const profileToShow = profile || FALLBACK_PROFILE_IMAGE;
 
   return (
     <Box className={styles['profile-detail-header']}>
       <Box className={styles['profile-detail-header__image']}>
         <img
-          style={{
-            height: '200px',
-            width: '200px',
-            borderRadius: '100px',
-            border: '5px solid var(--primary-color)',
-          }}
           className={styles['profile-detail-header__user-image']}
-          src={
-            profile === ''
-              ? 'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80'
-              : profile
-          }
-          alt='user'
+          src={profileToShow}
+          alt={user?.name || 'user'}
         />
       </Box>
 
@@ -31,13 +25,13 @@ export default function ProfileDetailsHeader({ profile }) {
           className={styles['profile-detail-header__name']}
           variant='h3'
         >
-          {user?.name || 'Not logged in'}
+          {user?.name}
         </Typography>
         <Typography
           className={styles['profile-detail-header__username']}
           variant='body1'
         >
-          {`@${user?.username}` || 'Log in'}
+          {`@${user?.username}`}
         </Typography>
       </Box>
     </Box>

@@ -1,17 +1,21 @@
-import { Box, useMediaQuery } from '@mui/material';
-import '../styles/NewChatPage.css';
-import ProfileHeader from './components/ProfileHeader/ProfileHeader';
-import SidebarSearchBar from './components/SidebarSearchBar/SidebarSearchBar';
-import ProfileCard from './components/ProfileCard/ProfileCard';
-import { useEffect, useState } from 'react';
-import ChatInput from './components/ChatInput/ChatInput';
-import ChatMessagesList from './components/ChatMessagesList/ChatMessagesList';
-import { BACKEND_BASE_URL } from '../../constants';
 import { io } from 'socket.io-client';
+import { useEffect, useState } from 'react';
+import { Box, useMediaQuery } from '@mui/material';
+
 import { getChatByUserId, getFriends } from '../../services/chat';
-import { debounce } from '../../utils';
-import NoDataFoundFallback from '../../common/NoDataFoundFallback';
 import { useUser } from '../../contexts/UserProvider';
+import { debounce } from '../../utils';
+
+import { BACKEND_BASE_URL } from '../../constants';
+
+import ProfileHeader from './components/ProfileHeader/ProfileHeader';
+import ProfileCard from './components/ProfileCard/ProfileCard';
+import ChatMessagesList from './components/ChatMessagesList/ChatMessagesList';
+import SidebarSearchBar from './components/SidebarSearchBar/SidebarSearchBar';
+import ChatInput from './components/ChatInput/ChatInput';
+import NoDataFoundFallback from '../../common/NoDataFoundFallback';
+
+import '../styles/NewChatPage.css';
 
 const socket = io(BACKEND_BASE_URL, {
   transports: ["websocket", "polling"],

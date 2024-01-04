@@ -165,7 +165,7 @@ export default function PrimarySearchAppBar() {
       <AppBar position='static'>
         <UserSearch
           profiles={profiles}
-          style={{ display: profiles.length >= 1 ? 'block' : 'block' }}
+          style={{ display: profiles.length >= 1 ? 'block' : 'none' }}
         />
         <Toolbar>
           <Typography

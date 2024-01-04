@@ -6,6 +6,7 @@ import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import "./styles/Home.css";
 import "../utils.css";
+
 function Home({ isSideBarOpen, sidebarToggleHandler }) {
   const navigate = useNavigate();
   return (

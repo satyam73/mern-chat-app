@@ -63,10 +63,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function PrimarySearchAppBar({
-  sidebarToggleHandler,
-  backgroundcolor,
-}) {
+export default function PrimarySearchAppBar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { setUser } = useUser();
@@ -171,16 +168,6 @@ export default function PrimarySearchAppBar({
           style={{ display: profiles.length >= 1 ? 'block' : 'block' }}
         />
         <Toolbar>
-          <IconButton
-            size='large'
-            edge='start'
-            color='inherit'
-            aria-label='open drawer'
-            sx={{ mr: 2 }}
-            onClick={() => sidebarToggleHandler()}
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography
             variant='h6'
             noWrap

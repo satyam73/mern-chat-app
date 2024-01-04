@@ -7,7 +7,7 @@ export default function Layout({ children, sidebarToggleHandler, goToAllChats })
 
   return (
     <>
-      <Navbar sidebarToggleHandler={sidebarToggleHandler} />
+      <Navbar />
       {children}
       {isMobileScreen && <BottomNavbar goToAllChats={goToAllChats} />}
     </>

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "../common/Navbar";
 import axios from "axios";
-// import Sidebar from "../common/Sidebar";
 import {
   TextField,
   FormControl,
@@ -177,8 +176,8 @@ function Register({ isSideBarOpen, sidebarToggleHandler }) {
         backgroundSize: "90%",
       }}
     >
-      <Navbar sidebarToggleHandler={sidebarToggleHandler} />
-      {/* <Sidebar isSideBarOpen={isSideBarOpen} /> */}
+      <Navbar />
+
       <div
         className="container-fluid d-flex align-items-center justify-content-center"
         style={{ height: "92vh", width: "99vw" }}

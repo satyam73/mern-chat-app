@@ -105,8 +105,7 @@ function Login({ sidebarToggleHandler }) {
         backgroundSize: "90%",
       }}
     >
-      <Navbar sidebarToggleHandler={sidebarToggleHandler} />
-      {/* <Sidebar isSideBarOpen={isSideBarOpen} /> */}
+      <Navbar />
       <div
         className="container-fluid d-flex align-items-center justify-content-center"
         style={{ height: "92vh", width: "99vw" }}

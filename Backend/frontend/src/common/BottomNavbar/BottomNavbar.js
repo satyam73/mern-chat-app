@@ -22,6 +22,7 @@ export default function BottomNavbar({ goToAllChats }) {
       navigate('/profile');
     }
   }
+
   return (<BottomNavigation
     showLabels
     value={value}

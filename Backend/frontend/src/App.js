@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 
 // bootstrap styles
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
@@ -25,12 +25,17 @@ function App() {
   const [activeChatUser, setActiveChatUser] = useState(null);
   const [activeChatId, setActiveChatId] = useState(null);
   const [isChatActive, setIsChatActive] = useState(false);
+  const navigate = useNavigate();
 
   function goToAllChats() {
     setIsChatActive(false);
     setActiveChatUserId('');
     setActiveChatUser({});
     setActiveChatId('');
+
+    if (window.location.pathname === '/profile') {
+      navigate('/chat');
+    }
   }
 
   function sidebarToggleHandler(evt) {

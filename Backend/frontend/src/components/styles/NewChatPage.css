@@ -42,6 +42,9 @@
   overflow-y: auto;
   width: 100%;
   scrollbar-width: thin;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .chat-container__friend-list::-webkit-scrollbar-thumb {

@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 import { useEffect, useState } from 'react';
-import { Box, useMediaQuery } from '@mui/material';
+import { Box, Skeleton, useMediaQuery } from '@mui/material';
 
 import { getChatByUserId, getFriends } from '../../services/chat';
 import { useUser } from '../../contexts/UserProvider';
@@ -29,6 +29,7 @@ export default function NewChatPage({ activeChatUserId, setActiveChatUserId, act
   const { user } = useUser();
   const [friendsToShowOnUi, setFriendsToShowOnUi] = useState([]);
   const [isMessagesLoading, setIsMessagesLoading] = useState(true);
+  const [isFriendsLoading, setIsFriendsLoading] = useState(true);
   const isNoFriendsFound = friendsToShowOnUi.length === 0;
   const searchInputHandler = debounce(onSearchInput);
   const isMobileScreen = useMediaQuery('(max-width: 1007px)', { defaultMatches: null });
@@ -46,9 +47,16 @@ export default function NewChatPage({ activeChatUserId, setActiveChatUserId, act
 
   useEffect(() => {
     (async () => {
-      const friends = await getFriends();
-      setFriends(friends);
-      setFriendsToShowOnUi(friends);
+      setIsFriendsLoading(true);
+      try {
+        const friends = await getFriends();
+        setFriends(friends);
+        setFriendsToShowOnUi(friends);
+      } catch (error) {
+        console.log('Some error occured while fetching friends ', error);
+      } finally {
+        setIsFriendsLoading(false);
+      }
     })();
   }, []);
 
@@ -65,7 +73,17 @@ export default function NewChatPage({ activeChatUserId, setActiveChatUserId, act
     setFriendsToShowOnUi(filteredFriends);
   }
 
-  const profileMapping = friendsToShowOnUi.map((friend, idx) => (
+  const friendsMappingSkeleton = Array(4).fill('profile-skeleton').map((element, idx) => (
+    <Skeleton
+      key={element + '-' + idx}
+      sx={{ margin: '2px 0' }}
+      variant='rectangular'
+      width={'99%'}
+      height={60}
+    />
+  ));
+
+  const friendsMapping = friendsToShowOnUi.map((friend, idx) => (
     <ProfileCard
       name={friend.name}
       profileImage={friend.profilePic}
@@ -74,6 +92,16 @@ export default function NewChatPage({ activeChatUserId, setActiveChatUserId, act
       key={friend._id}
     />
   ));
+
+  let friendsMappingWithFallback;
+
+  if (isFriendsLoading) {
+    friendsMappingWithFallback = friendsMappingSkeleton;
+  } else if (isNoFriendsFound) {
+    friendsMappingWithFallback = <NoDataFoundFallback />;
+  } else {
+    friendsMappingWithFallback = friendsMapping;
+  }
 
   async function profileClickHandler(e, user) {
     setIsChatActive(true);
@@ -112,9 +140,7 @@ export default function NewChatPage({ activeChatUserId, setActiveChatUserId, act
               <SidebarSearchBar onSearchInput={searchInputHandler} />
               <Box className='chat-container__friend-list'>
 
-                {isNoFriendsFound ?
-                  <NoDataFoundFallback /> :
-                  profileMapping}
+                {friendsMappingWithFallback}
               </Box>
             </Box>
             <Box className={`chat-container__chat-section ${isChatActive ? 'chat-container__chat-section--visible' : 'chat-container__chat-section--hidden'}`}>
@@ -133,9 +159,7 @@ export default function NewChatPage({ activeChatUserId, setActiveChatUserId, act
             <Box className='chat-container__sidebar'>
               <ProfileHeader user={user} />
               <SidebarSearchBar onSearchInput={searchInputHandler} />
-              <Box className='chat-container__friend-list'> {isNoFriendsFound ?
-                <NoDataFoundFallback /> :
-                profileMapping}</Box>
+              <Box className='chat-container__friend-list'> {friendsMappingWithFallback}</Box>
             </Box>
             <Box className='chat-container__chat-section'>
               <ProfileHeader user={activeChatUser} />

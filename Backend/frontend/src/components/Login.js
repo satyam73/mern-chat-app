@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import Navbar from "../common/Navbar";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   TextField,
@@ -16,19 +16,34 @@ import {
 } from "@mui/material";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
-import background from "../images/background.svg";
-import axios from "axios";
-import Loader from "../common/Loader";
-import { SIGNIN_URL } from "../constants";
+import { useAuth } from "../contexts/AuthProvider";
 import { useUser } from "../contexts/UserProvider";
+import { SIGNIN_URL } from "../constants";
 
-function Login({ sidebarToggleHandler }) {
+import Navbar from "../common/Navbar";
+import Loader from "../common/Loader";
+
+import background from "../images/background.svg";
+
+export default function Login() {
   const [isPasswordShowing, setIsPasswordShowing] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [loginDetails, setLoginDetails] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { setUser } = useUser();
+  const { isLoggedIn, isLoading: isAuthLoading } = useAuth();
+
+  useEffect(() => {
+    function redirectLoggedInUser() {
+      if (isLoggedIn && !isAuthLoading) {
+        navigate('/chat');
+      }
+    }
+
+    redirectLoggedInUser();
+  }, []);
+
   const [error, setError] = useState({
     isError: false,
     message: "",
@@ -257,4 +272,3 @@ function Login({ sidebarToggleHandler }) {
   );
 }
 
-export default Login;

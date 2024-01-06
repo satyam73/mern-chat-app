@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import Navbar from "../common/Navbar";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   TextField,
   FormControl,
@@ -15,14 +15,33 @@ import {
 } from "@mui/material";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
-import background from "../images/background.svg";
-import Loader from "../common/Loader";
-import { REGISTER_URL } from "../constants";
 
-function Register({ isSideBarOpen, sidebarToggleHandler }) {
+import { REGISTER_URL } from "../constants";
+import { useAuth } from "../contexts/AuthProvider";
+
+import Navbar from "../common/Navbar";
+import Loader from "../common/Loader";
+
+import background from "../images/background.svg";
+
+
+function Register() {
   const [isPasswordShowing, setIsPasswordShowing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [picName, setPicName] = useState("");
+  const { isLoggedIn, isLoading: isAuthLoading } = useAuth();
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    function redirectLoggedInUser() {
+      if (isLoggedIn && !isAuthLoading) {
+        navigate('/chat');
+      }
+    }
+
+    redirectLoggedInUser();
+  }, []);
+
   const [error, setError] = useState({
     isError: false,
     message: "no error!",

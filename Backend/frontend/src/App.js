@@ -45,20 +45,20 @@ function App() {
   return (
     <ToastProvider>
       <UserProvider>
-        <Box className='App'>
-          <Routes>
-            <Route
-              element={
-                <Home
-                  sidebarToggleHandler={sidebarToggleHandler}
-                  isSideBarOpen={isSideBarOpen}
-                />
-              }
-              path='/'
-            />
-            <Route
-              element={
-                <AuthProvider>
+        <AuthProvider>
+          <Box className='App'>
+            <Routes>
+              <Route
+                element={
+                  <Home
+                    sidebarToggleHandler={sidebarToggleHandler}
+                    isSideBarOpen={isSideBarOpen}
+                  />
+                }
+                path='/'
+              />
+              <Route
+                element={
                   <Layout
                     goToAllChats={goToAllChats}
                     sidebarToggleHandler={sidebarToggleHandler}
@@ -74,31 +74,29 @@ function App() {
                       isChatActive={isChatActive}
                     />
                   </Layout>
-                </AuthProvider>
-              }
-              path='/chat'
-            />
-            <Route
-              element={
-                <Register
-                  sidebarToggleHandler={sidebarToggleHandler}
-                  isSideBarOpen={isSideBarOpen}
-                />
-              }
-              path='/register'
-            />
-            <Route
-              element={
-                <Login
-                  sidebarToggleHandler={sidebarToggleHandler}
-                  isSideBarOpen={isSideBarOpen}
-                />
-              }
-              path='/login'
-            />
-            <Route
-              element={
-                <AuthProvider>
+                }
+                path='/chat'
+              />
+              <Route
+                element={
+                  <Register
+                    sidebarToggleHandler={sidebarToggleHandler}
+                    isSideBarOpen={isSideBarOpen}
+                  />
+                }
+                path='/register'
+              />
+              <Route
+                element={
+                  <Login
+                    sidebarToggleHandler={sidebarToggleHandler}
+                    isSideBarOpen={isSideBarOpen}
+                  />
+                }
+                path='/login'
+              />
+              <Route
+                element={
                   <Layout
                     goToAllChats={goToAllChats}
                     sidebarToggleHandler={sidebarToggleHandler}
@@ -108,14 +106,14 @@ function App() {
                       isSideBarOpen={isSideBarOpen}
                     />
                   </Layout>
-                </AuthProvider>
-              }
-              path='/profile'
-            />
-          </Routes>
-        </Box>
+                }
+                path='/profile'
+              />
+            </Routes>
+          </Box>
+        </AuthProvider>
       </UserProvider>
-    </ToastProvider>
+    </ToastProvider >
   );
 }
 

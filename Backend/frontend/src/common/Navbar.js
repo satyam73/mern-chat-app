@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -9,7 +8,6 @@ import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
@@ -17,11 +15,11 @@ import { useLocation, Link, useNavigate } from 'react-router-dom';
 import UserSearch from '../common/UserSearch';
 import { useUser } from '../contexts/UserProvider';
 
-import { SEARCH_API_URL } from '../constants';
-import { SIGNOUT_URL } from '../constants';
+import { useAuth } from '../contexts/AuthProvider';
+import { debounce } from '../utils';
+import { getUsersByUsername, signOut } from '../services/user';
 
 import '../utils.css';
-import { useAuth } from '../contexts/AuthProvider';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -63,13 +61,23 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function PrimarySearchAppBar() {
+export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { setUser } = useUser();
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
   const { isLoggedIn } = useAuth();
+  const menuId = 'primary-menu';
+
+  useEffect(() => {
+    const onBodyClick = (e) => {
+      setProfiles([]);
+    };
+    document.addEventListener('click', onBodyClick);
+    return () => document.removeEventListener('click', onBodyClick);
+  });
+
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -78,11 +86,8 @@ export default function PrimarySearchAppBar() {
     setAnchorEl(null);
   };
 
-  const signOutHandler = async (evt) => {
-    const { status } = await axios.get(SIGNOUT_URL, {
-      headers: { 'Content-Type': 'application/json' },
-      withCredentials: true,
-    });
+  const signOutHandler = async () => {
+    const { status } = await signOut();
 
     if (status === 200) {
       setUser({});
@@ -90,15 +95,14 @@ export default function PrimarySearchAppBar() {
     }
   };
 
-  const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
       id={menuId}
       keepMounted
       transformOrigin={{
-        vertical: '-10px',
-        horizontal: '10px',
+        vertical: -10,
+        horizontal: 10,
       }}
       open={isMenuOpen}
       onClose={handleMenuClose}
@@ -133,19 +137,21 @@ export default function PrimarySearchAppBar() {
   );
 
   const [profiles, setProfiles] = useState([]);
-  async function searchHandler(evt) {
+
+  const searchHandler = debounce(onUserSearch);
+
+  async function onUserSearch(evt) {
     try {
-      const searchedUserName = evt.target.value;
-      const ENDPOINT = SEARCH_API_URL(searchedUserName);
+      const searchedUserName = evt.target.value.trim();
+
       if (!searchedUserName) {
+        setProfiles([]);
         return;
       }
 
-      const response = await fetch(ENDPOINT, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      });
-      const { users } = await response.json();
+      const {
+        data: { users },
+      } = await getUsersByUsername(searchedUserName);
       setProfiles(users);
     } catch (err) {
       console.error('Error : ', err);
@@ -172,7 +178,7 @@ export default function PrimarySearchAppBar() {
             variant='h6'
             noWrap
             component='div'
-            sx={{ display: { xs: 'none', sm: 'block' } }}
+            sx={{ display: { sm: 'block' } }}
           >
             <Link
               to='/'
@@ -184,25 +190,24 @@ export default function PrimarySearchAppBar() {
               Convo
             </Link>
           </Typography>
-          <Search
-            sx={{
-              borderRadius: '20px',
-              backgroundColor: '#e3e3e380',
-              '&:hover': { backgroundColor: '#e3e3e380' },
-            }}
-          >
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              onInput={searchHandler}
-              // onBlur={() => {
-              //   setProfiles([]);
-              // }}
-              placeholder='Search Profile'
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
+          {isLoggedIn && (
+            <Search
+              sx={{
+                borderRadius: '20px',
+                backgroundColor: '#e3e3e380',
+                '&:hover': { backgroundColor: '#e3e3e380' },
+              }}
+            >
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                onInput={searchHandler}
+                placeholder='Search Profile'
+                inputProps={{ 'aria-label': 'search' }}
+              />
+            </Search>
+          )}
           <Box sx={{ flexGrow: 1 }} />
           {isLoggedIn && (
             <>

@@ -1,5 +1,16 @@
 import axios from "axios";
-import { ACCEPT_FRIEND_REQUEST_URL, FRIENDS_API_URL, FRIEND_REQUESTS_API_URL, REJECT_FRIEND_REQUEST_URL, SEND_FRIEND_REQUEST_URL, } from "../constants";
+import { ACCEPT_FRIEND_REQUEST_URL, FRIENDS_API_URL, FRIEND_REQUESTS_API_URL, REJECT_FRIEND_REQUEST_URL, SEARCH_API_URL, SEND_FRIEND_REQUEST_URL, SIGNOUT_URL, } from "../constants";
+
+async function getUsersByUsername(searchedUserName) {
+  try {
+    const USERS_BY_USERNAME_API_URL = SEARCH_API_URL(searchedUserName);
+    const { data, status } = await axios.get(USERS_BY_USERNAME_API_URL, { withCredentials: true });
+
+    return { data, status };
+  } catch (error) {
+    throw error;
+  }
+}
 
 async function getAllFriends() {
   try {
@@ -68,4 +79,14 @@ async function sendFriendRequest(userId) {
   }
 }
 
-export { getAllFriends, getFriendRequests, acceptFriendRequest, rejectFriendRequest, sendFriendRequest };
+async function signOut() {
+  try {
+    const { data, status } = await axios.get(SIGNOUT_URL, { headers: { 'Content-Type': 'application/json' }, withCredentials: true });
+
+    return { data, status };
+  } catch (error) {
+    throw error;
+  }
+}
+
+export { getAllFriends, getFriendRequests, acceptFriendRequest, rejectFriendRequest, sendFriendRequest, getUsersByUsername, signOut };

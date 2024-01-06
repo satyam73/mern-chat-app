@@ -28,6 +28,7 @@ export default function NewChatPage({ activeChatUserId, setActiveChatUserId, act
   const [messages, setMessages] = useState([]);
   const { user } = useUser();
   const [friendsToShowOnUi, setFriendsToShowOnUi] = useState([]);
+  const [isMessagesLoading, setIsMessagesLoading] = useState(true);
   const isNoFriendsFound = friendsToShowOnUi.length === 0;
   const searchInputHandler = debounce(onSearchInput);
   const isMobileScreen = useMediaQuery('(max-width: 1007px)', { defaultMatches: null });
@@ -76,22 +77,29 @@ export default function NewChatPage({ activeChatUserId, setActiveChatUserId, act
 
   async function profileClickHandler(e, user) {
     setIsChatActive(true);
+    setIsMessagesLoading(true);
     socket.disconnect();
     socket.connect();
     setActiveChatUser(user);
     setActiveChatUserId(user._id);
 
-    const { chat } = await getChatByUserId(user._id);
-    const chatId = chat?.[0]?._id;
-    const messages = chat?.[0]?.messages;
+    try {
+      const { chat } = await getChatByUserId(user._id);
+      const chatId = chat?.[0]?._id;
+      const messages = chat?.[0]?.messages;
 
-    setActiveChatId(chatId);
-    setMessages(messages);
-
-    if (socket.connected) {
-      socket.emit("joining", chatId);
-      console.log("connected to socket.io");
+      setActiveChatId(chatId);
+      setMessages(messages);
+      if (socket.connected) {
+        socket.emit("joining", chatId);
+        console.log("connected to socket.io");
+      }
+    } catch (error) {
+      console.error('Some error occured while fetching messages ', error);
+    } finally {
+      setIsMessagesLoading(false);
     }
+
   }
 
   return (
@@ -113,7 +121,7 @@ export default function NewChatPage({ activeChatUserId, setActiveChatUserId, act
               <ProfileHeader user={activeChatUser} />
               <hr className='chat-container__separator' />
               <Box className={'chat-container__message-section'}>
-                <ChatMessagesList activeChatUserId={activeChatUserId} messages={messages} />
+                <ChatMessagesList isMessagesLoading={isMessagesLoading} activeChatUserId={activeChatUserId} messages={messages} />
               </Box>
               <Box className='chat-container__input-wrapper'>
                 <ChatInput activeChatUserId={activeChatUserId} activeChatId={activeChatId} setMessages={setMessages} socket={socket} />

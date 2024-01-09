@@ -2,12 +2,13 @@
   display: flex;
   gap: 1rem;
   padding: 1rem;
+  width: 100%;
 }
 
 .profile-detail-header__user-image {
-  height: 200px;
-  width: 200px;
-  border-radius: 100px;
+  height: 160px;
+  width: 160px;
+  border-radius: 50%;
   border: 5px solid var(--primary-color);
 }
 
@@ -15,10 +16,34 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 70%;
 }
 
 .profile-detail-header__info .profile-detail-header__name,
 .profile-detail-header__info .profile-detail-header__username {
   font-weight: 600;
   font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 40%;
+}
+
+.profile-detail-header__info .profile-detail-header__username {
+  color: var(--color-pure-grey);
+}
+
+@media (width<=1007px) {
+  .profile-detail-header__user-image {
+    height: 70px;
+    width: 70px;
+  }
+
+  .profile-detail-header__info .profile-detail-header__name {
+    font-size: 1.4rem;
+  }
+
+  .profile-detail-header__info .profile-detail-header__username {
+    font-size: 0.9rem;
+  }
 }

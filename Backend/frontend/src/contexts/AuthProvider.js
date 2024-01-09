@@ -7,26 +7,42 @@ export const useAuth = () => useContext(AuthContext);
 
 export default function AuthProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const { user, isLoading } = useUser();
+  const { user, isLoading: isUserLoading } = useUser();
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+  let componentToShow;
+
+  const isNotLoggedInPage = ['/login', '/', 'home', 'register'].includes(window.location.pathname)
+
 
   useEffect(() => {
     function check() {
-      if (isLoading) return;
+      setIsLoading(true);
+      if (isUserLoading) return;
 
       if (!user._id) {
         setIsLoggedIn(false);
-        navigate("/login");
-        return;
+
+        if (!isNotLoggedInPage) navigate("/login");
+
+      } else {
+        setIsLoggedIn(true);
       }
 
-      setIsLoggedIn(true);
+      setIsLoading(false)
     }
     check();
-  }, [isLoading]);
+  }, [isUserLoading]);
+
+
+  if (isNotLoggedInPage) {
+    componentToShow = children;
+  } else if (isLoggedIn) {
+    componentToShow = children;
+  }
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, isLoading }}>
-      {isLoggedIn && children}
+    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, isLoading, setIsLoading }}>
+      {componentToShow}
     </AuthContext.Provider>)
 }

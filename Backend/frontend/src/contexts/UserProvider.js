@@ -26,7 +26,7 @@ export default function UserProvider({ children }) {
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, setUser, isLoading }} >
+    <UserContext.Provider value={{ user, setUser, isLoading, setIsLoading }} >
       {children}
     </UserContext.Provider >
   )

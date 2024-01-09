@@ -31,7 +31,7 @@ export default function Login() {
   const [loginDetails, setLoginDetails] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { setUser } = useUser();
+  const { setUser, setIsLoading: setIsUserLoading } = useUser();
   const { isLoggedIn, isLoading: isAuthLoading } = useAuth();
 
   useEffect(() => {
@@ -52,7 +52,6 @@ export default function Login() {
     isSuccess: false,
     message: "",
   });
-  console.log(SIGNIN_URL)
   const handleClickShowPassword = () => {
     setIsPasswordShowing(!isPasswordShowing);
   };
@@ -65,6 +64,7 @@ export default function Login() {
 
   const submitHandler = async (evt) => {
     setIsLoading(true);
+    setIsUserLoading(true)
     const { email, username, password } = loginDetails;
     if (isChecked) {
       if (!username || !password) {
@@ -83,7 +83,7 @@ export default function Login() {
         return;
       }
     }
-    console.log(SIGNIN_URL)
+
     try {
       const { data, status } = await axios.post(
         SIGNIN_URL,
@@ -97,6 +97,7 @@ export default function Login() {
       if (status === 200) {
         setUser(data);
         setSuccess({ isSuccess: true, message: "Login Successfully!" });
+
       }
 
       setTimeout(() => navigate("/chat"), 1000);
@@ -108,6 +109,7 @@ export default function Login() {
       console.error("Error in login : ", err.message);
     } finally {
       setIsLoading(false);
+      setIsUserLoading(false);
     }
   };
   return (

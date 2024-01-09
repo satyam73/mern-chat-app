@@ -10,17 +10,17 @@ import { useAuth } from '../contexts/AuthProvider';
 
 function Home({ isSideBarOpen, sidebarToggleHandler }) {
   const navigate = useNavigate();
-  const { isLoggedIn, isLoading } = useAuth();
+  const { isLoading: isAuthLoading, isLoggedIn } = useAuth();
 
   useEffect(() => {
     function redirectLoggedInUser() {
-      if (isLoggedIn && !isLoading) {
+      if (isLoggedIn && !isAuthLoading) {
         navigate('/chat');
       }
     }
 
     redirectLoggedInUser();
-  }, []);
+  }, [isLoggedIn]);
 
   return (
     <div>

@@ -67,7 +67,7 @@ export default function Navbar() {
   const { setUser } = useUser();
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, setIsLoggedIn } = useAuth();
   const menuId = 'primary-menu';
 
   useEffect(() => {
@@ -88,9 +88,9 @@ export default function Navbar() {
 
   const signOutHandler = async () => {
     const { status } = await signOut();
-
     if (status === 200) {
       setUser({});
+      setIsLoggedIn(false);
       navigate('/login');
     }
   };

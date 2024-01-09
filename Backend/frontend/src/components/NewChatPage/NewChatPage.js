@@ -16,6 +16,7 @@ import ChatInput from './components/ChatInput/ChatInput';
 import NoDataFoundFallback from '../../common/NoDataFoundFallback';
 
 import '../styles/NewChatPage.css';
+import { useAuth } from '../../contexts/AuthProvider';
 
 const socket = io(BACKEND_BASE_URL, {
   transports: ["websocket", "polling"],
@@ -34,6 +35,7 @@ export default function NewChatPage({ activeChatUserId, setActiveChatUserId, act
   const searchInputHandler = debounce(onSearchInput);
   const isMobileScreen = useMediaQuery('(max-width: 1007px)', { defaultMatches: null });
 
+  const { isLoggedIn, setIsLoggedIn } = useAuth();
   useEffect(() => {
     const onMessageReceive = (message) => {
       if (activeChatId && (message.chat === activeChatId) && (message.sender !== user._id)) {

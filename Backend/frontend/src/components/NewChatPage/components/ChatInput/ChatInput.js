@@ -9,6 +9,7 @@ import { sendMessage } from '../../../../services/chat';
 import { useUser } from '../../../../contexts/UserProvider';
 
 import styles from './ChatInput.module.css';
+import { throttle } from '../../../../utils';
 
 export default function ChatInput({
   activeChatUserId,
@@ -18,11 +19,12 @@ export default function ChatInput({
   const [isEmojiPanelVisible, setIsEmojiPanelVisible] = useState(false);
   const chatInputRef = useRef(null);
   const { user } = useUser();
+  const onMessageSendThrottled = throttle(onMessageSend, 1500);
 
   useEffect(() => {
     const onKeyPress = (e) => {
       if (e.keyCode !== 13) return;
-      onMessageSend();
+      onMessageSendThrottled();
     };
 
     document.addEventListener('keydown', onKeyPress);
@@ -38,7 +40,7 @@ export default function ChatInput({
 
   async function onMessageSend() {
     const sanitizedValue = chatInputRef.current.value.trim();
-
+    chatInputRef.current.value = '';
     if (!sanitizedValue) return;
 
     const payload = {
@@ -93,7 +95,7 @@ export default function ChatInput({
         aria-label='chat input'
       />
       <IconButton
-        onClick={onMessageSend}
+        onClick={onMessageSendThrottled}
         className={styles['chat-input-container__send-button']}
       >
         <SendIcon fontSize='medium' />

@@ -1,0 +1,18 @@
+.no-chat-selected-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.no-chat-selected-container__image {
+  width: 300px;
+}
+
+.no-chat-selected-container .no-chat-selected-container__text {
+  font-size: 1.2rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+}

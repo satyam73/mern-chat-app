@@ -15,6 +15,7 @@ import ChatInput from './components/ChatInput/ChatInput';
 import NoDataFoundFallback from '../../common/NoDataFoundFallback';
 
 import '../styles/NewChatPage.css';
+import NoChatSelected from '../NoChatSelected/NoChatSelected';
 
 export default function NewChatPage({ activeChatUserId, setActiveChatUserId, activeChatUser, setActiveChatUser, activeChatId, setActiveChatId, isChatActive, setIsChatActive }) {
   const [friends, setFriends] = useState([]);
@@ -24,6 +25,7 @@ export default function NewChatPage({ activeChatUserId, setActiveChatUserId, act
   const [isMessagesLoading, setIsMessagesLoading] = useState(true);
   const [isFriendsLoading, setIsFriendsLoading] = useState(true);
   const isNoFriendsFound = friendsToShowOnUi.length === 0;
+  const isAnyChatSelected = Boolean(activeChatId);
   const searchInputHandler = debounce(onSearchInput);
   const isMobileScreen = useMediaQuery('(max-width: 1007px)', { defaultMatches: null });
 
@@ -155,14 +157,17 @@ export default function NewChatPage({ activeChatUserId, setActiveChatUserId, act
               <Box className='chat-container__friend-list'> {friendsMappingWithFallback}</Box>
             </Box>
             <Box className='chat-container__chat-section'>
-              <ProfileHeader user={activeChatUser} />
-              <hr className='chat-container__separator' />
-              <Box className={'chat-container__message-section'}>
-                <ChatMessagesList activeChatUserId={activeChatUserId} messages={messages} />
-              </Box>
-              <Box className='chat-container__input-wrapper'>
-                <ChatInput activeChatUserId={activeChatUserId} activeChatId={activeChatId} setMessages={setMessages} socket={socket} />
-              </Box>
+              {isAnyChatSelected ?
+                <>  <ProfileHeader user={activeChatUser} />
+                  <hr className='chat-container__separator' />
+                  <Box className={'chat-container__message-section'}>
+                    <ChatMessagesList activeChatUserId={activeChatUserId} messages={messages} />
+                  </Box>
+                  <Box className='chat-container__input-wrapper'>
+                    <ChatInput activeChatUserId={activeChatUserId} activeChatId={activeChatId} setMessages={setMessages} socket={socket} />
+                  </Box>
+                </> : <NoChatSelected />
+              }
             </Box>
           </>
         }

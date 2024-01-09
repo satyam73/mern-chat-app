@@ -1,12 +1,11 @@
-import { io } from 'socket.io-client';
+
 import { useEffect, useState } from 'react';
 import { Box, Skeleton, useMediaQuery } from '@mui/material';
 
+import socket from '../../services/socket';
 import { getChatByUserId, getFriends } from '../../services/chat';
 import { useUser } from '../../contexts/UserProvider';
 import { debounce } from '../../utils';
-
-import { BACKEND_BASE_URL } from '../../constants';
 
 import ProfileHeader from './components/ProfileHeader/ProfileHeader';
 import ProfileCard from './components/ProfileCard/ProfileCard';
@@ -16,13 +15,6 @@ import ChatInput from './components/ChatInput/ChatInput';
 import NoDataFoundFallback from '../../common/NoDataFoundFallback';
 
 import '../styles/NewChatPage.css';
-import { useAuth } from '../../contexts/AuthProvider';
-
-const socket = io(BACKEND_BASE_URL, {
-  transports: ["websocket", "polling"],
-  reconnection: true,
-  reconnectionDelay: 1000,
-});
 
 export default function NewChatPage({ activeChatUserId, setActiveChatUserId, activeChatUser, setActiveChatUser, activeChatId, setActiveChatId, isChatActive, setIsChatActive }) {
   const [friends, setFriends] = useState([]);
@@ -35,7 +27,6 @@ export default function NewChatPage({ activeChatUserId, setActiveChatUserId, act
   const searchInputHandler = debounce(onSearchInput);
   const isMobileScreen = useMediaQuery('(max-width: 1007px)', { defaultMatches: null });
 
-  const { isLoggedIn, setIsLoggedIn } = useAuth();
   useEffect(() => {
     const onMessageReceive = (message) => {
       if (activeChatId && (message.chat === activeChatId) && (message.sender !== user._id)) {
@@ -152,7 +143,7 @@ export default function NewChatPage({ activeChatUserId, setActiveChatUserId, act
                 <ChatMessagesList isMessagesLoading={isMessagesLoading} activeChatUserId={activeChatUserId} messages={messages} />
               </Box>
               <Box className='chat-container__input-wrapper'>
-                <ChatInput activeChatUserId={activeChatUserId} activeChatId={activeChatId} setMessages={setMessages} socket={socket} />
+                <ChatInput activeChatUserId={activeChatUserId} activeChatId={activeChatId} setMessages={setMessages} />
               </Box>
             </Box>
           </>

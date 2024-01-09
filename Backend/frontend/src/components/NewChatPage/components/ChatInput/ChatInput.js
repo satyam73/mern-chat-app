@@ -1,17 +1,19 @@
-import { useEffect, useRef, useState } from 'react';
-import { Box, IconButton } from '@mui/material';
-import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
-import styles from './ChatInput.module.css';
 import EmojiPicker from 'emoji-picker-react';
 import SendIcon from '@mui/icons-material/Send';
+import { Box, IconButton } from '@mui/material';
+import { useEffect, useRef, useState } from 'react';
+import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
+
+import socket from '../../../../services/socket';
 import { sendMessage } from '../../../../services/chat';
 import { useUser } from '../../../../contexts/UserProvider';
+
+import styles from './ChatInput.module.css';
 
 export default function ChatInput({
   activeChatUserId,
   setMessages,
   activeChatId,
-  socket,
 }) {
   const [isEmojiPanelVisible, setIsEmojiPanelVisible] = useState(false);
   const chatInputRef = useRef(null);

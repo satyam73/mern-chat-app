@@ -78,11 +78,16 @@
 }
 
 .chat-container__message-section {
-  height: 77%;
+  height: 79%;
 }
 
 @media (width<=1007px) {
   .chat-container {
     height: calc(100svh - 1.8 * var(--navbar-height));
+  }
+
+  .chat-container__message-section {
+    height: 80%;
+    padding-bottom: 10px;
   }
 }

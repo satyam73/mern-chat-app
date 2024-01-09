@@ -20,6 +20,7 @@ import { debounce } from '../utils';
 import { getUsersByUsername, signOut } from '../services/user';
 
 import '../utils.css';
+import { useMediaQuery } from '@mui/material';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -29,7 +30,7 @@ const Search = styled('div')(({ theme }) => ({
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
   marginRight: theme.spacing(2),
-  marginLeft: 0,
+  marginLeft: theme.spacing(2),
   width: '100%',
   [theme.breakpoints.up('sm')]: {
     marginLeft: theme.spacing(3),
@@ -69,6 +70,7 @@ export default function Navbar() {
   const isMenuOpen = Boolean(anchorEl);
   const { isLoggedIn, setIsLoggedIn } = useAuth();
   const menuId = 'primary-menu';
+  const isMobileScreen = useMediaQuery('(max-width: 1007px)', { defaultMatches: null });
 
   useEffect(() => {
     const onBodyClick = (e) => {
@@ -178,7 +180,7 @@ export default function Navbar() {
             variant='h6'
             noWrap
             component='div'
-            sx={{ display: { sm: 'block' } }}
+            sx={{ display: { sm: 'block' }, overflow: 'unset', fontWeight: '500', fontSize: '1.7rem', fontFamily: "'Lemon', serif" }}
           >
             <Link
               to='/'
@@ -187,7 +189,7 @@ export default function Navbar() {
                 color: location.pathname !== '/' ? 'black' : 'white',
               }}
             >
-              Convo
+              {isMobileScreen ? 'C' : 'Convo'}
             </Link>
           </Typography>
           {isLoggedIn && (
@@ -240,6 +242,6 @@ export default function Navbar() {
         </Toolbar>
       </AppBar>
       {renderMenu}
-    </Box>
+    </Box >
   );
 }

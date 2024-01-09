@@ -117,9 +117,9 @@ const getUserDetails = async (req, res) => {
 }
 const signOutUser = async (req, res) => {
   try {
-    console.log('clearing cookie', req.cookie)
+    console.log('clearing cookie', req.cookies)
     res.clearCookie("user");
-    console.log('cookie cleared', req.cookie)
+    console.log('cookie cleared', req.cookies)
     res.status(200).json({
       message: "Signout Successfully",
     });

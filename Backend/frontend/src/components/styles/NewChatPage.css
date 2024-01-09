@@ -88,6 +88,6 @@
 
   .chat-container__message-section {
     height: 80%;
-    padding-bottom: 10px;
+    padding-bottom: 1rem;
   }
 }

@@ -6,9 +6,9 @@ import { FALLBACK_PROFILE_IMAGE } from '../../../constants';
 
 import styles from './profileDetailsHeader.module.css';
 
-export default function ProfileDetailsHeader({ profile }) {
+export default function ProfileDetailsHeader() {
   const { user } = useUser();
-  const profileToShow = profile || FALLBACK_PROFILE_IMAGE;
+  const profileToShow = user?.profilePic || FALLBACK_PROFILE_IMAGE;
 
   return (
     <Box className={styles['profile-detail-header']}>

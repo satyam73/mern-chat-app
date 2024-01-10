@@ -117,9 +117,23 @@ const getUserDetails = async (req, res) => {
 }
 const signOutUser = async (req, res) => {
   try {
-    console.log('clearing cookie', req.cookies)
-    res.clearCookie("user");
-    console.log('cookie cleared', req.cookies)
+    const cookie = req.cookies.user.trim();
+    const user = req.user;
+    console.log('clearing cookie', req.cookies.user.trim())
+    console.log(cookie);
+    console.log({ tokenLengthBefore: user.tokens.length })
+    res.clearCookie("user", {
+      domain: domainUrl,
+      expire: Date.now() + 2592000000,
+      sameSite: "lax",
+      secure: true,
+      httpOnly: true,
+    });
+
+    user.tokens = user.tokens.filter((token) => token !== cookie);
+    await user.save();
+    console.log('cookie cleared', req.cookies.user.trim())
+    console.log({ tokenLengthAfter: user.tokens.length })
     res.status(200).json({
       message: "Signout Successfully",
     });

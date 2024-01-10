@@ -252,6 +252,7 @@ export default function Login() {
                   size="medium"
                   variant="contained"
                   onClick={submitHandler}
+                  disabled={isLoading}
                   sx={{
                     width: "50%",
                     fontSize: "17px",
@@ -260,6 +261,10 @@ export default function Login() {
                     "&:hover": {
                       backgroundColor: "var(--secondary-color)",
                     },
+                    "&:disabled": {
+                      opacity: 0.5,
+                      backgroundColor: "var(--primary-color)",
+                    }
                   }}
                 >
                   {isLoading ? <Loader /> : "Login"}

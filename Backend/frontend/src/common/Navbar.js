@@ -89,8 +89,12 @@ export default function Navbar() {
   };
 
   const signOutHandler = async () => {
+    console.log('before')
     const { status } = await signOut();
+    console.log('after ', status)
     if (status === 200) {
+
+      console.log('status if ', status)
       setUser({});
       setIsLoggedIn(false);
       navigate('/login');

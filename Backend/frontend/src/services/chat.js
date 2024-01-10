@@ -1,13 +1,13 @@
 import axios from "axios";
 import { FRIENDS_API_URL, GET_CHAT_BY_USERID, SEND_API_URL } from "../constants";
 
-async function getChatByUserId(userId) {
+async function getChatByUserId(userId, query) {
   try {
-    const CHAT_API_URL = GET_CHAT_BY_USERID(userId)
+    const CHAT_API_URL = GET_CHAT_BY_USERID(userId, query)
 
-    const { data } = await axios.get(CHAT_API_URL, { withCredentials: true });
+    const { data, status } = await axios.get(CHAT_API_URL, { withCredentials: true });
 
-    return data;
+    return { data, status };
   } catch (error) {
     console.error('Some error occured while fetching chat by user id ', error)
   }

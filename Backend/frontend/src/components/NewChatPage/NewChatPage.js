@@ -80,6 +80,7 @@ export default function NewChatPage({ activeChatUserId, setActiveChatUserId, act
 
   const friendsMapping = friendsToShowOnUi.map((friend, idx) => (
     <ProfileCard
+      userId={friend._id}
       name={friend.name}
       profileImage={friend.profilePic}
       isActive={friend._id === activeChatUserId}
@@ -107,7 +108,7 @@ export default function NewChatPage({ activeChatUserId, setActiveChatUserId, act
     setActiveChatUserId(user._id);
 
     try {
-      const { chat } = await getChatByUserId(user._id);
+      const { data: { chat } } = await getChatByUserId(user._id);
       const chatId = chat?.[0]?._id;
       const messages = chat?.[0]?.messages;
 

@@ -1,5 +1,5 @@
-// const BACKEND_BASE_URL = 'https://convo-q1bf.onrender.com'
-const BACKEND_BASE_URL = 'http://localhost:5000'
+const BACKEND_BASE_URL = 'https://convo-q1bf.onrender.com'
+// const BACKEND_BASE_URL = 'http://localhost:5000'
 
 
 const SIGNIN_URL = `${BACKEND_BASE_URL}/api/user/login`;
@@ -21,7 +21,12 @@ const ACCEPT_FRIEND_REQUEST_URL = (userId) => {
   return `${BACKEND_BASE_URL}/api/user/${userId}/friend-request/accept`;
 };
 
-const GET_CHAT_BY_USERID = (userId) => {
+const GET_CHAT_BY_USERID = (userId, query) => {
+  const limit = query?.limit;
+
+  if (limit) {
+    return `${BACKEND_BASE_URL}/api/chats/${userId}/?limit=${limit}`;
+  }
   return `${BACKEND_BASE_URL}/api/chats/${userId}`;
 };
 

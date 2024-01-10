@@ -37,8 +37,11 @@
 }
 
 .profile-card__info .profile-card__last-message {
+  font-weight: 400;
+}
+
+.profile-card__info .profile-card__last-message {
   color: grey;
-  font-weight: 600;
   letter-spacing: 1px;
   font-family: 'Poppins', sans-serif
 }

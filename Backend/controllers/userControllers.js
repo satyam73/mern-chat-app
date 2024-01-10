@@ -77,9 +77,9 @@ const loginUser = async (req, res) => {
       res.cookie("user", token, {
         domain: domainUrl,
         expire: Date.now() + 2592000000,
-        sameSite: "none",
+        sameSite: "lax",
         secure: true,
-        // httpOnly: true,
+        httpOnly: true,
       });
       // console.log("ln 79 ", req.cookie);
       await user.save();

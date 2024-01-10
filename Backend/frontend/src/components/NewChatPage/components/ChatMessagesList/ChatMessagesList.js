@@ -1,6 +1,6 @@
 import { Box, Skeleton } from "@mui/material";
 import styles from './ChatMessagesList.module.css';
-import Message from "../../../../common/Message";
+import Message from "../../../../common/Message/Message";
 import { useEffect, useRef } from "react";
 import { useUser } from "../../../../contexts/UserProvider";
 

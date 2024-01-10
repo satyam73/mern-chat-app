@@ -12,8 +12,7 @@ export default function AuthProvider({ children }) {
   const navigate = useNavigate();
   let componentToShow;
 
-  const isNotLoggedInPage = ['/login', '/', 'home', 'register'].includes(window.location.pathname)
-
+  const isNotLoggedInPage = ['/login', '/', '/register'].includes(window.location.pathname);
 
   useEffect(() => {
     function check() {

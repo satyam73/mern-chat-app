@@ -1,12 +1,18 @@
-.registerMainContainer{
+/* .wrapperDiv {
+    overflow: hidden;
+} */
+
+.registerMainContainer {
     width: 430px;
     height: fit-content;
     box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.411);
     background-color: white;
+    max-height: 90%;
+    overflow-y: auto;
 }
 
-@media only screen and (max-width: 450px){
-    .registerMainContainer{
+@media only screen and (max-width: 450px) {
+    .registerMainContainer {
         width: 350px;
     }
 }

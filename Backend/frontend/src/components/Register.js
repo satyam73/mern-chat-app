@@ -1,6 +1,6 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   TextField,
   FormControl,
@@ -12,25 +12,24 @@ import {
   Alert,
   Button,
   Typography,
-} from "@mui/material";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import Visibility from "@mui/icons-material/Visibility";
+} from '@mui/material';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Visibility from '@mui/icons-material/Visibility';
 
-import { REGISTER_URL } from "../constants";
-import { useAuth } from "../contexts/AuthProvider";
+import { REGISTER_URL } from '../constants';
+import { useAuth } from '../contexts/AuthProvider';
 
-import Navbar from "../common/Navbar";
-import Loader from "../common/Loader";
+import Navbar from '../common/Navbar';
+import Loader from '../common/Loader';
 
-import background from "../images/background.svg";
-
+import background from '../images/background.svg';
 
 function Register() {
   const [isPasswordShowing, setIsPasswordShowing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [picName, setPicName] = useState("");
+  const [picName, setPicName] = useState('');
   const { isLoggedIn, isLoading: isAuthLoading } = useAuth();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     function redirectLoggedInUser() {
@@ -44,19 +43,19 @@ function Register() {
 
   const [error, setError] = useState({
     isError: false,
-    message: "no error!",
+    message: 'no error!',
   });
   const [success, setSuccess] = useState({
     isSuccess: false,
-    message: "",
+    message: '',
   });
   const [registerDetails, setRegisterDetails] = useState({
-    name: "",
-    email: "",
-    username: "",
-    profilePic: "",
-    password: "",
-    confirmPassword: "",
+    name: '',
+    email: '',
+    username: '',
+    profilePic: '',
+    password: '',
+    confirmPassword: '',
   });
 
   const handleClickShowPassword = () => {
@@ -75,29 +74,29 @@ function Register() {
     if (!image) {
       setError({
         isError: true,
-        message: "Please select image to proceed!",
+        message: 'Please select image to proceed!',
       });
       return;
     }
     try {
       const type = image.type;
-      if (type === "image/png" || type === "image/jpeg") {
+      if (type === 'image/png' || type === 'image/jpeg') {
         setIsLoading(true);
         const imageFile = new FormData();
 
-        imageFile.append("file", image);
-        imageFile.append("upload_preset", "chat-app");
-        imageFile.append("cloud_name", "dl5pqfdrf");
-        imageFile.append("tags", [
-          "chat-app",
-          "userPic",
-          "profile",
-          "profilePic",
+        imageFile.append('file', image);
+        imageFile.append('upload_preset', 'chat-app');
+        imageFile.append('cloud_name', 'dl5pqfdrf');
+        imageFile.append('tags', [
+          'chat-app',
+          'userPic',
+          'profile',
+          'profilePic',
         ]);
         const response = await fetch(
-          "https://api.cloudinary.com/v1_1/dl5pqfdrf/image/upload",
+          'https://api.cloudinary.com/v1_1/dl5pqfdrf/image/upload',
           {
-            method: "post",
+            method: 'post',
             body: imageFile,
           }
         );
@@ -113,13 +112,13 @@ function Register() {
         } else {
           setError({
             isError: true,
-            message: "Error : Picture uploading unsuccessful!",
+            message: 'Error : Picture uploading unsuccessful!',
           });
         }
       } else {
         setError({
           isError: true,
-          message: "Please use png or jpg format photo!",
+          message: 'Please use png or jpg format photo!',
         });
       }
     } catch (err) {
@@ -145,7 +144,7 @@ function Register() {
     ) {
       setError({
         isError: true,
-        message: "Please fill all the details!",
+        message: 'Please fill all the details!',
       });
       return;
     }
@@ -153,7 +152,7 @@ function Register() {
     if (password !== confirmPassword) {
       setError({
         isError: true,
-        message: "Password is not matching!",
+        message: 'Password is not matching!',
       });
       return;
     }
@@ -164,13 +163,13 @@ function Register() {
         { name, email, username, profilePic, password, confirmPassword },
         {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         }
       );
       setSuccess({
         isSuccess: true,
-        message: "Account created successfully!",
+        message: 'Account created successfully!',
       });
     } catch (err) {
       const {
@@ -178,7 +177,7 @@ function Register() {
           data: { message },
         },
       } = err;
-      console.error("Error: ", err.message);
+      console.error('Error: ', err.message);
       setError({
         isError: true,
         message: message,
@@ -187,29 +186,30 @@ function Register() {
   };
   return (
     <div
-      className="login bg-light"
+      className='login bg-light pb-5'
       style={{
         backgroundImage: `url(${background})`,
-        height: "100vh",
-        backgroundPosition: "center",
-        backgroundSize: "90%",
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        height: 'fit-content',
+        backgroundSize: '200%',
       }}
     >
       <Navbar />
 
       <div
-        className="container-fluid d-flex align-items-center justify-content-center"
-        style={{ height: "92vh", width: "99vw" }}
+        className='d-flex align-items-center justify-content-center'
+        style={{ height: '100%', width: '99vw' }}
       >
         <Snackbar
           open={error.isError}
           autoHideDuration={6000}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
           // key={{ vertical: "bottom" } + { horizontal: "center" }}
           onClose={() =>
             setError({
               isError: false,
-              message: "no error!",
+              message: 'no error!',
             })
           }
         >
@@ -217,11 +217,11 @@ function Register() {
             onClose={() =>
               setError({
                 isError: false,
-                message: "no error!",
+                message: 'no error!',
               })
             }
-            severity="error"
-            sx={{ width: "100%" }}
+            severity='error'
+            sx={{ width: '100%' }}
           >
             {error.message}
           </Alert>
@@ -229,12 +229,12 @@ function Register() {
         <Snackbar
           open={success.isSuccess}
           autoHideDuration={6000}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
           // key={{ vertical: "bottom" } + { horizontal: "center" }}
           onClose={() =>
             setSuccess({
               isSuccess: false,
-              message: "",
+              message: '',
             })
           }
         >
@@ -242,159 +242,161 @@ function Register() {
             onClose={() =>
               setSuccess({
                 isSuccess: false,
-                message: "",
+                message: '',
               })
             }
-            severity="success"
-            sx={{ width: "100%" }}
+            severity='success'
+            sx={{ width: '100%' }}
           >
             {success.message}
           </Alert>
         </Snackbar>
-        <div className="row registerMainContainer rounded-4 p-3 pb-0 pt-5">
-          <div className="col-12 d-flex align-items-center justify-content-center flex-column w-100">
-            <div className="row mb-5 flex-column w-100 justify-content-center align-items-center">
-              <div className="col-12 text-center">
-                <h2 className="mb-5 fw-bolder">Create Account</h2>
-              </div>
-              <div className="col-12" style={{ width: "100%" }}>
-                <TextField
-                  fullWidth
-                  label="Name"
-                  type="text"
-                  // id="fullWidth"
-                  variant="outlined"
-                  name="name"
-                  onChange={inputChangeHandler}
-                />
-              </div>
-              <div className="col-12 mt-2" style={{ width: "100%" }}>
-                <TextField
-                  fullWidth
-                  label="Email"
-                  type="email"
-                  // id="fullWidth"
-                  variant="outlined"
-                  name="email"
-                  onChange={inputChangeHandler}
-                />
-              </div>
-              <div className="col-12 mt-2" style={{ width: "100%" }}>
-                <TextField
-                  fullWidth
-                  label="Username"
-                  type="text"
-                  // id="fullWidth"
-                  variant="outlined"
-                  name="username"
-                  onChange={inputChangeHandler}
-                />
-              </div>
-              <div className="col-12 mt-4" style={{ width: "100%" }}>
-                <Typography
-                  sx={{ font: "inherit" }}
-                  className="fw-bolder"
-                  variant="subtitle1"
-                  component="div"
-                >
-                  Upload Profile Picture
-                </Typography>
-                <Button
-                  sx={{
-                    backgroundColor: "var(--primary-color)",
-                    "&:hover": {
-                      backgroundColor: "var(--secondary-color)",
-                    },
-                  }}
-                  variant="contained"
-                  component="label"
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader /> Uploading
-                    </>
-                  ) : (
-                    "Click to upload"
-                  )}
-                  <input
-                    onChange={imageChangeHandler}
-                    name="profilePic"
-                    hidden
-                    accept="image/*"
-                    multiple
-                    type="file"
-                  />
-                </Button>
-                <span className="ms-1 fw-bold">{picName}</span>
-              </div>
-              <div className="col-12 mt-4" style={{ width: "100%" }}>
-                <FormControl sx={{ width: "100%" }} variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-password">
-                    Password
-                  </InputLabel>
-                  <OutlinedInput
-                    onChange={inputChangeHandler}
-                    name="password"
+        <div className='wrapperDiv rounded-4 p-3 pb-0 pt-5'>
+          <div className='row registerMainContainer rounded-4 p-3 pb-0 pt-5'>
+            <div className='col-12 d-flex align-items-center justify-content-center flex-column w-100'>
+              <div className='row mb-5 flex-column w-100 justify-content-center align-items-center'>
+                <div className='col-12 text-center'>
+                  <h2 className='mb-5 fw-bolder'>Create Account</h2>
+                </div>
+                <div className='col-12' style={{ width: '100%' }}>
+                  <TextField
                     fullWidth
-                    id="outlined-adornment-password"
-                    type={isPasswordShowing ? "text" : "password"}
-                    // value={"hello"}
-                    // onChange={handleChange("password")}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleClickShowPassword}
-                          edge="end"
-                        >
-                          {isPasswordShowing ? (
-                            <VisibilityOff />
-                          ) : (
-                            <Visibility />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    label="Password"
-                  />
-                </FormControl>
-              </div>
-              <div className="col-12 mt-2" style={{ width: "100%" }}>
-                <FormControl sx={{ width: "100%" }} variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-c-password">
-                    Confirm Password
-                  </InputLabel>
-                  <OutlinedInput
+                    label='Name'
+                    type='text'
+                    // id="fullWidth"
+                    variant='outlined'
+                    name='name'
                     onChange={inputChangeHandler}
-                    name="confirmPassword"
-                    fullWidth
-                    id="outlined-adornment-c-password"
-                    type="password"
-                    label="Password"
                   />
-                </FormControl>
-              </div>
-              <div
-                className="col-12 text-center mt-3"
-                style={{ width: "100%" }}
-              >
-                <Button
-                  size="medium"
-                  variant="contained"
-                  sx={{
-                    width: "50%",
-                    fontSize: "17px",
-                    p: 1,
-                    backgroundColor: "var(--primary-color)",
-                    "&:hover": {
-                      backgroundColor: "var(--secondary-color)",
-                    },
-                  }}
-                  onClick={submitHandler}
+                </div>
+                <div className='col-12 mt-2' style={{ width: '100%' }}>
+                  <TextField
+                    fullWidth
+                    label='Email'
+                    type='email'
+                    // id="fullWidth"
+                    variant='outlined'
+                    name='email'
+                    onChange={inputChangeHandler}
+                  />
+                </div>
+                <div className='col-12 mt-2' style={{ width: '100%' }}>
+                  <TextField
+                    fullWidth
+                    label='Username'
+                    type='text'
+                    // id="fullWidth"
+                    variant='outlined'
+                    name='username'
+                    onChange={inputChangeHandler}
+                  />
+                </div>
+                <div className='col-12 mt-4' style={{ width: '100%' }}>
+                  <Typography
+                    sx={{ font: 'inherit' }}
+                    className='fw-bolder'
+                    variant='subtitle1'
+                    component='div'
+                  >
+                    Upload Profile Picture
+                  </Typography>
+                  <Button
+                    sx={{
+                      backgroundColor: 'var(--primary-color)',
+                      '&:hover': {
+                        backgroundColor: 'var(--secondary-color)',
+                      },
+                    }}
+                    variant='contained'
+                    component='label'
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader /> Uploading
+                      </>
+                    ) : (
+                      'Click to upload'
+                    )}
+                    <input
+                      onChange={imageChangeHandler}
+                      name='profilePic'
+                      hidden
+                      accept='image/*'
+                      multiple
+                      type='file'
+                    />
+                  </Button>
+                  <span className='ms-1 fw-bold'>{picName}</span>
+                </div>
+                <div className='col-12 mt-4' style={{ width: '100%' }}>
+                  <FormControl sx={{ width: '100%' }} variant='outlined'>
+                    <InputLabel htmlFor='outlined-adornment-password'>
+                      Password
+                    </InputLabel>
+                    <OutlinedInput
+                      onChange={inputChangeHandler}
+                      name='password'
+                      fullWidth
+                      id='outlined-adornment-password'
+                      type={isPasswordShowing ? 'text' : 'password'}
+                      // value={"hello"}
+                      // onChange={handleChange("password")}
+                      endAdornment={
+                        <InputAdornment position='end'>
+                          <IconButton
+                            aria-label='toggle password visibility'
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleClickShowPassword}
+                            edge='end'
+                          >
+                            {isPasswordShowing ? (
+                              <VisibilityOff />
+                            ) : (
+                              <Visibility />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                      label='Password'
+                    />
+                  </FormControl>
+                </div>
+                <div className='col-12 mt-2' style={{ width: '100%' }}>
+                  <FormControl sx={{ width: '100%' }} variant='outlined'>
+                    <InputLabel htmlFor='outlined-adornment-c-password'>
+                      Confirm Password
+                    </InputLabel>
+                    <OutlinedInput
+                      onChange={inputChangeHandler}
+                      name='confirmPassword'
+                      fullWidth
+                      id='outlined-adornment-c-password'
+                      type='password'
+                      label='Password'
+                    />
+                  </FormControl>
+                </div>
+                <div
+                  className='col-12 text-center mt-3'
+                  style={{ width: '100%' }}
                 >
-                  Register
-                </Button>
+                  <Button
+                    size='medium'
+                    variant='contained'
+                    sx={{
+                      width: '50%',
+                      fontSize: '17px',
+                      p: 1,
+                      backgroundColor: 'var(--primary-color)',
+                      '&:hover': {
+                        backgroundColor: 'var(--secondary-color)',
+                      },
+                    }}
+                    onClick={submitHandler}
+                  >
+                    Register
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
